@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Risparmioforo.Domain.Transaction;
+﻿using Risparmioforo.Domain.Transaction;
 using Risparmioforo.Shared.Base;
 using Risparmioforo.Shared.Models;
 
-namespace Risparmioforo.Api.Services.TransactionService;
+namespace Risparmioforo.Services.TransactionService;
 
 public interface ITransactionService
 {

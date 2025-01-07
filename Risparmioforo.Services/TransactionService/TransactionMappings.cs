@@ -1,6 +1,6 @@
 ﻿using Risparmioforo.Domain.Transaction;
 
-namespace Risparmioforo.Api.Services.TransactionService;
+namespace Risparmioforo.Services.TransactionService;
 
 public static class TransactionMappings
 {
@@ -8,7 +8,8 @@ public static class TransactionMappings
     {
         return new Transaction
         {
-            Date = command.Date,
+            RegistrationDate = command.Date,
+            ValueDate = command.Date,
             Description = command.Description,
             Amount = command.Amount
         };
@@ -16,7 +17,8 @@ public static class TransactionMappings
 
     public static Transaction ToEntity(this UpdateTransactionCommand command, Transaction existingEntity)
     {
-        existingEntity.Date = command.Date;
+        existingEntity.RegistrationDate = command.Date;
+        existingEntity.ValueDate = command.Date;
         existingEntity.Description = command.Description;
         existingEntity.Amount = command.Amount;
         return existingEntity;

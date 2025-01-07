@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Risparmioforo.Shared", "Ris
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Risparmioforo.Infrastructure", "Risparmioforo.Infrastructure\Risparmioforo.Infrastructure.csproj", "{1A1B67D4-2660-420D-8924-043568506090}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScratchProject", "ScratchProject\ScratchProject.csproj", "{DD36E0BC-9D7D-47F3-B939-AA0F3B2B3153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Risparmioforo.Services", "Risparmioforo.Services\Risparmioforo.Services.csproj", "{55A89046-F9CA-4789-ABFE-7D30C7A0623B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{1A1B67D4-2660-420D-8924-043568506090}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A1B67D4-2660-420D-8924-043568506090}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A1B67D4-2660-420D-8924-043568506090}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD36E0BC-9D7D-47F3-B939-AA0F3B2B3153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD36E0BC-9D7D-47F3-B939-AA0F3B2B3153}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD36E0BC-9D7D-47F3-B939-AA0F3B2B3153}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD36E0BC-9D7D-47F3-B939-AA0F3B2B3153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55A89046-F9CA-4789-ABFE-7D30C7A0623B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55A89046-F9CA-4789-ABFE-7D30C7A0623B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55A89046-F9CA-4789-ABFE-7D30C7A0623B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55A89046-F9CA-4789-ABFE-7D30C7A0623B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

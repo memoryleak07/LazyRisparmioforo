@@ -7,11 +7,12 @@ public class PriceConfiguration : IEntityTypeConfiguration<Transaction>
 {
     public void Configure(EntityTypeBuilder<Transaction> builder)
     {
-        // builder.ToTable("Transactions");
-        
         builder.HasKey(e => e.Id);
         
-        builder.Property(e => e.Date)
+        builder.Property(e => e.ValueDate)
+            .IsRequired();      
+        
+        builder.Property(e => e.RegistrationDate)
             .IsRequired();
         
         builder.Property(e => e.Amount)

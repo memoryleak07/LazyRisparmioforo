@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Risparmioforo.Api.Services.TransactionService;
 using Risparmioforo.Domain.Transaction;
+using Risparmioforo.Services.TransactionService;
 using Risparmioforo.Shared.Base;
 using Risparmioforo.Shared.Models;
 

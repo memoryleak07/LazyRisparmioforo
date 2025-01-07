@@ -1,8 +1,8 @@
 ﻿using Risparmioforo.Api.Endpoints;
 using Risparmioforo.Api.Middleware;
-using Risparmioforo.Api.Services.TransactionService;
 using Risparmioforo.Infrastructure;
 using Risparmioforo.Infrastructure.Data;
+using Risparmioforo.Services.TransactionService;
 using Risparmioforo.Shared.Models;
 
 namespace Risparmioforo.Api;

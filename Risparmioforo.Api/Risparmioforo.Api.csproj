@@ -17,11 +17,8 @@
     <ItemGroup>
       <ProjectReference Include="..\Risparmioforo.Domain\Risparmioforo.Domain.csproj" />
       <ProjectReference Include="..\Risparmioforo.Infrastructure\Risparmioforo.Infrastructure.csproj" />
+      <ProjectReference Include="..\Risparmioforo.Services\Risparmioforo.Services.csproj" />
       <ProjectReference Include="..\Risparmioforo.Shared\Risparmioforo.Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>

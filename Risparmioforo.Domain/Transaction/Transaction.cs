@@ -3,7 +3,11 @@
 public class Transaction
 {
     public int Id { get; set; }
-    public DateTime Date { get; set; }
-    public string Description { get; set; } = string.Empty;
+    public DateOnly RegistrationDate { get; set; }
+    public DateOnly ValueDate{ get; set; }
+    public string Description { get; set; }
     public decimal Amount { get; set; }
+    public TransactionCategory Category { get; set; }
+    public TransactionType Type { get; set; }
+    public TransactionMerchant? Merchant { get; set; }
 }

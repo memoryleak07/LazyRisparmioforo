@@ -31,14 +31,14 @@ public class ApplicationDbContextInitializer(
             new Transaction
             {
                 Id = 1,
-                Date = DateTime.Now.Add(TimeSpan.FromDays(-1)),
+                // ValueDate = DateTime.Now.Add(TimeSpan.FromDays(-1)),
                 Description = "Test transaction",
                 Amount = 100
             },
             new Transaction
             {
                 Id = 2,
-                Date = DateTime.Now,
+                // ValueDate = DateTime.Now,
                 Description = "Test transaction 2",
                 Amount = 200
             }

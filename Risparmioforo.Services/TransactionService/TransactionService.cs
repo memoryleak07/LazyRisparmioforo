@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Risparmioforo.Domain.Transaction;
 using Risparmioforo.Infrastructure.Data;
 using Risparmioforo.Shared.Base;
 using Risparmioforo.Shared.Extensions;
 using Risparmioforo.Shared.Models;
 
-namespace Risparmioforo.Api.Services.TransactionService;
+namespace Risparmioforo.Services.TransactionService;
 
 public class TransactionService(
     ApplicationDbContext dbContext,
