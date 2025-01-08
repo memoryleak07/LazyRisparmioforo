@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Risparmioforo.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Risparmioforo.Services", "Risparmioforo.Services\Risparmioforo.Services.csproj", "{55A89046-F9CA-4789-ABFE-7D30C7A0623B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Risparmioforo.Tests", "Risparmioforo.Tests\Risparmioforo.Tests.csproj", "{53F9CC17-8360-49B3-9BD5-5AE6B0734071}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{55A89046-F9CA-4789-ABFE-7D30C7A0623B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55A89046-F9CA-4789-ABFE-7D30C7A0623B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55A89046-F9CA-4789-ABFE-7D30C7A0623B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53F9CC17-8360-49B3-9BD5-5AE6B0734071}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53F9CC17-8360-49B3-9BD5-5AE6B0734071}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53F9CC17-8360-49B3-9BD5-5AE6B0734071}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53F9CC17-8360-49B3-9BD5-5AE6B0734071}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

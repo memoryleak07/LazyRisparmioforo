@@ -7,7 +7,7 @@ public class Transaction
     public DateOnly ValueDate{ get; set; }
     public string Description { get; set; }
     public decimal Amount { get; set; }
-    public TransactionCategory Category { get; set; }
     public TransactionType Type { get; set; }
+    public TransactionOperation Operation { get; set; }
     public TransactionMerchant? Merchant { get; set; }
 }

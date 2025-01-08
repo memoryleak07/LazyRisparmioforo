@@ -24,8 +24,6 @@ public static class HostingExtension
             });
         });
         
-        // builder.Services.AddScoped<ITransactionService, TransactionService>();
-        // builder.Services.AddScoped<IImportFileService, ImportFileService>();
         builder.Services.AddTransactionService();
         builder.Services.AddImportFileService();
         

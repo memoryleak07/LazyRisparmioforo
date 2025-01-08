@@ -1,44 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Risparmioforo.Domain.Transaction;
-using Risparmioforo.Infrastructure.Data;
-using Risparmioforo.Services.TransactionService;
+﻿namespace Risparmioforo.Tests.TransactionService;
 
-namespace Risparmioforo.Tests.TransactionService;
-
-public class TransactionTypeTests
+public class TransactionOperationTests
 {
     private readonly ApplicationDbContext _dbContext;
 
-    public TransactionTypeTests()
+    public TransactionOperationTests()
     {
         var serviceProvider = new ServiceCollection().AddRequiredServices().BuildServiceProvider();
         _dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
     }
-    
+    // public enum TransactionOperation
+    // {
+    //     Salary, // TODO: is a Transfer?
+    //     Withdraw,
+    //     Payment,
+    //     Fee,
+    //     Transfer,
+    //     Debit,
+    //     Credit,
+    //     Undefined = 99
+    // }
     [Fact]
     public async Task AnyTransactionTypeUndefinedWithAmountOk_ReturnsFalse()
     {
-        var items = await _dbContext.Transactions.AsNoTracking().ToListAsync();
-        var incomes = items.Where(x => x.Amount > 0).ToList();
-        var expenses = items.Where(x => x.Amount < 0).ToList();
-
-        bool anyUndefinedIncome = incomes.Any(x => x.Type == TransactionType.Undefined);
-        bool anyUndefinedExpense = expenses.Any(x => x.Type == TransactionType.Undefined);
-        
-        Assert.False(anyUndefinedIncome);
-        Assert.False(anyUndefinedExpense);
-    }
-    
-    [Fact]
-    public async Task AnyTransactionUndefinedWithAmountNotZero_ReturnsFalse()
-    {
-        var items = await _dbContext.Transactions.AsNoTracking().ToListAsync();
-        var undefinedItems = items.Where(x => x.Type == TransactionType.Undefined).ToList();
-        if (undefinedItems.Count == 0)  return;
-
-        bool anyUndefinedAmountNotZero = undefinedItems.Any(x => x.Amount != 0);
-        
-        Assert.False(anyUndefinedAmountNotZero);
+        // var items = await _dbContext.Transactions.AsNoTracking().ToListAsync();
+        // var incomes = items.Where(x => x.Amount > 0).ToList();
+        // var expenses = items.Where(x => x.Amount < 0).ToList();
+        //
+        // bool anyUndefinedIncome = incomes.Any(x => x.Type == TransactionType.Undefined);
+        // bool anyUndefinedExpense = expenses.Any(x => x.Type == TransactionType.Undefined);
+        //
+        // Assert.False(anyUndefinedIncome);
+        // Assert.False(anyUndefinedExpense);
     }
 }

@@ -1,26 +1,40 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Risparmioforo.Services.TransactionService;
+﻿using Risparmioforo.Domain.Transaction;
 
 namespace Risparmioforo.Tests.TransactionService;
 
-public class TransactionServiceTests
+public class TransactionTypeTests
 {
-    private readonly ITransactionService _transactionService;
+    private readonly ApplicationDbContext _dbContext;
 
-    public TransactionServiceTests()
+    public TransactionTypeTests()
     {
         var serviceProvider = new ServiceCollection().AddRequiredServices().BuildServiceProvider();
-        _transactionService = serviceProvider.GetRequiredService<ITransactionService>();
+        _dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
     }
     
     [Fact]
-    public async Task RemoveTransactionCommand_ReturnsNotSuccess()
+    public async Task AnyTransactionTypeUndefinedWithAmountOk_ReturnsFalse()
     {
-        var command = new RemoveTransactionCommand { Id = 1000 };
-        var result = await _transactionService.Remove(command, CancellationToken.None);
+        var items = await _dbContext.Transactions.AsNoTracking().ToListAsync();
+        var incomes = items.Where(x => x.Amount > 0).ToList();
+        var expenses = items.Where(x => x.Amount < 0).ToList();
+
+        bool anyUndefinedIncome = incomes.Any(x => x.Type == TransactionType.Undefined);
+        bool anyUndefinedExpense = expenses.Any(x => x.Type == TransactionType.Undefined);
         
-        Assert.False(result.IsSuccess);
+        Assert.False(anyUndefinedIncome);
+        Assert.False(anyUndefinedExpense);
     }
     
-    
+    [Fact]
+    public async Task AnyTransactionUndefinedWithAmountNotZero_ReturnsFalse()
+    {
+        var items = await _dbContext.Transactions.AsNoTracking().ToListAsync();
+        var undefinedItems = items.Where(x => x.Type == TransactionType.Undefined).ToList();
+        if (undefinedItems.Count == 0)  return;
+
+        bool anyUndefinedAmountNotZero = undefinedItems.Any(x => x.Amount != 0);
+        
+        Assert.False(anyUndefinedAmountNotZero);
+    }
 }

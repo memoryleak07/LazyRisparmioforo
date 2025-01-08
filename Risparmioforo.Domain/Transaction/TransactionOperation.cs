@@ -1,6 +1,6 @@
 ﻿namespace Risparmioforo.Domain.Transaction;
 
-public enum TransactionCategory
+public enum TransactionOperation
 {
     Salary, // TODO: is a Transfer?
     Withdraw,

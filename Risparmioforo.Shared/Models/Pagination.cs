@@ -1,10 +1,37 @@
-﻿namespace Risparmioforo.Shared.Models;
+﻿using System.ComponentModel;
 
-public class Pagination<T>(ICollection<T> items, int pageIndex, int pageSize, int totalItemsCount)
+namespace Risparmioforo.Shared.Models;
+
+public class Pagination<T>
 {
-    public int PageIndex { get; set; } = pageIndex;
-    public int PageSize { get; set; } = pageSize;
-    public int TotalItemsCount { get; set; } = totalItemsCount;
-    public int TotalPagesCount { get; set; } = (int)Math.Ceiling((double)totalItemsCount / pageSize) - 1;
-    public ICollection<T>? Items { get; set; } = items;
+    public Pagination(
+        ICollection<T> items,
+        int pageIndex,
+        int pageSize, 
+        int totalItemsCount)
+    {
+        PageIndex = pageIndex;
+        PageSize = pageSize;
+        TotalItemsCount = totalItemsCount;
+        TotalPagesCount = (int)Math.Ceiling((double)totalItemsCount / pageSize)
+                               - (totalItemsCount > 0 ? 1 : 0);
+        Items = items;
+    }
+
+    public Pagination(
+        ICollection<T> items, 
+        int pageIndex, 
+        int pageSize, 
+        int totalItemsCount, 
+        string sortColumn, 
+        ListSortDirection sortDirection)
+    {
+        
+    }
+
+    public int PageIndex { get; set; }
+    public int PageSize { get; set; }
+    public int TotalItemsCount { get; set; }
+    public int TotalPagesCount { get; set; }
+    public ICollection<T>? Items { get; set; }
 }

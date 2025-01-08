@@ -4,11 +4,11 @@ namespace Risparmioforo.Services.UnicreditCsvService;
 
 public static class UnicreditCsvReader
 {
-    private static TransactionMerchant? ExtractMerchantFromText(string? description, TransactionCategory category)
+    private static TransactionMerchant? ExtractMerchantFromText(string? description, TransactionOperation operation)
     {
         if (string.IsNullOrEmpty(description) 
             || description.Length == 0
-            || category is not TransactionCategory.Payment)
+            || operation is not TransactionOperation.Payment)
             return null;
         
         int length = description.Length;
@@ -28,10 +28,10 @@ public static class UnicreditCsvReader
         };
     }
 
-    private static TransactionCategory DetermineCategory(string? description, TransactionType type)
+    private static TransactionOperation DetermineOperation(string? description, TransactionType type)
     {
         if (string.IsNullOrEmpty(description))
-            return TransactionCategory.Undefined;
+            return TransactionOperation.Undefined;
 
         var relevantPatterns = type switch
         {
@@ -46,7 +46,7 @@ public static class UnicreditCsvReader
                 return category;
         }
 
-        return TransactionCategory.Undefined;
+        return TransactionOperation.Undefined;
     }
 
     private static MerchantType DetermineMerchantType(string substring)
@@ -79,20 +79,20 @@ public static class UnicreditCsvReader
         };
     }
     
-    public static Transaction ToTransaction(this UnicreditCsvModel csvDto)
+    public static Transaction ToTransaction(this UnicreditCsvModel model)
     {
-        TransactionType type = DetermineTransactionType(csvDto.Importo);
-        TransactionCategory category = DetermineCategory(csvDto.Descrizione, type);
-        TransactionMerchant? merchant = ExtractMerchantFromText(csvDto.Descrizione, category);
+        TransactionType type = DetermineTransactionType(model.Importo);
+        TransactionOperation operation = DetermineOperation(model.Descrizione, type);
+        TransactionMerchant? merchant = ExtractMerchantFromText(model.Descrizione, operation);
 
         return new Transaction
         {
-            RegistrationDate = csvDto.DataRegistraz,
-            ValueDate = csvDto.DataValuta,
-            Description = csvDto.Descrizione?.Trim() ?? "",
-            Amount = csvDto.Importo,
+            RegistrationDate = model.DataRegistraz,
+            ValueDate = model.DataValuta,
+            Description = model.Descrizione?.Trim() ?? "",
+            Amount = model.Importo,
             Type = type,
-            Category = category,
+            Operation = operation,
             Merchant = merchant,
         };
     }

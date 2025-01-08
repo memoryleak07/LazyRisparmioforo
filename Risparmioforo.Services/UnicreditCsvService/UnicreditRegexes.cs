@@ -5,33 +5,33 @@ namespace Risparmioforo.Services.UnicreditCsvService;
 
 public static class UnicreditRegexes
 {
-    public static readonly Dictionary<TransactionCategory, Regex> CategoryPatterns = new()
+    public static readonly Dictionary<TransactionOperation, Regex> CategoryPatterns = new()
     {
-        [TransactionCategory.Salary] = new(@"VOSTRI\s+EMOLUMENTI", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-        [TransactionCategory.Payment] = new(@"\bPAGAMENTO(?!\s+RATA)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase), // ?!\s+RATA avoids PAGAMENTO+RATA to be handled as Payment
-        [TransactionCategory.Credit] = new(@"ACCREDITI\s+VARI", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-        [TransactionCategory.Transfer] = new(@"BONIFICO", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-        [TransactionCategory.Debit] = new(@"\b(ADDEBITO\s+SEPA\s+DD|RIMBORSO\s+PRESTITO|PAGAMENTO\s+RATA)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-        [TransactionCategory.Fees] = new(@"\b(MY\s+GENIUS|COMMISSIONI|IMPOSTA\s+BOLLO\s+CONTO\s+CORRENTE|COMMISSIONI\s+-\s+PROVVIGIONI\s+-\s+SPESE)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-        [TransactionCategory.Withdrawal] = new(@"PRELIEVO\s+(?:BANCOMAT|MASTERCARD|VISA|SMART)(?!.*COMMISSIONI)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+        [TransactionOperation.Salary] = new(@"VOSTRI\s+EMOLUMENTI", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+        [TransactionOperation.Payment] = new(@"\bPAGAMENTO(?!\s+RATA)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase), // ?!\s+RATA avoids PAGAMENTO+RATA to be handled as Payment
+        [TransactionOperation.Credit] = new(@"ACCREDITI\s+VARI", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+        [TransactionOperation.Transfer] = new(@"BONIFICO", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+        [TransactionOperation.Debit] = new(@"\b(ADDEBITO\s+SEPA\s+DD|RIMBORSO\s+PRESTITO|PAGAMENTO\s+RATA)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+        [TransactionOperation.Fee] = new(@"\b(MY\s+GENIUS|COMMISSIONI|IMPOSTA\s+BOLLO\s+CONTO\s+CORRENTE|COMMISSIONI\s+-\s+PROVVIGIONI\s+-\s+SPESE)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+        [TransactionOperation.Withdraw] = new(@"PRELIEVO\s+(?:BANCOMAT|MASTERCARD|VISA|SMART)(?!.*COMMISSIONI)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
     };
     public static readonly Regex MerchantEcommercePattern = new(@"\b(E-Commerce)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     public static readonly Regex MerchantContactlessPattern = new(@"\b(Contactless)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     public static readonly Regex CardNumberPattern = new(@"\bCARTA \*(\d+)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
     
-    public static readonly TransactionCategory[] IncomeCategories =
+    public static readonly TransactionOperation[] IncomeCategories =
     [
-        TransactionCategory.Salary,
-        TransactionCategory.Credit,
-        TransactionCategory.Transfer
+        TransactionOperation.Salary,
+        TransactionOperation.Credit,
+        TransactionOperation.Transfer
     ];
 
-    public static readonly TransactionCategory[] ExpenseCategories =
+    public static readonly TransactionOperation[] ExpenseCategories =
     [
-        TransactionCategory.Debit,
-        TransactionCategory.Fees,
-        TransactionCategory.Payment,
-        TransactionCategory.Withdrawal,
-        TransactionCategory.Transfer
+        TransactionOperation.Debit,
+        TransactionOperation.Fee,
+        TransactionOperation.Payment,
+        TransactionOperation.Withdraw,
+        TransactionOperation.Transfer
     ];
 }
