@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Risparmioforo.Domain.Transaction;
 using Risparmioforo.Infrastructure.Data;
 using Risparmioforo.Shared.Base;
+using Risparmioforo.Shared.Commands;
 using Risparmioforo.Shared.Extensions;
 using Risparmioforo.Shared.Models;
 
@@ -13,7 +14,7 @@ public class TransactionService(
     ILogger<TransactionService> logger) 
     : ITransactionService
 {
-    public async Task<Result<Pagination<Transaction>>> Search(SearchTransactionCommand command, CancellationToken cancellationToken)
+    public async Task<Result<Pagination<Transaction>>> Search(SearchCommand command, CancellationToken cancellationToken)
     {
         var query = dbContext.Transactions
             .AsNoTracking()

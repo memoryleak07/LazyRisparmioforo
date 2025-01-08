@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using Risparmioforo.Shared.Base;
 
 namespace Risparmioforo.Api.Middleware;
 
@@ -12,6 +14,10 @@ public class ExceptionHandlingMiddleware(
         {
             await requestDelegate(context);
         }
+        // catch (BadHttpRequestException ex) when (ex.InnerException is JsonException)
+        // {
+        //     var i = new Error("", "");
+        // }
         catch (Exception ex)
         {
             logger.LogError(ex, "Exception occured: {Message}", ex.Message);

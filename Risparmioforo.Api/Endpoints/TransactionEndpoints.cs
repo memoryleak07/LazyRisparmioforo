@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Risparmioforo.Domain.Transaction;
 using Risparmioforo.Services.TransactionService;
 using Risparmioforo.Shared.Base;
+using Risparmioforo.Shared.Commands;
 using Risparmioforo.Shared.Models;
 
 namespace Risparmioforo.Api.Endpoints;
@@ -39,7 +40,7 @@ public static class TransactionEndpoints
 
     private static async Task<Result<Pagination<Transaction>>> SearchCommand(
         [FromServices] ITransactionService transactionService,
-        [AsParameters] SearchTransactionCommand command, CancellationToken cancellationToken)
+        [AsParameters] SearchCommand command, CancellationToken cancellationToken)
         => await transactionService.Search(command, cancellationToken);
 
     private static async Task<IResult> CreateCommand(

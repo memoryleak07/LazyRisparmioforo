@@ -21,4 +21,10 @@
       <ProjectReference Include="..\Risparmioforo.Shared\Risparmioforo.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Risparmioforo.Shared">
+        <HintPath>..\Risparmioforo.Tests\bin\Debug\net8.0\Risparmioforo.Shared.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

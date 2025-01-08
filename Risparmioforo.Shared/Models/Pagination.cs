@@ -13,8 +13,7 @@ public class Pagination<T>
         PageIndex = pageIndex;
         PageSize = pageSize;
         TotalItemsCount = totalItemsCount;
-        TotalPagesCount = (int)Math.Ceiling((double)totalItemsCount / pageSize)
-                               - (totalItemsCount > 0 ? 1 : 0);
+        TotalPagesCount = totalItemsCount == 0 ? 0 : (int)Math.Ceiling((double)totalItemsCount / pageSize);
         Items = items;
     }
 
