@@ -11,11 +11,10 @@ public static class TransactionEndpoints
 {
     public static void MapTransactionEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        var api = endpoints.MapGroup("/api/transactions");
+        var api = endpoints.MapGroup("/api/transactions/");
         
         api.MapGet("/search", SearchCommand)
             .Produces<Result<Pagination<Transaction>>>()
-            .Produces(StatusCodes.Status404NotFound)
             .WithDescription("Search transactions")
             .WithOpenApi();
         
@@ -40,8 +39,8 @@ public static class TransactionEndpoints
 
     private static async Task<Result<Pagination<Transaction>>> SearchCommand(
         [FromServices] ITransactionService transactionService,
-        [FromQuery] string? query, int pageIndex = 0, int pageSize = 10) 
-        => await transactionService.Search(query, pageIndex, pageSize);
+        [AsParameters] SearchTransactionCommand command, CancellationToken cancellationToken)
+        => await transactionService.Search(command, cancellationToken);
 
     private static async Task<IResult> CreateCommand(
         [FromServices] ITransactionService transactionService,

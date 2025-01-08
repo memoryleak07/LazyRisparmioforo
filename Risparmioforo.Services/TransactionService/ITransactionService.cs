@@ -6,8 +6,8 @@ namespace Risparmioforo.Services.TransactionService;
 
 public interface ITransactionService
 {
-    Task<Result<Pagination<Transaction>>> Search(string? query, int pageIndex = 0, int pageSize = 10);
-    Task<Result<Transaction>> Create(CreateTransactionCommand request, CancellationToken cancellationToken);
-    Task<Result<Transaction>> Update(UpdateTransactionCommand request, CancellationToken cancellationToken);
-    Task<Result<bool>> Remove(RemoveTransactionCommand request, CancellationToken cancellationToken);
+    Task<Result<Pagination<Transaction>>> Search(SearchTransactionCommand command, CancellationToken cancellationToken);
+    Task<Result<Transaction>> Create(CreateTransactionCommand command, CancellationToken cancellationToken);
+    Task<Result<Transaction>> Update(UpdateTransactionCommand command, CancellationToken cancellationToken);
+    Task<Result<bool>> Remove(RemoveTransactionCommand command, CancellationToken cancellationToken);
 }

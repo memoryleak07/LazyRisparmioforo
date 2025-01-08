@@ -1,9 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 using Risparmioforo.Domain.Transaction;
 
-namespace Risparmioforo.Services.TransactionService;
+namespace Risparmioforo.Services.UnicreditCsvService;
 
-public static class TransactionRegexes
+public static class UnicreditRegexes
 {
     public static readonly Dictionary<TransactionCategory, Regex> CategoryPatterns = new()
     {
@@ -15,7 +15,10 @@ public static class TransactionRegexes
         [TransactionCategory.Fees] = new(@"\b(MY\s+GENIUS|COMMISSIONI|IMPOSTA\s+BOLLO\s+CONTO\s+CORRENTE|COMMISSIONI\s+-\s+PROVVIGIONI\s+-\s+SPESE)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase),
         [TransactionCategory.Withdrawal] = new(@"PRELIEVO\s+(?:BANCOMAT|MASTERCARD|VISA|SMART)(?!.*COMMISSIONI)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
     };
-
+    public static readonly Regex MerchantEcommercePattern = new(@"\b(E-Commerce)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    public static readonly Regex MerchantContactlessPattern = new(@"\b(Contactless)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    public static readonly Regex CardNumberPattern = new(@"\bCARTA \*(\d+)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    
     public static readonly TransactionCategory[] IncomeCategories =
     [
         TransactionCategory.Salary,

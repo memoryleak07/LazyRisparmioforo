@@ -9,5 +9,5 @@ public enum TransactionCategory
     Transfer,
     Debit,
     Credit,
-    Undefined
+    Undefined = 99
 }

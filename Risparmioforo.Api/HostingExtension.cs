@@ -2,6 +2,7 @@
 using Risparmioforo.Api.Middleware;
 using Risparmioforo.Infrastructure;
 using Risparmioforo.Infrastructure.Data;
+using Risparmioforo.Services.ImportFileService;
 using Risparmioforo.Services.TransactionService;
 using Risparmioforo.Shared.Models;
 
@@ -14,6 +15,7 @@ public static class HostingExtension
         builder.Services.AddInfrastructuresServices(appSettings);
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddAntiforgery();
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", policy =>
@@ -22,8 +24,11 @@ public static class HostingExtension
             });
         });
         
-        builder.Services.AddScoped<ITransactionService, TransactionService>();
-
+        // builder.Services.AddScoped<ITransactionService, TransactionService>();
+        // builder.Services.AddScoped<IImportFileService, ImportFileService>();
+        builder.Services.AddTransactionService();
+        builder.Services.AddImportFileService();
+        
         return builder.Build();
     }
     
@@ -44,9 +49,12 @@ public static class HostingExtension
 
         app.UseHttpsRedirection();
         app.UseCors("AllowAll");
+        app.UseAntiforgery();
         
         app.UseMiddleware<ExceptionHandlingMiddleware>();
+        
         app.MapTransactionEndpoints();
+        app.MapImportFileEndpoints();
         
         return app;
     }

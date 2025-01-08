@@ -4,5 +4,5 @@ public enum TransactionType
 {
     Income,
     Expense,
-    None, // 0.00 €
+    Undefined = 99, // 0.00 €
 }

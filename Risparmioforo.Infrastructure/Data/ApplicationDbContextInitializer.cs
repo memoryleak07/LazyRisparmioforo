@@ -15,7 +15,7 @@ public class ApplicationDbContextInitializer(
             await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
             await context.Database.MigrateAsync();
-            await SeedDataAsync();
+            // await SeedDataAsync();
         }
         catch (Exception exception)
         {
@@ -31,14 +31,16 @@ public class ApplicationDbContextInitializer(
             new Transaction
             {
                 Id = 1,
-                // ValueDate = DateTime.Now.Add(TimeSpan.FromDays(-1)),
+                RegistrationDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-1)),
+                ValueDate = DateOnly.FromDateTime(DateTime.Now.AddDays(-1)),
                 Description = "Test transaction",
                 Amount = 100
             },
             new Transaction
             {
                 Id = 2,
-                // ValueDate = DateTime.Now,
+                RegistrationDate = DateOnly.FromDateTime(DateTime.Now),
+                ValueDate = DateOnly.FromDateTime(DateTime.Now),
                 Description = "Test transaction 2",
                 Amount = 200
             }

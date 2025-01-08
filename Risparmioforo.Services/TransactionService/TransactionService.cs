@@ -13,61 +13,72 @@ public class TransactionService(
     ILogger<TransactionService> logger) 
     : ITransactionService
 {
-    public async Task<Result<Pagination<Transaction>>> Search(
-        string? query, 
-        int pageIndex = 0, 
-        int pageSize = 10)
+    public async Task<Result<Pagination<Transaction>>> Search(SearchTransactionCommand command, CancellationToken cancellationToken)
     {
-        var transactions = await dbContext.Transactions
+        var query = dbContext.Transactions
             .AsNoTracking()
-            .Where(string.IsNullOrEmpty(query)
+            .Where(string.IsNullOrEmpty(command.Query)
                 ? transaction => true
-                : transaction => transaction.Description.ToLower() == query.ToLower())
-            .Take(pageSize)
-            .Skip(pageIndex * pageSize)
-            .ToListAsync();
+                : transaction => transaction.Description.ToLower() == command.Query.ToLower())
+            .AsQueryable();
 
-        return Result<Pagination<Transaction>>.Success(transactions.ToPagination(pageIndex, pageSize));
+        var totalItemsCount = await query.CountAsync(cancellationToken);
+        
+        var items = await query
+            .Include(x => x.Merchant)
+            .Skip(command.PageSize * command.PageIndex)
+            .Take(command.PageSize)
+            .ToListAsync(cancellationToken);
+
+        var paginatedResults = items.ToPagination(command.PageIndex, command.PageSize, totalItemsCount);
+
+        return Result<Pagination<Transaction>>.Success(paginatedResults);
     }
 
-    public async Task<Result<Transaction>> Create(CreateTransactionCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Transaction>> Create(CreateTransactionCommand command, CancellationToken cancellationToken)
     {
-        var entity = request.ToEntity();
+        var entity = command.ToEntity();
         
         dbContext.Transactions.Add(entity);
         
         await dbContext.SaveChangesAsync(cancellationToken);
         
+        logger.LogInformation("Transaction created successfully.");
+        
         return Result<Transaction>.Success(entity);
     }
     
-    public async Task<Result<Transaction>> Update(UpdateTransactionCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Transaction>> Update(UpdateTransactionCommand command, CancellationToken cancellationToken)
     {
         var entity = await dbContext.Transactions
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken: cancellationToken);
 
         if (entity is null)
-            return Result<Transaction>.Failure(TransactionErrors.NotFound(request.Id));
+            return Result<Transaction>.Failure(TransactionErrors.NotFound(command.Id));
         
-        entity = request.ToEntity(entity);
+        entity = command.ToEntity(entity);
         
         await dbContext.SaveChangesAsync(cancellationToken);
         
+        logger.LogInformation("Transaction updated successfully.");
+        
         return Result<Transaction>.Success(entity);
     }
     
-    public async Task<Result<bool>> Remove(RemoveTransactionCommand request, CancellationToken cancellationToken)
+    public async Task<Result<bool>> Remove(RemoveTransactionCommand command, CancellationToken cancellationToken)
     {
         var entity = await dbContext.Transactions
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken: cancellationToken);
 
         if (entity is null)
-            return Result<bool>.Failure(TransactionErrors.NotFound(request.Id));
+            return Result<bool>.Failure(TransactionErrors.NotFound(command.Id));
         
         dbContext.Transactions.Remove(entity);
         
         await dbContext.SaveChangesAsync(cancellationToken);
         
+        logger.LogInformation("Transaction removed successfully.");
+
         return Result<bool>.Success(true);
     }
 }

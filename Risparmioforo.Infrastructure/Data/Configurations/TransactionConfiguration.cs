@@ -3,7 +3,7 @@ using Risparmioforo.Domain.Transaction;
 
 namespace Risparmioforo.Infrastructure.Data.Configurations;
 
-public class PriceConfiguration : IEntityTypeConfiguration<Transaction>
+public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
 {
     public void Configure(EntityTypeBuilder<Transaction> builder)
     {
