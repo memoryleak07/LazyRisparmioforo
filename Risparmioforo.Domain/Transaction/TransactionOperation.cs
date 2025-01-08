@@ -2,10 +2,10 @@
 
 public enum TransactionCategory
 {
-    Salary,
-    Withdrawal,
+    Salary, // TODO: is a Transfer?
+    Withdraw,
     Payment,
-    Fees,
+    Fee,
     Transfer,
     Debit,
     Credit,
