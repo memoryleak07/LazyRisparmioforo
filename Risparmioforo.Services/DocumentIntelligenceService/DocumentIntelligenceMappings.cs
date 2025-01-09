@@ -76,12 +76,12 @@ public static class DocumentIntelligenceMappings
     
     private static ICollection<TransactionItem>? TryGetTransactionItems(this AnalyzedDocument analyzedDocument)
     {
-        var transactionItems = new List<TransactionItem>();
 
         if (!analyzedDocument.Fields.TryGetValue("Items", out DocumentField itemsField)
             || itemsField.FieldType != DocumentFieldType.List) 
             return null!;
         
+        var transactionItems = new List<TransactionItem>();
         
         foreach (DocumentField itemField in itemsField.ValueList)
         {

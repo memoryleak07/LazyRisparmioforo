@@ -13,10 +13,10 @@ public static class DependencyInjection
         
         services.AddTransient<IUnicreditCsvService, UnicreditCsvService.UnicreditCsvService>();
         
-        services.AddTransient<IDocumentIntelligenceService, DocumentIntelligenceService.DocumentIntelligenceService>();
-        
         services.AddTransient<ICsvValidator, ImportFileValidators.ImportFileCsvCommandValidator>();
         services.AddTransient<IImageValidator, ImportFileValidators.ImportFileImageCommandValidator>();
         services.AddValidatorsFromAssemblyContaining<ImportFileValidators>();
+        
+        services.AddDocumentIntelligenceService();
     }
 }

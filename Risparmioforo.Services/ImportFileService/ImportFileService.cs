@@ -54,7 +54,7 @@ public class ImportFileService(
             return Result<bool>.Failure(TransactionErrors.ValidationErrors(errors));
         }
 
-        await documentIntelligenceService.UploadDocumentAsync();
+        await documentIntelligenceService.UploadDocumentAsync(request.FileStream, cancellationToken);
         // var transactionsResult = await unicreditCsvService.ReadCsvAsync(request.FileStream, cancellationToken);
         // if (!transactionsResult.IsSuccess)
         // {

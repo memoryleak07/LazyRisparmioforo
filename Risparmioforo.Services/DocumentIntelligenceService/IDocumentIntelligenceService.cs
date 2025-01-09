@@ -1,6 +1,8 @@
-﻿namespace Risparmioforo.Services.DocumentIntelligenceService;
+﻿using Risparmioforo.Shared.Base;
+
+namespace Risparmioforo.Services.DocumentIntelligenceService;
 
 public interface IDocumentIntelligenceService
 {
-    Task UploadDocumentAsync();
+    Task<Result<bool>> UploadDocumentAsync(StreamReader streamReader, CancellationToken cancellationToken);
 }
