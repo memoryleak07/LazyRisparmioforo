@@ -1,4 +1,3 @@
-using Risparmioforo.Api;
 using Risparmioforo.Api.Extensions;
 using Risparmioforo.Shared.Models;
 

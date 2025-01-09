@@ -16,7 +16,7 @@ public class ExceptionHandlingMiddleware(
         }
         // catch (BadHttpRequestException ex) when (ex.InnerException is JsonException)
         // {
-        //     var i = new Error("", "");
+        //     // TODO: !!!
         // }
         catch (Exception ex)
         {

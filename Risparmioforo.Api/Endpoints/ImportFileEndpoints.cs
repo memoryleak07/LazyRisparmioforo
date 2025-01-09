@@ -11,11 +11,19 @@ public static class ImportFileEndpoints
     {
         var api = endpoints.MapGroup("/api/import");
         
-        api.MapPut("/", ImportCommand)
+        api.MapPut("/csv", ImportCsvCommand)
             .Accepts<UploadFileViewModel>("multipart/form-data")
             .Produces<Result<bool>>(StatusCodes.Status200OK)
             .Produces<Result<bool>>(StatusCodes.Status400BadRequest)
-            .WithDescription("Import bank transactions")
+            .WithDescription("Import csv bank transactions")
+            .WithOpenApi()
+            .DisableAntiforgery();
+        
+        api.MapPut("/photo", ImportPhotoCommand)
+            .Accepts<UploadFileViewModel>("multipart/form-data")
+            .Produces<Result<bool>>(StatusCodes.Status200OK)
+            .Produces<Result<bool>>(StatusCodes.Status400BadRequest)
+            .WithDescription("Upload a photo")
             .WithOpenApi()
             .DisableAntiforgery();
     }
@@ -24,20 +32,35 @@ public static class ImportFileEndpoints
     {
         public required IFormFile FormFile { get; set; }
     }
-    private static async Task<IResult> ImportCommand(
+
+    private static ImportFileCommand ToImportFileCommand(this UploadFileViewModel model)
+    {
+        return new ImportFileCommand
+        {
+            FileStream = new StreamReader(model.FormFile.OpenReadStream()),
+            ContentType = model.FormFile.ContentType,
+            FileName = model.FormFile.FileName,
+            FileLength = model.FormFile.Length
+        };
+    }
+    
+    private static async Task<IResult> ImportCsvCommand(
         [FromServices] IImportFileService importFileService,
         [FromForm] UploadFileViewModel request,
         CancellationToken cancellationToken)
     {
-        var command =  new ImportFileCommand
-        {
-            FileStream = new StreamReader(request.FormFile.OpenReadStream()),
-            ContentType = request.FormFile.ContentType,
-            FileName = request.FormFile.FileName,
-            FileLength = request.FormFile.Length
-        };
-        
-        var result = await importFileService.ImportAsync(command, cancellationToken);
+        var result = await importFileService.ImportCsvAsync(request.ToImportFileCommand(), cancellationToken);
+        return result.Map<IResult>(
+            onSuccess: value => TypedResults.Ok(Result<bool>.Success(value)),
+            onFailure: error => TypedResults.BadRequest(Result<bool>.Failure(error)));
+    }
+    
+    private static async Task<IResult> ImportPhotoCommand(
+        [FromServices] IImportFileService importFileService,
+        [FromForm] UploadFileViewModel request,
+        CancellationToken cancellationToken)
+    {
+        var result = await importFileService.ImportPhotoAsync(request.ToImportFileCommand(), cancellationToken);
         return result.Map<IResult>(
             onSuccess: value => TypedResults.Ok(Result<bool>.Success(value)),
             onFailure: error => TypedResults.BadRequest(Result<bool>.Failure(error)));

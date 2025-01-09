@@ -2,23 +2,44 @@
 
 namespace Risparmioforo.Services.ImportFileService;
 
-public class ImportFileCommandValidator : AbstractValidator<ImportFileCommand>
+public interface ICsvValidator : IValidator<ImportFileCommand> { }
+public interface IImageValidator : IValidator<ImportFileCommand> { }
+
+public class ImportFileValidators
 {
-    public ImportFileCommandValidator()
+    public class ImportFileCsvCommandValidator : AbstractValidator<ImportFileCommand>, ICsvValidator
     {
-        RuleFor(x => x.FileStream)
-            .NotNull().WithMessage("File stream cannot be null.");
+        public ImportFileCsvCommandValidator()
+        {
+            RuleFor(x => x.FileStream)
+                .NotNull().WithMessage("File stream cannot be null.");
         
-        RuleFor(x => x.FileName)
-            .NotEmpty().WithMessage("File name is required.")
-            .MaximumLength(255).WithMessage("File name cannot exceed 255 characters.");
+            RuleFor(x => x.FileLength)
+                .NotNull().WithMessage("File length cannot be null.")
+                .LessThanOrEqualTo(10485760).WithMessage("File size must not exceed 10MB.");
         
-        RuleFor(x => x.FileLength)
-            .NotNull().WithMessage("File length cannot be null.")
-            .LessThanOrEqualTo(10485760).WithMessage("File size must not exceed 10MB.");
+            RuleFor(x => x.ContentType)
+                .NotNull().WithMessage("Content type cannot be null.")
+                .Must(x => x.Equals("text/csv")).WithMessage("Only csv file is supported.");
+        }
+    }
+
+    public class ImportFileImageCommandValidator : AbstractValidator<ImportFileCommand>, IImageValidator
+    {
+        private readonly string[] _supportedExtensions = ["image/jpeg", "image/png"];
+    
+        public ImportFileImageCommandValidator()
+        {
+            RuleFor(x => x.FileStream)
+                .NotNull().WithMessage("File stream cannot be null.");
         
-        RuleFor(x => x.ContentType)
-            .NotNull().WithMessage("Content type cannot be null.")
-            .Must(x => x.Equals("text/csv")).WithMessage("Only csv file is supported.");
+            RuleFor(x => x.FileLength)
+                .NotNull().WithMessage("File length cannot be null.")
+                .LessThanOrEqualTo(10485760).WithMessage("File size must not exceed 10MB.");
+        
+            RuleFor(x => x.ContentType)
+                .Must(x => _supportedExtensions.Contains(x))
+                .WithMessage("Only jpeg and png images are supported.");
+        }
     }
 }

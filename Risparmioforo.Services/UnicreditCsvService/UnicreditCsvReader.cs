@@ -22,7 +22,7 @@ public static class UnicreditCsvReader
         return new TransactionMerchant
         {
             MerchantType = DetermineMerchantType(group2),
-            CardNumber = DetermineCardNumber(group3),
+            // CardNumber = DetermineCardNumber(group3), // TODO: cardNumber may belong to Transaction entity
             Name = group4.Trim(),
             Location = group5.Trim(),
         };
@@ -94,6 +94,7 @@ public static class UnicreditCsvReader
             Type = type,
             Operation = operation,
             Merchant = merchant,
+            // Items = [] // TODO: extract items, how?
         };
     }
 

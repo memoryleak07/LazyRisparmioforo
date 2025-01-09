@@ -4,5 +4,6 @@ namespace Risparmioforo.Services.ImportFileService;
 
 public interface IImportFileService
 {
-    Task<Result<bool>> ImportAsync(ImportFileCommand command, CancellationToken cancellationToken);
+    Task<Result<bool>> ImportCsvAsync(ImportFileCommand command, CancellationToken cancellationToken);
+    Task<Result<bool>> ImportPhotoAsync(ImportFileCommand request, CancellationToken cancellationToken);
 }

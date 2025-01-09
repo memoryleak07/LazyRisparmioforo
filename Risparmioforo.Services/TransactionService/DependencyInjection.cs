@@ -4,10 +4,8 @@ namespace Risparmioforo.Services.TransactionService;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddTransactionService(this IServiceCollection services)
+    public static void AddTransactionService(this IServiceCollection services)
     {
         services.AddTransient<ITransactionService, TransactionService>();
-        
-        return services;
     }
 }
