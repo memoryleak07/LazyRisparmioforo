@@ -19,7 +19,7 @@ public static class ImportFileEndpoints
             .WithOpenApi()
             .DisableAntiforgery();
         
-        api.MapPut("/photo", ImportPhotoCommand)
+        api.MapPut("/photo", ImportReceiptCommand)
             .Accepts<UploadFileViewModel>("multipart/form-data")
             .Produces<Result<bool>>(StatusCodes.Status200OK)
             .Produces<Result<bool>>(StatusCodes.Status400BadRequest)
@@ -57,12 +57,12 @@ public static class ImportFileEndpoints
             onFailure: error => TypedResults.BadRequest(Result<bool>.Failure(error)));
     }
     
-    private static async Task<IResult> ImportPhotoCommand(
+    private static async Task<IResult> ImportReceiptCommand(
         [FromServices] IImportFileService importFileService,
         [FromForm] UploadFileViewModel request,
         CancellationToken cancellationToken)
     {
-        var result = await importFileService.ImportDocumentsAsync(request.ToImportFileCommand(), cancellationToken);
+        var result = await importFileService.ImportReceiptDocumentsAsync(request.ToImportFileCommand(), cancellationToken);
         return result.Map<IResult>(
             onSuccess: value => TypedResults.Ok(Result<bool>.Success(value)),
             onFailure: error => TypedResults.BadRequest(Result<bool>.Failure(error)));

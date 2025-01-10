@@ -5,12 +5,12 @@ namespace Risparmioforo.Services.DocumentIntelligenceService;
 
 public static class DocumentIntelligenceMappings
 {
-    public static ICollection<Transaction>? TryGetTransactions(this IReadOnlyList<AnalyzedDocument> analyzeResult)
+    public static ICollection<Transaction>? TryGetTransactions(this IReadOnlyList<AnalyzedDocument> analyzedDocuments)
     {
-        var transactions = analyzeResult
-            .Select(x => x.TryGetTransaction())
-            .Where(x => x != null)
-            .Select(x => x!)
+        var transactions = analyzedDocuments
+            .Select(document => document.TryGetTransaction())
+            .Where(transaction => transaction is not null)
+            .Select(transaction => transaction!)
             .ToList();
 
         return transactions.Count > 0 ? transactions : null;
@@ -18,42 +18,47 @@ public static class DocumentIntelligenceMappings
 
     public static Transaction? TryGetTransaction(this AnalyzedDocument analyzedDocument)
     {
+        if (analyzedDocument.Confidence < 0.7) return null;
+        
         DateOnly? registrationDate = analyzedDocument.TryGetTransactionDate();
         decimal? amount = analyzedDocument.TryGetTransactionAmount();
         
         // TODO: determine when to return null
-        if (registrationDate == null || amount == null) 
+        if (registrationDate is null || amount is null) 
             return null;
-
-        TransactionType type = TransactionType.Expense;
-        TransactionMethod method = analyzedDocument.TryGetTransactionMethod();
-        TransactionMerchant? merchant = analyzedDocument.TryGetTransactionMerchant();
-        ICollection<TransactionItem>? items = analyzedDocument.TryGetTransactionItems();
         
         return new Transaction
         {
-            Description = "you wanna too much",
+            Description =  analyzedDocument.DocumentType,
             ValueDate = DateOnly.FromDateTime(DateTime.Now),
             RegistrationDate = registrationDate.Value,
             Amount = amount.Value * -1,
-            Type = type,
-            Method = method,
-            Merchant = merchant,
-            Items = items,
+            Type = TransactionType.Expense,
+            Method = TransactionMethod.Cash,
+            Operation = TransactionOperation.Payment,
+            Merchant = analyzedDocument.TryGetTransactionMerchant(),
+            Items = analyzedDocument.TryGetTransactionItems(),
         };
+    }
+    
+    private static decimal? TryGetTransactionAmount(this AnalyzedDocument analyzedDocument)
+    {
+        if (!analyzedDocument.Fields.TryGetValue("Total", out DocumentField invoiceTotalField)
+            || invoiceTotalField.FieldType != DocumentFieldType.Currency) 
+            return null;
+        
+        Console.WriteLine($"Receipt Total: '{invoiceTotalField.ValueCurrency.CurrencySymbol}{invoiceTotalField.ValueCurrency.Amount}', with confidence {invoiceTotalField.Confidence}");
+        return (decimal)invoiceTotalField.ValueCurrency.Amount;
     }
     
     private static DateOnly? TryGetTransactionDate(this AnalyzedDocument analyzedDocument)
     {
         if (!analyzedDocument.Fields.TryGetValue("TransactionDate", out DocumentField transactionDate)
-            || transactionDate.FieldType != DocumentFieldType.Date) 
-            return null;
-        
-        if (!transactionDate.ValueDate.HasValue)
+            || transactionDate.FieldType != DocumentFieldType.Date
+            || !transactionDate.ValueDate.HasValue)
             return null;
         
         Console.WriteLine($"Transaction Date: '{transactionDate.ValueDate}', with confidence {transactionDate.Confidence}");
-        
         return DateOnly.FromDateTime(transactionDate.ValueDate.Value.Date);
     }
     
@@ -76,37 +81,9 @@ public static class DocumentIntelligenceMappings
             transactionMerchant.Location = merchantAddressField.Content; 
         }
         
-        // TODO: determine operation type
-        
         return transactionMerchant;
     }
 
-    private static decimal? TryGetTransactionAmount(this AnalyzedDocument analyzedDocument)
-    {
-        if (!analyzedDocument.Fields.TryGetValue("Total", out DocumentField invoiceTotalField)
-            || invoiceTotalField.FieldType != DocumentFieldType.Currency) 
-            return null;
-        
-        Console.WriteLine($"Receipt Total: '{invoiceTotalField.ValueCurrency.CurrencySymbol}{invoiceTotalField.ValueCurrency.Amount}', with confidence {invoiceTotalField.Confidence}");
-        return (decimal)invoiceTotalField.ValueCurrency.Amount;
-    }
-    
-    private static TransactionMethod TryGetTransactionMethod(this AnalyzedDocument analyzedDocument)
-    {
-        if (!analyzedDocument.Fields.TryGetValue("Method", out DocumentField paymentMethodField)
-            || paymentMethodField.FieldType != DocumentFieldType.String) 
-            return TransactionMethod.Undefined;
-        
-        Console.WriteLine($"Transaction Method: '{paymentMethodField.ValueString}', with confidence {paymentMethodField.Confidence}");
-
-        if (paymentMethodField.ValueString.Contains("cash", StringComparison.InvariantCultureIgnoreCase))
-            return TransactionMethod.Cash;
-        if (paymentMethodField.ValueString.Contains("card", StringComparison.InvariantCultureIgnoreCase))
-            return TransactionMethod.Card;
-        
-        return TransactionMethod.Undefined;
-    }
-    
     private static ICollection<TransactionItem>? TryGetTransactionItems(this AnalyzedDocument analyzedDocument)
     {
         if (!analyzedDocument.Fields.TryGetValue("Items", out DocumentField itemsField)
@@ -119,14 +96,14 @@ public static class DocumentIntelligenceMappings
         foreach (DocumentField itemField in itemsField.ValueList
                      .Where(x => x.FieldType == DocumentFieldType.Dictionary))
         {
-            TransactionItem? item = null;
+            TransactionItem? transactionItem = null;
             IReadOnlyDictionary<string, DocumentField> itemFields = itemField.ValueDictionary;
             
             if (itemFields.TryGetValue("Description", out DocumentField? itemDescriptionField)
                 && itemDescriptionField.FieldType == DocumentFieldType.String)
             {
                 Console.WriteLine($"  Description: '{itemDescriptionField.ValueString}', with confidence {itemDescriptionField.Confidence}");
-                item = new TransactionItem { Item = itemDescriptionField.ValueString };
+                transactionItem = new TransactionItem { Item = itemDescriptionField.ValueString };
             }
             
             if (itemFields.TryGetValue("Quantity", out DocumentField? itemQuantityField)
@@ -134,20 +111,20 @@ public static class DocumentIntelligenceMappings
                 && itemQuantityField.ValueDouble.HasValue)
             {
                 Console.WriteLine($"  Quantity: '{itemQuantityField.ValueDouble}', with confidence {itemQuantityField.Confidence}");
-                item ??= new TransactionItem(); 
-                item.Quantity = (int)itemQuantityField.ValueDouble; 
+                transactionItem ??= new TransactionItem(); 
+                transactionItem.Quantity = (int)itemQuantityField.ValueDouble; 
             }
             
             if (itemFields.TryGetValue("Price", out DocumentField? itemPriceField)
                 && itemPriceField.FieldType == DocumentFieldType.Currency)
             {
                 Console.WriteLine($"  Price: '{itemPriceField.ValueCurrency.CurrencySymbol}{itemPriceField.ValueCurrency.Amount}', with confidence {itemPriceField.Confidence}");
-                item ??= new TransactionItem(); 
-                item.Price = (int)itemPriceField.ValueCurrency.Amount;
+                transactionItem ??= new TransactionItem(); 
+                transactionItem.Price = (int)itemPriceField.ValueCurrency.Amount;
             }
             
-            if (item is null) continue;
-            transactionItems.Add(item);
+            if (transactionItem is null) continue;
+            transactionItems.Add(transactionItem);
         }
 
         return transactionItems.Count > 0 ? transactionItems : null;

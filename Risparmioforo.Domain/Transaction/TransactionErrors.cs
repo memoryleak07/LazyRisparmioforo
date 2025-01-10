@@ -16,6 +16,10 @@ public abstract class TransactionErrors
         "The transaction is not unique.",
         "Transaction.NotUnique");
     
+    public static Error InsertError => new(
+        "An error occurred while inserting the transactions.",
+        "Transaction.InsertError");
+    
     public static Error ValidationErrors(IEnumerable<string> validationErrors) => new(
         string.Join(", ", validationErrors),
         "Transaction.ValidationErrors");

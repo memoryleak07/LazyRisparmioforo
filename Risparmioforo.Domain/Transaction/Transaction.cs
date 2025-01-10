@@ -12,6 +12,5 @@ public class Transaction
     public TransactionMethod Method { get; set; } = TransactionMethod.Undefined;
     public TransactionOperation Operation { get; set; } = TransactionOperation.Undefined;
     public TransactionMerchant? Merchant { get; set; }
-    // public MerchantType MerchantType { get; set; } = MerchantType.Undefined;
     public ICollection<TransactionItem>? Items { get; set; }
 }

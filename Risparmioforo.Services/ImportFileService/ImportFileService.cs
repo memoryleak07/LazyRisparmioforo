@@ -41,7 +41,7 @@ public class ImportFileService(
         return await InsertTransactionsAsync(transactions, cancellationToken);
     }
 
-    public async Task<Result<bool>> ImportDocumentsAsync(ImportFileCommand request, CancellationToken cancellationToken)
+    public async Task<Result<bool>> ImportReceiptDocumentsAsync(ImportFileCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await imageValidator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
@@ -83,7 +83,7 @@ public class ImportFileService(
             logger.LogError(exception, "Exception occured: {Message}", exception.Message);
             await dbContextTransaction.RollbackAsync(cancellationToken);
             
-            return Result<bool>.Failure(new Error("SomeErrorMessageHere", "ErrorCodeHere"));
+            return Result<bool>.Failure(TransactionErrors.InsertError);
         }
     }
 }

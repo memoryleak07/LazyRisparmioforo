@@ -42,8 +42,18 @@ public static class UnicreditCsvReader
         return TransactionOperation.Undefined;
     }
 
-    private static TransactionMethod DetermineTransactionMethod(string? description)
+    private static TransactionMethod DetermineTransactionMethod(string? description, TransactionOperation transactionOperation)
     {
+        if (transactionOperation is TransactionOperation.Withdraw)
+            return TransactionMethod.Cash;
+        
+        if (transactionOperation is TransactionOperation.Transfer
+            or TransactionOperation.Payment
+            or TransactionOperation.Credit
+            or TransactionOperation.Debit
+            or TransactionOperation.Fee)
+            return TransactionMethod.Card;
+        
         if (string.IsNullOrEmpty(description))
             return TransactionMethod.Undefined;
         
@@ -58,14 +68,20 @@ public static class UnicreditCsvReader
 
     private static string ExtractCardNumberFromText(string? description)
     {
-        if (string.IsNullOrEmpty(description) || description.Length < 100)
+        if (string.IsNullOrEmpty(description))
             return string.Empty;
+
+        var matchCardNumber = UnicreditRegexes.CardNumberPattern.Match(description);
+        if (!matchCardNumber.Success) 
+            return string.Empty;
+
+        if (!string.IsNullOrEmpty(matchCardNumber.Groups[1].Value))
+            return matchCardNumber.Groups[1].Value;
         
-        var substring = description.Substring(100, Math.Min(50, description.Length - 100));
-        var matchCardNumber = UnicreditRegexes.CardNumberPattern.Match(substring);
-        return matchCardNumber.Success
-            ? matchCardNumber.Groups[1].Value
-            : string.Empty;
+        if (!string.IsNullOrEmpty(matchCardNumber.Groups[2].Value))
+            return matchCardNumber.Groups[2].Value;
+        
+        return string.Empty;
     }
 
     private static TransactionType DetermineTransactionType(decimal amount)
@@ -91,8 +107,8 @@ public static class UnicreditCsvReader
             Amount = model.Importo,
             Type = type,
             Operation = operation,
-            Method = DetermineTransactionMethod(model.Descrizione),
             Card = ExtractCardNumberFromText(model.Descrizione),
+            Method = DetermineTransactionMethod(model.Descrizione, operation),
             Merchant = ExtractMerchantFromText(model.Descrizione, operation),
             // Items = [] // TODO: extract items, how?
         };

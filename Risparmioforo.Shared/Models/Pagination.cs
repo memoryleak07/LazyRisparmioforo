@@ -1,31 +1,14 @@
-﻿using System.ComponentModel;
-
-namespace Risparmioforo.Shared.Models;
+﻿namespace Risparmioforo.Shared.Models;
 
 public class Pagination<T>
 {
-    public Pagination(
-        ICollection<T> items,
-        int pageIndex,
-        int pageSize, 
-        int totalItemsCount)
+    public Pagination(ICollection<T> items, int pageIndex, int pageSize, int totalItemsCount)
     {
         PageIndex = pageIndex;
         PageSize = pageSize;
         TotalItemsCount = totalItemsCount;
         TotalPagesCount = totalItemsCount == 0 ? 0 : (int)Math.Ceiling((double)totalItemsCount / pageSize);
         Items = items;
-    }
-
-    public Pagination(
-        ICollection<T> items, 
-        int pageIndex, 
-        int pageSize, 
-        int totalItemsCount, 
-        string sortColumn, 
-        ListSortDirection sortDirection)
-    {
-        
     }
 
     public int PageIndex { get; set; }
