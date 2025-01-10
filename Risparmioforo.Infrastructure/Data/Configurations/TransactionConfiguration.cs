@@ -17,7 +17,8 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
         
         builder.Property(e => e.Amount)
             .IsRequired();
-
-        builder.Ignore(e => e.Items);
+        
+        builder.Property(e => e.Description)
+            .HasMaxLength(255);
     }
 }

@@ -2,8 +2,8 @@
 
 public class ImportFileCommand
 {
-    public StreamReader FileStream { get; set; }
     public string ContentType { get; set; }
+    public byte[] FileBytes { get; set; }
     public string FileName { get; set; } 
     public long FileLength { get; set; } 
 }

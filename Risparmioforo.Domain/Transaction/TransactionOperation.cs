@@ -2,7 +2,6 @@
 
 public enum TransactionOperation
 {
-    Salary, // TODO: is a Transfer?
     Withdraw,
     Payment,
     Fee,

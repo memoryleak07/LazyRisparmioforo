@@ -11,7 +11,7 @@ public class ImportFileValidators
     {
         public ImportFileCsvCommandValidator()
         {
-            RuleFor(x => x.FileStream)
+            RuleFor(x => x.FileBytes)
                 .NotNull().WithMessage("File stream cannot be null.");
         
             RuleFor(x => x.FileLength)
@@ -30,7 +30,7 @@ public class ImportFileValidators
     
         public ImportFileImageCommandValidator()
         {
-            RuleFor(x => x.FileStream)
+            RuleFor(x => x.FileBytes)
                 .NotNull().WithMessage("File stream cannot be null.");
         
             RuleFor(x => x.FileLength)

@@ -27,6 +27,7 @@ public class TransactionService(
         
         var items = await query
             .Include(x => x.Merchant)
+            .Include(x => x.Items)
             .Skip(command.PageSize * command.PageIndex)
             .Take(command.PageSize)
             .ToListAsync(cancellationToken);

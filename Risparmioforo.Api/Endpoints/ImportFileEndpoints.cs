@@ -35,9 +35,11 @@ public static class ImportFileEndpoints
 
     private static ImportFileCommand ToImportFileCommand(this UploadFileViewModel model)
     {
+        using var memoryStream = new MemoryStream();
+        model.FormFile.CopyTo(memoryStream);
         return new ImportFileCommand
         {
-            FileStream = new StreamReader(model.FormFile.OpenReadStream()),
+            FileBytes = memoryStream.ToArray(),
             ContentType = model.FormFile.ContentType,
             FileName = model.FormFile.FileName,
             FileLength = model.FormFile.Length
@@ -60,7 +62,7 @@ public static class ImportFileEndpoints
         [FromForm] UploadFileViewModel request,
         CancellationToken cancellationToken)
     {
-        var result = await importFileService.ImportPhotoAsync(request.ToImportFileCommand(), cancellationToken);
+        var result = await importFileService.ImportDocumentsAsync(request.ToImportFileCommand(), cancellationToken);
         return result.Map<IResult>(
             onSuccess: value => TypedResults.Ok(Result<bool>.Success(value)),
             onFailure: error => TypedResults.BadRequest(Result<bool>.Failure(error)));

@@ -8,17 +8,15 @@ using Risparmioforo.Shared.Base;
 namespace Risparmioforo.Services.DocumentIntelligenceService;
 
 public class DocumentIntelligenceService(
-    DocumentIntelligenceClient documentAnalysisClient,
+    DocumentIntelligenceClient documentIntelligenceClient,
     ApplicationDbContext dbContext,
     ILogger<DocumentIntelligenceService> logger
 ) : IDocumentIntelligenceService
 {
-    public async Task<Result<bool>> UploadDocumentAsync(StreamReader streamReader, CancellationToken cancellationToken)
+    public async Task<Result<ICollection<Transaction>>> ReadReceiptDocumentsAsync(byte[] bytes, CancellationToken cancellationToken)
     {
-        var testDocument = await File.ReadAllBytesAsync(@"C:\Users\Marco\Downloads\scontrino.jpg");
-
-        var binaryData = new BinaryData(testDocument);
-        Operation<AnalyzeResult> operation = await documentAnalysisClient.AnalyzeDocumentAsync(
+        var binaryData = new BinaryData(bytes);
+        Operation<AnalyzeResult> operation = await documentIntelligenceClient.AnalyzeDocumentAsync(
             WaitUntil.Completed,
             "prebuilt-receipt",
             binaryData,
@@ -26,37 +24,15 @@ public class DocumentIntelligenceService(
 
         if (!operation.HasValue)
         {
-            return Result<bool>.Failure(new Error("SomeErrorMessage", "UploadDocument.Error"));
+            return Result<ICollection<Transaction>>.Failure(new Error("SomeErrorMessage", "UploadDocument.Error"));
         }
 
         var transactions = operation.Value.Documents.TryGetTransactions();
-        if (transactions.Count == 0)
+        if (transactions is null || transactions.Count == 0)
         {
-            return Result<bool>.Failure(new Error("SomeErrorMessage", "UploadDocument.Error"));
+            return Result<ICollection<Transaction>>.Failure(new Error("SomeErrorMessage", "UploadDocument.Error"));
         }
-
-        await Insert(transactions, cancellationToken);
         
-        return Result<bool>.Success(true);
-    }
-
-
-    private async Task Insert(ICollection<Transaction> transactions, CancellationToken cancellationToken)
-    {
-        await using var dbContextTransaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
-        try
-        {
-            await dbContext.AddRangeAsync(transactions, cancellationToken);
-            
-            await dbContext.SaveChangesAsync(cancellationToken);
-            await dbContextTransaction.CommitAsync(cancellationToken);
-            
-            logger.LogInformation("Transactions inserted successfully.");
-        }
-        catch (Exception exception)
-        {
-            logger.LogError(exception.Message, exception);
-            await dbContextTransaction.RollbackAsync(cancellationToken);
-        }
+        return Result<ICollection<Transaction>>.Success(transactions);
     }
 }

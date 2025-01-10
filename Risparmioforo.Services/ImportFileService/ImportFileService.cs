@@ -23,72 +23,67 @@ public class ImportFileService(
         if (!validationResult.IsValid)
         {
             var errors = validationResult.Errors.Select(e => e.ErrorMessage);
-            
             return Result<bool>.Failure(TransactionErrors.ValidationErrors(errors));
         }
 
-        var transactionsResult = await unicreditCsvService.ReadCsvAsync(request.FileStream, cancellationToken);
-        if (!transactionsResult.IsSuccess)
+        var readCsvResult = await unicreditCsvService.ReadCsvAsync(request.FileBytes, cancellationToken);
+        if (!readCsvResult.IsSuccess)
         {
-            return Result<bool>.Failure(transactionsResult.Error!);
+            return Result<bool>.Failure(readCsvResult.Error!);
         }
 
-        var transactions = transactionsResult.Value;
+        var transactions = readCsvResult.Value;
         if (transactions is null || transactions.Count == 0)
         {
             return Result<bool>.Failure(TransactionErrors.CollectionNullOrEmpty);
         }
 
-        await InsertTransactionsAsync(transactions, cancellationToken);
-        
-        return Result<bool>.Success(true);
+        return await InsertTransactionsAsync(transactions, cancellationToken);
     }
 
-    public async Task<Result<bool>> ImportPhotoAsync(ImportFileCommand request, CancellationToken cancellationToken)
+    public async Task<Result<bool>> ImportDocumentsAsync(ImportFileCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await imageValidator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
             var errors = validationResult.Errors.Select(e => e.ErrorMessage);
-            
             return Result<bool>.Failure(TransactionErrors.ValidationErrors(errors));
         }
 
-        await documentIntelligenceService.UploadDocumentAsync(request.FileStream, cancellationToken);
-        // var transactionsResult = await unicreditCsvService.ReadCsvAsync(request.FileStream, cancellationToken);
-        // if (!transactionsResult.IsSuccess)
-        // {
-        //     return Result<bool>.Failure(transactionsResult.Error!);
-        // }
-        //
-        // var transactions = transactionsResult.Value;
-        // if (transactions is null || transactions.Count == 0)
-        // {
-        //     return Result<bool>.Failure(TransactionErrors.CollectionNullOrEmpty);
-        // }
-        //
-        // await InsertTransactionsAsync(transactions, cancellationToken);
+        var readDocumentsResult = await documentIntelligenceService.ReadReceiptDocumentsAsync(request.FileBytes, cancellationToken);
+        if (!readDocumentsResult.IsSuccess)
+        {
+            return Result<bool>.Failure(readDocumentsResult.Error!);
+        }
         
-        return Result<bool>.Success(true);
+        var transactions = readDocumentsResult.Value;
+        if (transactions is null || transactions.Count == 0)
+        {
+            return Result<bool>.Failure(TransactionErrors.CollectionNullOrEmpty);
+        }
+        
+        return await InsertTransactionsAsync(transactions, cancellationToken);
     }
     
-    private async Task InsertTransactionsAsync(ICollection<Transaction> transactions, CancellationToken cancellationToken)
+    private async Task<Result<bool>> InsertTransactionsAsync(ICollection<Transaction> transactions, CancellationToken cancellationToken)
     {
         await using var dbContextTransaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            await dbContext.AddRangeAsync(transactions, cancellationToken);
-            
+            dbContext.AddRange(transactions);
             await dbContext.SaveChangesAsync(cancellationToken);
             await dbContextTransaction.CommitAsync(cancellationToken);
             
             logger.LogInformation("Transactions inserted successfully.");
+            
+            return Result<bool>.Success(true);
         }
         catch (Exception exception)
         {
-            logger.LogError(exception.Message, exception);
+            logger.LogError(exception, "Exception occured: {Message}", exception.Message);
             await dbContextTransaction.RollbackAsync(cancellationToken);
+            
+            return Result<bool>.Failure(new Error("SomeErrorMessageHere", "ErrorCodeHere"));
         }
-        
     }
 }

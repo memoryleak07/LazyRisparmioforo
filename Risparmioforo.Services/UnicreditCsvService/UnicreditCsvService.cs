@@ -23,10 +23,10 @@ public class UnicreditCsvService(
     };
     
     public async Task<Result<ICollection<Transaction>>> ReadCsvAsync(
-        StreamReader streamReader, 
+        byte[] fileBytes,
         CancellationToken cancellationToken)
     {
-        using var csv = new CsvReader(streamReader, _unicreditCsvConfiguration);
+        using var csv = new CsvReader(new StreamReader(new MemoryStream(fileBytes)), _unicreditCsvConfiguration);
         
         csv.Context.RegisterClassMap<UnicreditCsvModelMap>();
 

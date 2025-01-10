@@ -11,18 +11,11 @@ public static class UnicreditCsvReader
             || operation is not TransactionOperation.Payment)
             return null;
         
-        int length = description.Length;
-        
-        _ = description.Substring(0, Math.Min(50, length));
-        string group2 = length > 50 ? description.Substring(50, Math.Min(50, length - 50)) : "";
-        string group3 = length > 100 ? description.Substring(100, Math.Min(50, length - 100)) : "";
-        string group4 = length > 150 ? description.Substring(150, Math.Min(50, length - 150)) : "";
-        string group5 = length > 200 ? description[200..] : "";
-
+        string group4 = description.Length > 150 ? description.Substring(150, Math.Min(50, description.Length - 150)) : "";
+        string group5 = description.Length > 200 ? description[200..] : "";
+    
         return new TransactionMerchant
         {
-            MerchantType = DetermineMerchantType(group2),
-            // CardNumber = DetermineCardNumber(group3), // TODO: cardNumber may belong to Transaction entity
             Name = group4.Trim(),
             Location = group5.Trim(),
         };
@@ -35,35 +28,41 @@ public static class UnicreditCsvReader
 
         var relevantPatterns = type switch
         {
-            TransactionType.Income => UnicreditRegexes.IncomeCategories,
-            TransactionType.Expense => UnicreditRegexes.ExpenseCategories,
+            TransactionType.Income => UnicreditRegexes.IncomeOperationPatterns,
+            TransactionType.Expense => UnicreditRegexes.ExpenseOperationPatterns,
             _ => []
         };
 
         foreach (var category in relevantPatterns)
         {
-            if (UnicreditRegexes.CategoryPatterns[category].IsMatch(description))
+            if (UnicreditRegexes.TransactionOperationPatterns[category].IsMatch(description))
                 return category;
         }
 
         return TransactionOperation.Undefined;
     }
 
-    private static MerchantType DetermineMerchantType(string substring)
+    private static TransactionMethod DetermineTransactionMethod(string? description)
     {
-        if (UnicreditRegexes.MerchantEcommercePattern.IsMatch(substring))
-            return MerchantType.ECommerce;
+        if (string.IsNullOrEmpty(description))
+            return TransactionMethod.Undefined;
+        
+        if (UnicreditRegexes.EcommercePattern.IsMatch(description))
+            return TransactionMethod.Card;
 
-        if (UnicreditRegexes.MerchantContactlessPattern.IsMatch(substring))
-            return MerchantType.Store;
+        if (UnicreditRegexes.ContactlessPattern.IsMatch(description))
+            return TransactionMethod.Card;
 
-        return MerchantType.Undefined;
+        return TransactionMethod.Undefined;
     }
 
-    private static string DetermineCardNumber(string substring)
+    private static string ExtractCardNumberFromText(string? description)
     {
+        if (string.IsNullOrEmpty(description) || description.Length < 100)
+            return string.Empty;
+        
+        var substring = description.Substring(100, Math.Min(50, description.Length - 100));
         var matchCardNumber = UnicreditRegexes.CardNumberPattern.Match(substring);
-
         return matchCardNumber.Success
             ? matchCardNumber.Groups[1].Value
             : string.Empty;
@@ -83,7 +82,6 @@ public static class UnicreditCsvReader
     {
         TransactionType type = DetermineTransactionType(model.Importo);
         TransactionOperation operation = DetermineOperation(model.Descrizione, type);
-        TransactionMerchant? merchant = ExtractMerchantFromText(model.Descrizione, operation);
 
         return new Transaction
         {
@@ -93,7 +91,9 @@ public static class UnicreditCsvReader
             Amount = model.Importo,
             Type = type,
             Operation = operation,
-            Merchant = merchant,
+            Method = DetermineTransactionMethod(model.Descrizione),
+            Card = ExtractCardNumberFromText(model.Descrizione),
+            Merchant = ExtractMerchantFromText(model.Descrizione, operation),
             // Items = [] // TODO: extract items, how?
         };
     }
