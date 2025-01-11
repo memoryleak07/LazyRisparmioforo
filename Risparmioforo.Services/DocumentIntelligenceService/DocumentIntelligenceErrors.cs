@@ -12,11 +12,15 @@ public abstract class DocumentIntelligenceErrors
         "The client did not found any document.",
         "DocumentIntelligence.NotFoundAnyDocument");
     
+    public static Error LowConfidenceDocument => new(
+        "The operation returned a result but the confidence is too low.",
+        "DocumentIntelligence.LowConfidenceDocument");
+    
     public static Error TryGetTransactionsError => new(
-        "Error converting the document.",
+        "Error converting the documents.",
         "DocumentIntelligence.TryGetTransactionsError");
     
-    public static Error GenericError(Exception exception) => new(
-        exception.Message,
-        "DocumentIntelligence.CsvGenericError");
+    public static Error ReadReceiptGenericError => new(
+        "Exception occurred while reading receipt documents.",
+        "DocumentIntelligence.ReceiptGenericError");
 }

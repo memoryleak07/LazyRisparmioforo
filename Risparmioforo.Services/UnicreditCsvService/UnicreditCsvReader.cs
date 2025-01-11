@@ -1,4 +1,5 @@
-﻿using Risparmioforo.Domain.Transaction;
+﻿using Risparmioforo.Domain.Common;
+using Risparmioforo.Domain.Transaction;
 
 namespace Risparmioforo.Services.UnicreditCsvService;
 
@@ -21,49 +22,39 @@ public static class UnicreditCsvReader
         };
     }
 
-    private static TransactionOperation DetermineOperation(string? description, TransactionType type)
+    private static TransactionOperation DetermineOperation(string? description, Flow type)
     {
         if (string.IsNullOrEmpty(description))
             return TransactionOperation.Undefined;
 
         var relevantPatterns = type switch
         {
-            TransactionType.Income => UnicreditRegexes.IncomeOperationPatterns,
-            TransactionType.Expense => UnicreditRegexes.ExpenseOperationPatterns,
+            Flow.Income => UnicreditRegexes.IncomeOperationPatterns,
+            Flow.Expense => UnicreditRegexes.ExpenseOperationPatterns,
             _ => []
         };
 
-        foreach (var category in relevantPatterns)
+        foreach (var operation in relevantPatterns)
         {
-            if (UnicreditRegexes.TransactionOperationPatterns[category].IsMatch(description))
-                return category;
+            if (UnicreditRegexes.TransactionOperationPatterns[operation].IsMatch(description))
+                return operation;
         }
 
         return TransactionOperation.Undefined;
     }
 
-    private static TransactionMethod DetermineTransactionMethod(string? description, TransactionOperation transactionOperation)
+    private static TransactionMethod DetermineTransactionMethod(TransactionOperation transactionOperation)
     {
-        if (transactionOperation is TransactionOperation.Withdraw)
-            return TransactionMethod.Cash;
-        
-        if (transactionOperation is TransactionOperation.Transfer
-            or TransactionOperation.Payment
-            or TransactionOperation.Credit
-            or TransactionOperation.Debit
-            or TransactionOperation.Fee)
-            return TransactionMethod.Card;
-        
-        if (string.IsNullOrEmpty(description))
-            return TransactionMethod.Undefined;
-        
-        if (UnicreditRegexes.EcommercePattern.IsMatch(description))
-            return TransactionMethod.Card;
-
-        if (UnicreditRegexes.ContactlessPattern.IsMatch(description))
-            return TransactionMethod.Card;
-
-        return TransactionMethod.Undefined;
+        return transactionOperation switch
+        {
+            TransactionOperation.Withdraw => TransactionMethod.Cash,
+            TransactionOperation.Transfer 
+                or TransactionOperation.Payment
+                or TransactionOperation.Credit 
+                or TransactionOperation.Debit
+                or TransactionOperation.Fee => TransactionMethod.Card,
+            _ => TransactionMethod.Undefined
+        };
     }
 
     private static string ExtractCardNumberFromText(string? description)
@@ -84,20 +75,20 @@ public static class UnicreditCsvReader
         return string.Empty;
     }
 
-    private static TransactionType DetermineTransactionType(decimal amount)
+    private static Flow DetermineFlow(decimal amount)
     {
         return amount switch
         {
-            < 0 => TransactionType.Expense,
-            > 0 => TransactionType.Income,
-            _ => TransactionType.Undefined
+            < 0 => Flow.Expense,
+            > 0 => Flow.Income,
+            _ => Flow.Undefined
         };
     }
     
     public static Transaction ToTransaction(this UnicreditCsvModel model)
     {
-        TransactionType type = DetermineTransactionType(model.Importo);
-        TransactionOperation operation = DetermineOperation(model.Descrizione, type);
+        Flow flow = DetermineFlow(model.Importo);
+        TransactionOperation operation = DetermineOperation(model.Descrizione, flow);
 
         return new Transaction
         {
@@ -105,10 +96,10 @@ public static class UnicreditCsvReader
             ValueDate = model.DataValuta,
             Description = model.Descrizione?.Trim() ?? "",
             Amount = model.Importo,
-            Type = type,
+            Flow = flow,
             Operation = operation,
-            Card = ExtractCardNumberFromText(model.Descrizione),
-            Method = DetermineTransactionMethod(model.Descrizione, operation),
+            CardNumber = ExtractCardNumberFromText(model.Descrizione),
+            Method = DetermineTransactionMethod(operation),
             Merchant = ExtractMerchantFromText(model.Descrizione, operation),
             // Items = [] // TODO: extract items, how?
         };

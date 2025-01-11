@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Risparmioforo.Domain.Category;
 using Risparmioforo.Domain.Transaction;
 using Risparmioforo.Infrastructure.Data;
+using Risparmioforo.Services.CategoryService;
 using Risparmioforo.Services.DocumentIntelligenceService;
 using Risparmioforo.Services.UnicreditCsvService;
 using Risparmioforo.Shared.Base;
@@ -38,6 +41,9 @@ public class ImportFileService(
             return Result<bool>.Failure(TransactionErrors.CollectionNullOrEmpty);
         }
 
+        Category[] categories = await dbContext.Categories.AsNoTracking().ToArrayAsync(cancellationToken);
+        transactions.SetCategories(categories);
+        
         return await InsertTransactionsAsync(transactions, cancellationToken);
     }
 

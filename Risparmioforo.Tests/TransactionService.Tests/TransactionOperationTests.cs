@@ -1,4 +1,4 @@
-﻿namespace Risparmioforo.Tests.TransactionService;
+﻿namespace Risparmioforo.Tests.TransactionService.Tests;
 
 public class TransactionOperationTests
 {
@@ -27,8 +27,8 @@ public class TransactionOperationTests
         // var incomes = items.Where(x => x.Amount > 0).ToList();
         // var expenses = items.Where(x => x.Amount < 0).ToList();
         //
-        // bool anyUndefinedIncome = incomes.Any(x => x.Type == TransactionType.Undefined);
-        // bool anyUndefinedExpense = expenses.Any(x => x.Type == TransactionType.Undefined);
+        // bool anyUndefinedIncome = incomes.Any(x => x.Flow == Flow.Undefined);
+        // bool anyUndefinedExpense = expenses.Any(x => x.Flow == Flow.Undefined);
         //
         // Assert.False(anyUndefinedIncome);
         // Assert.False(anyUndefinedExpense);

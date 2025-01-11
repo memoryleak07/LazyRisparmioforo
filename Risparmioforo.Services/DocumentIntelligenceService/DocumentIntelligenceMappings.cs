@@ -1,4 +1,5 @@
 ﻿using Azure.AI.DocumentIntelligence;
+using Risparmioforo.Domain.Common;
 using Risparmioforo.Domain.Transaction;
 
 namespace Risparmioforo.Services.DocumentIntelligenceService;
@@ -18,24 +19,23 @@ public static class DocumentIntelligenceMappings
 
     public static Transaction? TryGetTransaction(this AnalyzedDocument analyzedDocument)
     {
-        if (analyzedDocument.Confidence < 0.7) return null;
-        
         DateOnly? registrationDate = analyzedDocument.TryGetTransactionDate();
         decimal? amount = analyzedDocument.TryGetTransactionAmount();
         
-        // TODO: determine when to return null
         if (registrationDate is null || amount is null) 
             return null;
         
         return new Transaction
         {
-            Description =  analyzedDocument.DocumentType,
+            CardNumber = string.Empty,
+            Description = "receipt",
             ValueDate = DateOnly.FromDateTime(DateTime.Now),
             RegistrationDate = registrationDate.Value,
             Amount = amount.Value * -1,
-            Type = TransactionType.Expense,
+            Flow = Flow.Expense,
             Method = TransactionMethod.Cash,
             Operation = TransactionOperation.Payment,
+            Category =  analyzedDocument.TryGetTransactionCategory(),
             Merchant = analyzedDocument.TryGetTransactionMerchant(),
             Items = analyzedDocument.TryGetTransactionItems(),
         };
@@ -43,23 +43,33 @@ public static class DocumentIntelligenceMappings
     
     private static decimal? TryGetTransactionAmount(this AnalyzedDocument analyzedDocument)
     {
-        if (!analyzedDocument.Fields.TryGetValue("Total", out DocumentField invoiceTotalField)
-            || invoiceTotalField.FieldType != DocumentFieldType.Currency) 
+        if (!analyzedDocument.Fields.TryGetValue("Total", out DocumentField totalField)
+            || totalField.FieldType != DocumentFieldType.Currency) 
             return null;
         
-        Console.WriteLine($"Receipt Total: '{invoiceTotalField.ValueCurrency.CurrencySymbol}{invoiceTotalField.ValueCurrency.Amount}', with confidence {invoiceTotalField.Confidence}");
-        return (decimal)invoiceTotalField.ValueCurrency.Amount;
+        Console.WriteLine($"Receipt Total: '{totalField.ValueCurrency.CurrencySymbol}{totalField.ValueCurrency.Amount}', with confidence {totalField.Confidence}");
+        return (decimal)totalField.ValueCurrency.Amount;
+    }
+    
+    private static string TryGetTransactionCategory(this AnalyzedDocument analyzedDocument)
+    {
+        if (!analyzedDocument.Fields.TryGetValue("ReceiptType", out DocumentField categoryField)
+            || categoryField.FieldType != DocumentFieldType.String) 
+            return string.Empty;
+        
+        Console.WriteLine($"Receipt Type: '{categoryField.ValueString}', with confidence {categoryField.Confidence}");
+        return categoryField.ValueString;
     }
     
     private static DateOnly? TryGetTransactionDate(this AnalyzedDocument analyzedDocument)
     {
-        if (!analyzedDocument.Fields.TryGetValue("TransactionDate", out DocumentField transactionDate)
-            || transactionDate.FieldType != DocumentFieldType.Date
-            || !transactionDate.ValueDate.HasValue)
+        if (!analyzedDocument.Fields.TryGetValue("TransactionDate", out DocumentField dateField)
+            || dateField.FieldType != DocumentFieldType.Date
+            || !dateField.ValueDate.HasValue)
             return null;
         
-        Console.WriteLine($"Transaction Date: '{transactionDate.ValueDate}', with confidence {transactionDate.Confidence}");
-        return DateOnly.FromDateTime(transactionDate.ValueDate.Value.Date);
+        Console.WriteLine($"Transaction Date: '{dateField.ValueDate}', with confidence {dateField.Confidence}");
+        return DateOnly.FromDateTime(dateField.ValueDate.Value.Date);
     }
     
     private static TransactionMerchant? TryGetTransactionMerchant(this AnalyzedDocument analyzedDocument)
@@ -84,7 +94,7 @@ public static class DocumentIntelligenceMappings
         return transactionMerchant;
     }
 
-    private static ICollection<TransactionItem>? TryGetTransactionItems(this AnalyzedDocument analyzedDocument)
+    private static List<TransactionItem>? TryGetTransactionItems(this AnalyzedDocument analyzedDocument)
     {
         if (!analyzedDocument.Fields.TryGetValue("Items", out DocumentField itemsField)
             || itemsField.FieldType != DocumentFieldType.List

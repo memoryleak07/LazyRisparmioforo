@@ -1,4 +1,5 @@
 ﻿using Risparmioforo.Domain.Category;
+using Risparmioforo.Domain.Common;
 using Risparmioforo.Domain.Transaction;
 
 namespace Risparmioforo.Infrastructure.Data;
@@ -29,24 +30,24 @@ public class ApplicationDbContextInitializer(
     {
         var categories = new List<Category>()
         {
-            new() { Name = "Insurance" },
-            new() { Name = "Fines" },
-            new() { Name = "Transport" },
-            new() { Name = "Education" },
-            new() { Name = "Health" },
-            new() { Name = "Shopping" },
-            new() { Name = "Clothing" },
-            new() { Name = "Beauty" },
-            new() { Name = "Travel" },
-            new() { Name = "Grocery" },
-            new() { Name = "Bar" },
-            new() { Name = "Tobacco" },
-            new() { Name = "Gift" },
-            new() { Name = "Equipment" },
-            new() { Name = "Rent" },
-            new() { Name = "Tax" },
-            new() { Name = "Saving" },
-            new() { Name = "Investment" },
+            // From azure document intelligence
+            // https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/receipt?view=doc-intel-4.0.0
+            new() { Flow = Flow.Expense, Name = "Meal", Keywords = ["bar", "restaurant", "coffee", "caffè", "chalet"]},
+            new() { Flow = Flow.Expense, Name = "Supplies" },
+            new() { Flow = Flow.Expense, Name = "Hotel", Keywords = ["hotel", "b&b"] },
+            new() { Flow = Flow.Expense, Name = "Fuel&Energy", Keywords = ["benzina", "gas", "distributore", "petrol", "carburant"] },
+            new() { Flow = Flow.Expense, Name = "Transportation", Keywords = ["park", "parcheggio"]},
+            new() { Flow = Flow.Expense, Name = "Communication" },
+            new() { Flow = Flow.Expense, Name = "Subscriptions", Keywords = ["amazon prime", "github", "netflix", "spotify", "youtube"] },
+            new() { Flow = Flow.Expense, Name = "Training", Keywords = ["gym", "palestra", "fitness"] },
+            new() { Flow = Flow.Expense, Name = "Healthcare", Keywords = ["dott.", "medico", "dottore", "farmacia"] },
+            // custom
+            new() { Flow = Flow.Expense, Name = "Insurance", Keywords = ["unipolsai", "assicurazione"] },
+            new() { Flow = Flow.Expense, Name = "Fines", Keywords = ["pagamenti p.a."] },
+            new() { Flow = Flow.Expense, Name = "Shopping", Keywords = ["amazon", "amzn"] },
+            new() { Flow = Flow.Expense, Name = "Clothing", Keywords = ["zalando"] },
+            new() { Flow = Flow.Expense, Name = "Telephone", Keywords = ["vodafone", "ho. mobile"] },
+            new() { Flow = Flow.Income, Name = "Salary", Keywords = ["alten"] },
         };
         
         // var transactions = new List<Transaction>

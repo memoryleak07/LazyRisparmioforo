@@ -6,7 +6,8 @@ public sealed class UnicreditCsvModelMap : ClassMap<UnicreditCsvModel>
 {
     public UnicreditCsvModelMap()
     {
-        // AutoMap(CultureInfo.InvariantCulture);
+        // Data Registrazione;Data valuta;Descrizione;Importo (EUR);
+        
         Map(m => m.DataRegistraz)
             .Name("Data Registrazione").TypeConverterOption.Format("dd.MM.yyyy");
         

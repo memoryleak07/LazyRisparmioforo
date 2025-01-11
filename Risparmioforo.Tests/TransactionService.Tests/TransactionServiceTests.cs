@@ -1,6 +1,6 @@
 ﻿using Risparmioforo.Services.TransactionService;
 
-namespace Risparmioforo.Tests.TransactionService;
+namespace Risparmioforo.Tests.TransactionService.Tests;
 
 public class TransactionServiceTests
 {

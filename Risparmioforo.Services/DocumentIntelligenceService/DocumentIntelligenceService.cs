@@ -30,7 +30,12 @@ public class DocumentIntelligenceService(
             {
                 return Result<ICollection<Transaction>>.Failure(DocumentIntelligenceErrors.NotFoundAnyDocument);
             }
-
+            
+            if (operation.Value.Documents.Average(x => x.Confidence) < 0.7)
+            {
+                return Result<ICollection<Transaction>>.Failure(DocumentIntelligenceErrors.LowConfidenceDocument);
+            }
+            
             var transactions = operation.Value.Documents.TryGetTransactions();
             if (transactions is null || transactions.Count == 0)
             {
@@ -42,7 +47,7 @@ public class DocumentIntelligenceService(
         catch (Exception exception)
         {
             logger.LogError(exception, "Exception occured: {Message}", exception.Message);
-            return Result<ICollection<Transaction>>.Failure(DocumentIntelligenceErrors.GenericError(exception));
+            return Result<ICollection<Transaction>>.Failure(DocumentIntelligenceErrors.ReadReceiptGenericError);
         }
     }
 }
