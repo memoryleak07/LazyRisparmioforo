@@ -31,7 +31,7 @@ public class TransactionService(
             .Take(command.PageSize)
             .ToListAsync(cancellationToken);
 
-        var dto = items.ToTransactionsDto();
+        var dto = items.ToDto();
         var paginatedResults = dto.ToPagination(command.PageIndex, command.PageSize, totalItemsCount);
 
         return Result<Pagination<TransactionDto>>.Success(paginatedResults);
@@ -52,7 +52,7 @@ public class TransactionService(
         
         logger.LogInformation("Transaction created successfully.");
         
-        return Result<TransactionDto>.Success(entity.ToTransactionDto());
+        return Result<TransactionDto>.Success(entity.ToDto());
     }
     
     public async Task<Result<TransactionDto>> Update(UpdateTransactionCommand command, CancellationToken cancellationToken)
@@ -78,7 +78,7 @@ public class TransactionService(
         
         logger.LogInformation("Transaction updated successfully.");
         
-        return Result<TransactionDto>.Success(entity.ToTransactionDto());
+        return Result<TransactionDto>.Success(entity.ToDto());
     }
     
     public async Task<Result<bool>> Remove(RemoveTransactionCommand command, CancellationToken cancellationToken)

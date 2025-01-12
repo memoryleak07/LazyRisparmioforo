@@ -20,10 +20,10 @@ public class TransactionDto
 
 public static class TransactionMappingExtension
 {
-    public static ICollection<TransactionDto> ToTransactionsDto(this ICollection<Transaction> transactions) =>
-        transactions.Select(t => t.ToTransactionDto()).ToList();
+    public static ICollection<TransactionDto> ToDto(this ICollection<Transaction> transactions) =>
+        transactions.Select(t => t.ToDto()).ToList();
 
-    public static TransactionDto ToTransactionDto(this Transaction transaction) => 
+    public static TransactionDto ToDto(this Transaction transaction) => 
         new TransactionDto
         {
             Id = transaction.Id,

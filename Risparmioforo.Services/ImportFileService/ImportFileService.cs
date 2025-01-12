@@ -49,7 +49,7 @@ public class ImportFileService(
             Result<Pagination<TransactionDto>>.Failure(TransactionErrors.InsertError);
         }
         
-        var dto = transactions.ToTransactionsDto();
+        var dto = transactions.ToDto();
         return Result<Pagination<TransactionDto>>.Success(dto.ToPagination(pageIndex: 0, pageSize: 10, transactions.Count));
     }
 
@@ -79,7 +79,7 @@ public class ImportFileService(
             return Result<Pagination<TransactionDto>>.Failure(TransactionErrors.InsertError);
         }
 
-        var dto = transactions.ToTransactionsDto();
+        var dto = transactions.ToDto();
         return Result<Pagination<TransactionDto>>.Success(dto.ToPagination(pageIndex: 0, pageSize: 10, transactions.Count));
     }
     
