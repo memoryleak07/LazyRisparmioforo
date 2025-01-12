@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Risparmioforo.Domain.Category;
 using Risparmioforo.Services.CategoryService;
 using Risparmioforo.Shared.Base;
@@ -14,33 +13,33 @@ public static class CategoryEndpoints
         var api = endpoints.MapGroup("/api/category/");
         
         api.MapGet("/search", SearchCommand)
-            .Produces<Result<Pagination<Category>>>()
+            .Produces<Result<Pagination<CategoryDto>>>()
             .WithDescription("Search categories")
             .WithOpenApi();
         
         api.MapPost("/create", CreateCommand)
             .Accepts<CreateCategoryCommand>("application/json")
-            .Produces<Result<Category>>()
+            .Produces<Result<CategoryDto>>()
             .Produces(StatusCodes.Status400BadRequest)
             .WithDescription("Create a category")
             .WithOpenApi();
         
         api.MapPut("/update", UpdateCommand)
             .Accepts<UpdateCategoryCommand>("application/json")
-            .Produces<Result<Category>>()
+            .Produces<Result<CategoryDto>>()
             .Produces(StatusCodes.Status400BadRequest)
             .WithDescription("Update a category")
             .WithOpenApi();
         
         api.MapDelete("/remove", RemoveCommand)
             .Accepts<RemoveCategoryCommand>("application/json")
-            .Produces<Ok>()
+            .Produces<Result<bool>>()
             .Produces(StatusCodes.Status400BadRequest)
             .WithDescription("Remove a category")
             .WithOpenApi();
     }
 
-    private static async Task<Result<Pagination<Category>>> SearchCommand(
+    private static async Task<Result<Pagination<CategoryDto>>> SearchCommand(
         [FromServices] ICategoryService categoryService,
         [AsParameters] SearchCommand command, CancellationToken cancellationToken)
         => await categoryService.Search(command, cancellationToken);
@@ -51,8 +50,8 @@ public static class CategoryEndpoints
     {
         var result = await categoryService.Create(request, cancellationToken);
         return result.Map<IResult>(
-            onSuccess: value => TypedResults.Ok(Result<Category>.Success(value)),
-            onFailure: error => TypedResults.BadRequest(Result<Category>.Failure(error)));
+            onSuccess: value => TypedResults.Ok(Result<CategoryDto>.Success(value)),
+            onFailure: error => TypedResults.BadRequest(Result<CategoryDto>.Failure(error)));
     }
     
     private static async Task<IResult> UpdateCommand(
@@ -61,8 +60,8 @@ public static class CategoryEndpoints
     {
         var result = await categoryService.Update(request, cancellationToken);
         return result.Map<IResult>(
-            onSuccess: value => TypedResults.Ok(Result<Category>.Success(value)),
-            onFailure: error => TypedResults.BadRequest(Result<Category>.Failure(error)));
+            onSuccess: value => TypedResults.Ok(Result<CategoryDto>.Success(value)),
+            onFailure: error => TypedResults.BadRequest(Result<CategoryDto>.Failure(error)));
     }
     
     private static async Task<IResult> RemoveCommand(

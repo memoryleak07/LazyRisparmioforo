@@ -13,7 +13,7 @@ public class CategoryService(
     ICategoryValidator categoryValidator)
      : ICategoryService
 {
-    public async Task<Result<Pagination<Category>>> Search(SearchCommand command, CancellationToken cancellationToken)
+    public async Task<Result<Pagination<CategoryDto>>> Search(SearchCommand command, CancellationToken cancellationToken)
     {
         var query = dbContext.Categories
             .AsNoTracking()
@@ -29,12 +29,13 @@ public class CategoryService(
             .Take(command.PageSize)
             .ToListAsync(cancellationToken);
 
-        var paginatedResults = items.ToPagination(command.PageIndex, command.PageSize, totalItemsCount);
+        var dto = items.ToDto();
+        var paginatedResults = dto.ToPagination(command.PageIndex, command.PageSize, totalItemsCount);
 
-        return Result<Pagination<Category>>.Success(paginatedResults);
+        return Result<Pagination<CategoryDto>>.Success(paginatedResults);
     }
     
-    public async Task<Result<Category>> Create(CreateCategoryCommand command, CancellationToken cancellationToken)
+    public async Task<Result<CategoryDto>> Create(CreateCategoryCommand command, CancellationToken cancellationToken)
     {
         var entity = new Category { Flow = command.Flow, Name = command.Name, Keywords = command.Keywords};
         
@@ -42,30 +43,30 @@ public class CategoryService(
         if (!validationResult.IsValid)
         {
             var errors = validationResult.Errors.Select(e => e.ErrorMessage);
-            return Result<Category>.Failure(CategoryErrors.ValidationErrors(errors));
+            return Result<CategoryDto>.Failure(CategoryErrors.ValidationErrors(errors));
         }
         
         if (await IsNameNotUnique(command.Name))
-            return Result<Category>.Failure(CategoryErrors.NotUnique);
+            return Result<CategoryDto>.Failure(CategoryErrors.NotUnique);
 
         dbContext.Categories.Add(entity);
         await dbContext.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Category created successfully.");
         
-        return Result<Category>.Success(entity);
+        return Result<CategoryDto>.Success(entity.ToDto());
     }
     
-    public async Task<Result<Category>> Update(UpdateCategoryCommand command, CancellationToken cancellationToken)
+    public async Task<Result<CategoryDto>> Update(UpdateCategoryCommand command, CancellationToken cancellationToken)
     {
         if (await IsNameNotUnique(command.Name, command.Id))
-            return Result<Category>.Failure(CategoryErrors.NotUnique);
+            return Result<CategoryDto>.Failure(CategoryErrors.NotUnique);
 
         var entity = await dbContext.Categories
             .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken: cancellationToken);
 
         if (entity is null)
-            return Result<Category>.Failure(CategoryErrors.NotFound(command.Id));
+            return Result<CategoryDto>.Failure(CategoryErrors.NotFound(command.Id));
 
         entity.Name = command.Name;
         entity.Keywords.AddRange(command.Keywords.Except(entity.Keywords));
@@ -74,14 +75,14 @@ public class CategoryService(
         if (!validationResult.IsValid)
         {
             var errors = validationResult.Errors.Select(e => e.ErrorMessage);
-            return Result<Category>.Failure(CategoryErrors.ValidationErrors(errors));
+            return Result<CategoryDto>.Failure(CategoryErrors.ValidationErrors(errors));
         }
         
         await dbContext.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Category updated successfully.");
         
-        return Result<Category>.Success(entity);
+        return Result<CategoryDto>.Success(entity.ToDto());
     }
     
     public async Task<Result<bool>> Remove(RemoveCategoryCommand command, CancellationToken cancellationToken)

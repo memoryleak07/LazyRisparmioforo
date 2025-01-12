@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Risparmioforo.Domain.Transaction;
 using Risparmioforo.Services.TransactionService;
 using Risparmioforo.Shared.Base;
@@ -31,7 +30,7 @@ public static class TransactionEndpoints
             .WithOpenApi();
         
         api.MapDelete("/remove", RemoveCommand)
-            .Produces<Ok>()
+            .Produces<Result<bool>>()
             .Produces(StatusCodes.Status400BadRequest)
             .WithDescription("Remove a transaction")
             .WithOpenApi();

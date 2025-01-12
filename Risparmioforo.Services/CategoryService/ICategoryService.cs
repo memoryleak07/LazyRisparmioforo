@@ -6,8 +6,8 @@ namespace Risparmioforo.Services.CategoryService;
 
 public interface ICategoryService
 {
-    Task<Result<Pagination<Category>>> Search(SearchCommand command, CancellationToken cancellationToken);
-    Task<Result<Category>> Create(CreateCategoryCommand command, CancellationToken cancellationToken);
-    Task<Result<Category>> Update(UpdateCategoryCommand command, CancellationToken cancellationToken);
+    Task<Result<Pagination<CategoryDto>>> Search(SearchCommand command, CancellationToken cancellationToken);
+    Task<Result<CategoryDto>> Create(CreateCategoryCommand command, CancellationToken cancellationToken);
+    Task<Result<CategoryDto>> Update(UpdateCategoryCommand command, CancellationToken cancellationToken);
     Task<Result<bool>> Remove(RemoveCategoryCommand command, CancellationToken cancellationToken);
 }
