@@ -11,4 +11,8 @@ public abstract class CategoryErrors
     public static Error NotUnique => new(
         "The category is not unique.",
         "Category.NotUnique");
+    
+    public static Error ValidationErrors(IEnumerable<string> validationErrors) => new(
+        string.Join(", ", validationErrors),
+        "Category.ValidationErrors");
 }

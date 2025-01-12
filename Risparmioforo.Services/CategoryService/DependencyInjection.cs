@@ -1,13 +1,16 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
+using Risparmioforo.Services.ImportFileService;
 
 namespace Risparmioforo.Services.CategoryService;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddCategoryService(this IServiceCollection services)
+    public static void AddCategoryService(this IServiceCollection services)
     {
         services.AddTransient<ICategoryService, CategoryService>();
 
-        return services;
+        services.AddTransient<ICategoryValidator, CategoryValidator>();
+        services.AddValidatorsFromAssemblyContaining<ImportFileValidators>();
     }
 }

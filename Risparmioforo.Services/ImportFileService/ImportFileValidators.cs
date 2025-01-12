@@ -35,7 +35,7 @@ public class ImportFileValidators
         
             RuleFor(x => x.FileLength)
                 .NotNull().WithMessage("File length cannot be null.")
-                .LessThanOrEqualTo(10485760).WithMessage("File size must not exceed 10MB.");
+                .LessThanOrEqualTo(5 * 1024 * 1024).WithMessage("File size must not exceed 5MB.");
         
             RuleFor(x => x.ContentType)
                 .Must(x => _supportedExtensions.Contains(x))
