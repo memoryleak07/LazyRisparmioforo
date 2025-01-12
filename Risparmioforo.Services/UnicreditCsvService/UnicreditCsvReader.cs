@@ -1,4 +1,5 @@
-﻿using Risparmioforo.Domain.Common;
+﻿using Risparmioforo.Domain.Account;
+using Risparmioforo.Domain.Common;
 using Risparmioforo.Domain.Transaction;
 
 namespace Risparmioforo.Services.UnicreditCsvService;
@@ -43,17 +44,17 @@ public static class UnicreditCsvReader
         return TransactionOperation.Undefined;
     }
 
-    private static TransactionMethod DetermineTransactionMethod(TransactionOperation transactionOperation)
+    private static AccountDefault DetermineDefaultAccount(TransactionOperation transactionOperation)
     {
         return transactionOperation switch
         {
-            TransactionOperation.Withdraw => TransactionMethod.Cash,
+            TransactionOperation.Withdraw => AccountDefault.Cash,
             TransactionOperation.Transfer 
                 or TransactionOperation.Payment
                 or TransactionOperation.Credit 
                 or TransactionOperation.Debit
-                or TransactionOperation.Fee => TransactionMethod.Card,
-            _ => TransactionMethod.Undefined
+                or TransactionOperation.Fee => AccountDefault.Main,
+            _ =>  AccountDefault.Main,
         };
     }
 
@@ -98,9 +99,9 @@ public static class UnicreditCsvReader
             Amount = model.Importo,
             Flow = flow,
             Operation = operation,
+            AccountId = (int)DetermineDefaultAccount(operation),
             CardNumber = ExtractCardNumberFromText(model.Descrizione),
-            Method = DetermineTransactionMethod(operation),
-            Merchant = ExtractMerchantFromText(model.Descrizione, operation),
+            Merchant = ExtractMerchantFromText(model.Descrizione, operation)
             // Items = [] // TODO: extract items, how?
         };
     }

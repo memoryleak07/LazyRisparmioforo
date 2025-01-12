@@ -2,6 +2,7 @@
 using Risparmioforo.Api.Middleware;
 using Risparmioforo.Infrastructure;
 using Risparmioforo.Infrastructure.Data;
+using Risparmioforo.Services.AccountService;
 using Risparmioforo.Services.CategoryService;
 using Risparmioforo.Services.ImportFileService;
 using Risparmioforo.Services.TransactionService;
@@ -28,6 +29,7 @@ public static class HostingExtension
         builder.Services.AddTransactionService();
         builder.Services.AddImportFileService();
         builder.Services.AddCategoryService();
+        builder.Services.AddAccountService();
         
         return builder.Build();
     }
@@ -56,6 +58,7 @@ public static class HostingExtension
         app.MapTransactionEndpoints();
         app.MapImportFileEndpoints();
         app.MapCategoryEndpoints();
+        app.MapAccountEndpoints();
         
         return app;
     }

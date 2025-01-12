@@ -1,4 +1,5 @@
 ﻿using Azure.AI.DocumentIntelligence;
+using Risparmioforo.Domain.Account;
 using Risparmioforo.Domain.Common;
 using Risparmioforo.Domain.Transaction;
 
@@ -27,13 +28,13 @@ public static class DocumentIntelligenceMappings
         
         return new Transaction
         {
+            AccountId = (int)AccountDefault.Cash,
             CardNumber = string.Empty,
             Description = "receipt",
             ValueDate = DateOnly.FromDateTime(DateTime.Now),
             RegistrationDate = registrationDate.Value,
             Amount = amount.Value * -1,
             Flow = Flow.Expense,
-            Method = TransactionMethod.Cash,
             Operation = TransactionOperation.Payment,
             Category =  analyzedDocument.TryGetTransactionCategory(),
             Merchant = analyzedDocument.TryGetTransactionMerchant(),
@@ -94,12 +95,12 @@ public static class DocumentIntelligenceMappings
         return transactionMerchant;
     }
 
-    private static List<TransactionItem>? TryGetTransactionItems(this AnalyzedDocument analyzedDocument)
+    private static List<TransactionItem> TryGetTransactionItems(this AnalyzedDocument analyzedDocument)
     {
         if (!analyzedDocument.Fields.TryGetValue("Items", out DocumentField itemsField)
             || itemsField.FieldType != DocumentFieldType.List
             || itemsField.ValueList.Count == 0) 
-            return null;
+            return [];
         
         var transactionItems = new List<TransactionItem>();
         
@@ -137,6 +138,6 @@ public static class DocumentIntelligenceMappings
             transactionItems.Add(transactionItem);
         }
 
-        return transactionItems.Count > 0 ? transactionItems : null;
+        return transactionItems;
     }
 }
