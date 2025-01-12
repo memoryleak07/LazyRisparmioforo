@@ -5,7 +5,7 @@ using Risparmioforo.Infrastructure.Data;
 using Risparmioforo.Services.CategoryService;
 using Risparmioforo.Services.ImportFileService;
 using Risparmioforo.Services.TransactionService;
-using Risparmioforo.Shared.Models;
+using Risparmioforo.Shared.Base;
 
 namespace Risparmioforo.Api.Extensions;
 

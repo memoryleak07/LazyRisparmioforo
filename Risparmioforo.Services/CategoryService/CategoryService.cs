@@ -5,7 +5,6 @@ using Risparmioforo.Infrastructure.Data;
 using Risparmioforo.Shared.Base;
 using Risparmioforo.Shared.Commands;
 using Risparmioforo.Shared.Extensions;
-using Risparmioforo.Shared.Models;
 
 namespace Risparmioforo.Services.CategoryService;
 
@@ -103,5 +102,5 @@ public class CategoryService(
     }
     
     private async Task<bool> IsNameNotUnique(string name, int? id = null) => 
-        await dbContext.Categories.AnyAsync(x => x.Name.ToLower() == name.ToLower() && (id == null || x.Id == id));
+        await dbContext.Categories.AnyAsync(x => x.Name.ToLower() == name.ToLower() && (id == null || x.Id != id));
 }

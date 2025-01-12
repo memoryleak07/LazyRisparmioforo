@@ -1,5 +1,5 @@
 using Risparmioforo.Api.Extensions;
-using Risparmioforo.Shared.Models;
+using Risparmioforo.Shared.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 

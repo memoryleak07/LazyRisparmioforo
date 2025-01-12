@@ -5,16 +5,16 @@ using Risparmioforo.Infrastructure.Data;
 using Risparmioforo.Shared.Base;
 using Risparmioforo.Shared.Commands;
 using Risparmioforo.Shared.Extensions;
-using Risparmioforo.Shared.Models;
 
 namespace Risparmioforo.Services.TransactionService;
 
 public class TransactionService(
     ApplicationDbContext dbContext,
-    ILogger<TransactionService> logger) 
+    ILogger<TransactionService> logger,
+    ITransactionValidator transactionValidator) 
     : ITransactionService
 {
-    public async Task<Result<Pagination<Transaction>>> Search(SearchCommand command, CancellationToken cancellationToken)
+    public async Task<Result<Pagination<TransactionDto>>> Search(SearchCommand command, CancellationToken cancellationToken)
     {
         var query = dbContext.Transactions
             .AsNoTracking()
@@ -32,39 +32,54 @@ public class TransactionService(
             .Take(command.PageSize)
             .ToListAsync(cancellationToken);
 
-        var paginatedResults = items.ToPagination(command.PageIndex, command.PageSize, totalItemsCount);
+        var dto = items.ToTransactionsDto();
+        var paginatedResults = dto.ToPagination(command.PageIndex, command.PageSize, totalItemsCount);
 
-        return Result<Pagination<Transaction>>.Success(paginatedResults);
+        return Result<Pagination<TransactionDto>>.Success(paginatedResults);
     }
 
-    public async Task<Result<Transaction>> Create(CreateTransactionCommand command, CancellationToken cancellationToken)
+    public async Task<Result<TransactionDto>> Create(CreateTransactionCommand command, CancellationToken cancellationToken)
     {
         var entity = command.ToEntity();
+        var validationResult = await transactionValidator.ValidateAsync(entity, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+            return Result<TransactionDto>.Failure(TransactionErrors.ValidationErrors(errors));
+        }
         
         dbContext.Transactions.Add(entity);
-        
         await dbContext.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Transaction created successfully.");
         
-        return Result<Transaction>.Success(entity);
+        return Result<TransactionDto>.Success(entity.ToTransactionDto());
     }
     
-    public async Task<Result<Transaction>> Update(UpdateTransactionCommand command, CancellationToken cancellationToken)
+    public async Task<Result<TransactionDto>> Update(UpdateTransactionCommand command, CancellationToken cancellationToken)
     {
         var entity = await dbContext.Transactions
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == command.Id, cancellationToken: cancellationToken);
 
         if (entity is null)
-            return Result<Transaction>.Failure(TransactionErrors.NotFound(command.Id));
+            return Result<TransactionDto>.Failure(TransactionErrors.NotFound(command.Id));
         
         entity = command.ToEntity(entity);
         
+        var validationResult = await transactionValidator.ValidateAsync(entity, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors.Select(e => e.ErrorMessage);
+            return Result<TransactionDto>.Failure(TransactionErrors.ValidationErrors(errors));
+        }
+
+        dbContext.Entry(entity).State = EntityState.Modified;
         await dbContext.SaveChangesAsync(cancellationToken);
         
         logger.LogInformation("Transaction updated successfully.");
         
-        return Result<Transaction>.Success(entity);
+        return Result<TransactionDto>.Success(entity.ToTransactionDto());
     }
     
     public async Task<Result<bool>> Remove(RemoveTransactionCommand command, CancellationToken cancellationToken)

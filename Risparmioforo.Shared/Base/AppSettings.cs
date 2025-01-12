@@ -1,4 +1,4 @@
-﻿namespace Risparmioforo.Shared.Models;
+﻿namespace Risparmioforo.Shared.Base;
 
 
 public class AppSettings

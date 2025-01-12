@@ -4,7 +4,6 @@ using Risparmioforo.Domain.Transaction;
 using Risparmioforo.Services.TransactionService;
 using Risparmioforo.Shared.Base;
 using Risparmioforo.Shared.Commands;
-using Risparmioforo.Shared.Models;
 
 namespace Risparmioforo.Api.Endpoints;
 
@@ -15,18 +14,18 @@ public static class TransactionEndpoints
         var api = endpoints.MapGroup("/api/transactions/");
         
         api.MapGet("/search", SearchCommand)
-            .Produces<Result<Pagination<Transaction>>>()
+            .Produces<Result<Pagination<TransactionDto>>>()
             .WithDescription("Search transactions")
             .WithOpenApi();
         
         api.MapPost("/create", CreateCommand)
-            .Produces<Result<Transaction>>()
+            .Produces<Result<TransactionDto>>()
             .Produces(StatusCodes.Status400BadRequest)
             .WithDescription("Create a transaction")
             .WithOpenApi();
         
         api.MapPut("/update", UpdateCommand)
-            .Produces<Result<Transaction>>()
+            .Produces<Result<TransactionDto>>()
             .Produces(StatusCodes.Status400BadRequest)
             .WithDescription("Update a transaction")
             .WithOpenApi();
@@ -38,7 +37,7 @@ public static class TransactionEndpoints
             .WithOpenApi();
     }
 
-    private static async Task<Result<Pagination<Transaction>>> SearchCommand(
+    private static async Task<Result<Pagination<TransactionDto>>> SearchCommand(
         [FromServices] ITransactionService transactionService,
         [AsParameters] SearchCommand command, CancellationToken cancellationToken)
         => await transactionService.Search(command, cancellationToken);
@@ -49,8 +48,8 @@ public static class TransactionEndpoints
     {
         var result = await transactionService.Create(request, cancellationToken);
         return result.Map<IResult>(
-            onSuccess: value => TypedResults.Ok(Result<Transaction>.Success(value)),
-            onFailure: error => TypedResults.BadRequest(Result<Transaction>.Failure(error)));
+            onSuccess: value => TypedResults.Ok(Result<TransactionDto>.Success(value)),
+            onFailure: error => TypedResults.BadRequest(Result<TransactionDto>.Failure(error)));
     }
 
     private static async Task<IResult> UpdateCommand(
@@ -59,8 +58,8 @@ public static class TransactionEndpoints
     {
         var result = await transactionService.Update(request, cancellationToken);
         return result.Map<IResult>(
-            onSuccess: value => TypedResults.Ok(Result<Transaction>.Success(value)),
-            onFailure: error => TypedResults.BadRequest(Result<Transaction>.Failure(error)));
+            onSuccess: value => TypedResults.Ok(Result<TransactionDto>.Success(value)),
+            onFailure: error => TypedResults.BadRequest(Result<TransactionDto>.Failure(error)));
     }
     
     private static async Task<IResult> RemoveCommand(

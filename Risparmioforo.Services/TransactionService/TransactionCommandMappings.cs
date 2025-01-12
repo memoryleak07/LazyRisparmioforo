@@ -2,7 +2,7 @@
 
 namespace Risparmioforo.Services.TransactionService;
 
-public static class TransactionMappings
+public static class TransactionCommandMappings
 {
     public static Transaction ToEntity(this CreateTransactionCommand command)
     {
@@ -21,6 +21,7 @@ public static class TransactionMappings
         existingEntity.ValueDate = command.Date;
         existingEntity.Description = command.Description;
         existingEntity.Amount = command.Amount;
+        
         return existingEntity;
     }
 }

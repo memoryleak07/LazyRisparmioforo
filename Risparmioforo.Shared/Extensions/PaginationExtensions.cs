@@ -1,4 +1,4 @@
-﻿using Risparmioforo.Shared.Models;
+﻿using Risparmioforo.Shared.Base;
 
 namespace Risparmioforo.Shared.Extensions;
 

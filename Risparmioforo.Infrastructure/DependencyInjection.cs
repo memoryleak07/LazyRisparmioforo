@@ -1,5 +1,5 @@
 ﻿using Risparmioforo.Infrastructure.Data;
-using Risparmioforo.Shared.Models;
+using Risparmioforo.Shared.Base;
 
 namespace Risparmioforo.Infrastructure;
 

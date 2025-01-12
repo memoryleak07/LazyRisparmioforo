@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Risparmioforo.Domain.Transaction;
 using Risparmioforo.Services.ImportFileService;
 using Risparmioforo.Shared.Base;
 using IFormFile = Microsoft.AspNetCore.Http.IFormFile;
@@ -21,8 +22,8 @@ public static class ImportFileEndpoints
         
         api.MapPut("/photo", ImportReceiptCommand)
             .Accepts<UploadFileViewModel>("multipart/form-data")
-            .Produces<Result<bool>>(StatusCodes.Status200OK)
-            .Produces<Result<bool>>(StatusCodes.Status400BadRequest)
+            .Produces<Result<ICollection<TransactionDto>>>(StatusCodes.Status200OK)
+            .Produces<Result<ICollection<TransactionDto>>>(StatusCodes.Status400BadRequest)
             .WithDescription("Upload a photo")
             .WithOpenApi()
             .DisableAntiforgery();
@@ -64,7 +65,7 @@ public static class ImportFileEndpoints
     {
         var result = await importFileService.ImportReceiptDocumentsAsync(request.ToImportFileCommand(), cancellationToken);
         return result.Map<IResult>(
-            onSuccess: value => TypedResults.Ok(Result<bool>.Success(value)),
-            onFailure: error => TypedResults.BadRequest(Result<bool>.Failure(error)));
+            onSuccess: value => TypedResults.Ok(Result<ICollection<TransactionDto>>.Success(value)),
+            onFailure: error => TypedResults.BadRequest(Result<ICollection<TransactionDto>>.Failure(error)));
     }
 }

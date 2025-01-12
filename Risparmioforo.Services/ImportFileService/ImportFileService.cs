@@ -44,34 +44,44 @@ public class ImportFileService(
         Category[] categories = await dbContext.Categories.AsNoTracking().ToArrayAsync(cancellationToken);
         transactions.SetCategories(categories);
         
-        return await InsertTransactionsAsync(transactions, cancellationToken);
+        if (!await InsertTransactionsAsync(transactions, cancellationToken))
+        {
+            Result<bool>.Failure(TransactionErrors.InsertError);
+        }
+        
+        return Result<bool>.Success(true);
     }
 
-    public async Task<Result<bool>> ImportReceiptDocumentsAsync(ImportFileCommand request, CancellationToken cancellationToken)
+    public async Task<Result<ICollection<TransactionDto>>> ImportReceiptDocumentsAsync(ImportFileCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await imageValidator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
             var errors = validationResult.Errors.Select(e => e.ErrorMessage);
-            return Result<bool>.Failure(TransactionErrors.ValidationErrors(errors));
+            return Result<ICollection<TransactionDto>>.Failure(TransactionErrors.ValidationErrors(errors));
         }
 
         var readDocumentsResult = await documentIntelligenceService.ReadReceiptDocumentsAsync(request.FileBytes, cancellationToken);
         if (!readDocumentsResult.IsSuccess)
         {
-            return Result<bool>.Failure(readDocumentsResult.Error!);
+            return Result<ICollection<TransactionDto>>.Failure(readDocumentsResult.Error!);
         }
         
         var transactions = readDocumentsResult.Value;
         if (transactions is null || transactions.Count == 0)
         {
-            return Result<bool>.Failure(TransactionErrors.CollectionNullOrEmpty);
+            return Result<ICollection<TransactionDto>>.Failure(TransactionErrors.CollectionNullOrEmpty);
+        }
+
+        if (!await InsertTransactionsAsync(transactions, cancellationToken))
+        {
+            return Result<ICollection<TransactionDto>>.Failure(TransactionErrors.InsertError);
         }
         
-        return await InsertTransactionsAsync(transactions, cancellationToken);
+        return Result<ICollection<TransactionDto>>.Success(transactions.ToTransactionsDto());
     }
     
-    private async Task<Result<bool>> InsertTransactionsAsync(ICollection<Transaction> transactions, CancellationToken cancellationToken)
+    private async Task<bool> InsertTransactionsAsync(ICollection<Transaction> transactions, CancellationToken cancellationToken)
     {
         await using var dbContextTransaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         try
@@ -81,15 +91,13 @@ public class ImportFileService(
             await dbContextTransaction.CommitAsync(cancellationToken);
             
             logger.LogInformation("Transactions inserted successfully.");
-            
-            return Result<bool>.Success(true);
+            return true;
         }
         catch (Exception exception)
         {
             logger.LogError(exception, "Exception occured: {Message}", exception.Message);
             await dbContextTransaction.RollbackAsync(cancellationToken);
-            
-            return Result<bool>.Failure(TransactionErrors.InsertError);
+            return false;
         }
     }
 }

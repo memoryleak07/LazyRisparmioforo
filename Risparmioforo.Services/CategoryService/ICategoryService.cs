@@ -1,7 +1,6 @@
 ﻿using Risparmioforo.Domain.Category;
 using Risparmioforo.Shared.Base;
 using Risparmioforo.Shared.Commands;
-using Risparmioforo.Shared.Models;
 
 namespace Risparmioforo.Services.CategoryService;
 
