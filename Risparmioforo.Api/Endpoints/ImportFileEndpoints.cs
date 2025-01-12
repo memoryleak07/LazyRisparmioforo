@@ -14,17 +14,17 @@ public static class ImportFileEndpoints
         
         api.MapPut("/csv", ImportCsvCommand)
             .Accepts<UploadFileViewModel>("multipart/form-data")
-            .Produces<Result<bool>>(StatusCodes.Status200OK)
-            .Produces<Result<bool>>(StatusCodes.Status400BadRequest)
+            .Produces<Result<Pagination<TransactionDto>>>(StatusCodes.Status200OK)
+            .Produces<Result<Pagination<TransactionDto>>>(StatusCodes.Status400BadRequest)
             .WithDescription("Import csv bank transactions")
             .WithOpenApi()
             .DisableAntiforgery();
         
         api.MapPut("/photo", ImportReceiptCommand)
             .Accepts<UploadFileViewModel>("multipart/form-data")
-            .Produces<Result<ICollection<TransactionDto>>>(StatusCodes.Status200OK)
-            .Produces<Result<ICollection<TransactionDto>>>(StatusCodes.Status400BadRequest)
-            .WithDescription("Upload a photo")
+            .Produces<Result<Pagination<TransactionDto>>>(StatusCodes.Status200OK)
+            .Produces<Result<Pagination<TransactionDto>>>(StatusCodes.Status400BadRequest)
+            .WithDescription("Upload photo of receipts documents")
             .WithOpenApi()
             .DisableAntiforgery();
     }
@@ -54,8 +54,8 @@ public static class ImportFileEndpoints
     {
         var result = await importFileService.ImportCsvAsync(request.ToImportFileCommand(), cancellationToken);
         return result.Map<IResult>(
-            onSuccess: value => TypedResults.Ok(Result<bool>.Success(value)),
-            onFailure: error => TypedResults.BadRequest(Result<bool>.Failure(error)));
+            onSuccess: value => TypedResults.Ok(Result<Pagination<TransactionDto>>.Success(value)),
+            onFailure: error => TypedResults.BadRequest(Result<Pagination<TransactionDto>>.Failure(error)));
     }
     
     private static async Task<IResult> ImportReceiptCommand(
@@ -65,7 +65,7 @@ public static class ImportFileEndpoints
     {
         var result = await importFileService.ImportReceiptDocumentsAsync(request.ToImportFileCommand(), cancellationToken);
         return result.Map<IResult>(
-            onSuccess: value => TypedResults.Ok(Result<ICollection<TransactionDto>>.Success(value)),
-            onFailure: error => TypedResults.BadRequest(Result<ICollection<TransactionDto>>.Failure(error)));
+            onSuccess: value => TypedResults.Ok(Result<Pagination<TransactionDto>>.Success(value)),
+            onFailure: error => TypedResults.BadRequest(Result<Pagination<TransactionDto>>.Failure(error)));
     }
 }

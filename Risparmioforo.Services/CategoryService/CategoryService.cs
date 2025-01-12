@@ -4,7 +4,6 @@ using Risparmioforo.Domain.Category;
 using Risparmioforo.Infrastructure.Data;
 using Risparmioforo.Shared.Base;
 using Risparmioforo.Shared.Commands;
-using Risparmioforo.Shared.Extensions;
 
 namespace Risparmioforo.Services.CategoryService;
 

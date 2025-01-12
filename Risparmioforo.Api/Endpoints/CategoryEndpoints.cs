@@ -15,28 +15,28 @@ public static class CategoryEndpoints
         
         api.MapGet("/search", SearchCommand)
             .Produces<Result<Pagination<Category>>>()
-            .WithDescription("Search transactions")
+            .WithDescription("Search categories")
             .WithOpenApi();
         
         api.MapPost("/create", CreateCommand)
             .Accepts<CreateCategoryCommand>("application/json")
             .Produces<Result<Category>>()
             .Produces(StatusCodes.Status400BadRequest)
-            .WithDescription("Create a transaction")
+            .WithDescription("Create a category")
             .WithOpenApi();
         
         api.MapPut("/update", UpdateCommand)
             .Accepts<UpdateCategoryCommand>("application/json")
             .Produces<Result<Category>>()
             .Produces(StatusCodes.Status400BadRequest)
-            .WithDescription("Update a transaction")
+            .WithDescription("Update a category")
             .WithOpenApi();
         
         api.MapDelete("/remove", RemoveCommand)
             .Accepts<RemoveCategoryCommand>("application/json")
             .Produces<Ok>()
             .Produces(StatusCodes.Status400BadRequest)
-            .WithDescription("Remove a transaction")
+            .WithDescription("Remove a category")
             .WithOpenApi();
     }
 

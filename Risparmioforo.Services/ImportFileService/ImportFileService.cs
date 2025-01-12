@@ -20,25 +20,25 @@ public class ImportFileService(
     ICsvValidator csvValidator)
      : IImportFileService
 {
-    public async Task<Result<bool>> ImportCsvAsync(ImportFileCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Pagination<TransactionDto>>> ImportCsvAsync(ImportFileCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await csvValidator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
             var errors = validationResult.Errors.Select(e => e.ErrorMessage);
-            return Result<bool>.Failure(TransactionErrors.ValidationErrors(errors));
+            return Result<Pagination<TransactionDto>>.Failure(TransactionErrors.ValidationErrors(errors));
         }
 
         var readCsvResult = await unicreditCsvService.ReadCsvAsync(request.FileBytes, cancellationToken);
         if (!readCsvResult.IsSuccess)
         {
-            return Result<bool>.Failure(readCsvResult.Error!);
+            return Result<Pagination<TransactionDto>>.Failure(readCsvResult.Error!);
         }
 
         var transactions = readCsvResult.Value;
         if (transactions is null || transactions.Count == 0)
         {
-            return Result<bool>.Failure(TransactionErrors.CollectionNullOrEmpty);
+            return Result<Pagination<TransactionDto>>.Failure(TransactionErrors.CollectionNullOrEmpty);
         }
 
         Category[] categories = await dbContext.Categories.AsNoTracking().ToArrayAsync(cancellationToken);
@@ -46,39 +46,41 @@ public class ImportFileService(
         
         if (!await InsertTransactionsAsync(transactions, cancellationToken))
         {
-            Result<bool>.Failure(TransactionErrors.InsertError);
+            Result<Pagination<TransactionDto>>.Failure(TransactionErrors.InsertError);
         }
         
-        return Result<bool>.Success(true);
+        var dto = transactions.ToTransactionsDto();
+        return Result<Pagination<TransactionDto>>.Success(dto.ToPagination(pageIndex: 0, pageSize: 10, transactions.Count));
     }
 
-    public async Task<Result<ICollection<TransactionDto>>> ImportReceiptDocumentsAsync(ImportFileCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Pagination<TransactionDto>>> ImportReceiptDocumentsAsync(ImportFileCommand request, CancellationToken cancellationToken)
     {
         var validationResult = await imageValidator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
             var errors = validationResult.Errors.Select(e => e.ErrorMessage);
-            return Result<ICollection<TransactionDto>>.Failure(TransactionErrors.ValidationErrors(errors));
+            return Result<Pagination<TransactionDto>>.Failure(TransactionErrors.ValidationErrors(errors));
         }
 
         var readDocumentsResult = await documentIntelligenceService.ReadReceiptDocumentsAsync(request.FileBytes, cancellationToken);
         if (!readDocumentsResult.IsSuccess)
         {
-            return Result<ICollection<TransactionDto>>.Failure(readDocumentsResult.Error!);
+            return Result<Pagination<TransactionDto>>.Failure(readDocumentsResult.Error!);
         }
         
         var transactions = readDocumentsResult.Value;
         if (transactions is null || transactions.Count == 0)
         {
-            return Result<ICollection<TransactionDto>>.Failure(TransactionErrors.CollectionNullOrEmpty);
+            return Result<Pagination<TransactionDto>>.Failure(TransactionErrors.CollectionNullOrEmpty);
         }
 
         if (!await InsertTransactionsAsync(transactions, cancellationToken))
         {
-            return Result<ICollection<TransactionDto>>.Failure(TransactionErrors.InsertError);
+            return Result<Pagination<TransactionDto>>.Failure(TransactionErrors.InsertError);
         }
-        
-        return Result<ICollection<TransactionDto>>.Success(transactions.ToTransactionsDto());
+
+        var dto = transactions.ToTransactionsDto();
+        return Result<Pagination<TransactionDto>>.Success(dto.ToPagination(pageIndex: 0, pageSize: 10, transactions.Count));
     }
     
     private async Task<bool> InsertTransactionsAsync(ICollection<Transaction> transactions, CancellationToken cancellationToken)
