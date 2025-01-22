@@ -8,7 +8,7 @@ namespace Risparmioforo.Services.DocumentIntelligenceService;
 public static class DependencyInjection
 {
     private static readonly string Endpoint = "https://documentintelligenceinstance1.cognitiveservices.azure.com/";
-    private static readonly string Key = "5zsfi2CmeEF1oR9VXFfkbfNbB6TR5AabyX4CmY6rAuTsFbv9XA1BJQQJ99BAACgEuAYXJ3w3AAALACOGzoc8";
+    private static readonly string Key = "azureKey";
     
     public static void AddDocumentIntelligenceService(this IServiceCollection services)
     {
