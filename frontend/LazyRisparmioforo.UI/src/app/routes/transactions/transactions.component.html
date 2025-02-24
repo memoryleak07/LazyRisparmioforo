@@ -1,0 +1,103 @@
+<div class="card card-border border-base-300 card-sm items-center">
+  <div class="card-body">
+    <div class="flex flex-col sm:flex-row sm:items-center gap-4 w-full">
+
+      <!-- Search Input -->
+      <label class="input w-full sm:w-64 flex items-center gap-2">
+        <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </g>
+        </svg>
+        <input type="search"
+               required
+               placeholder="Search"
+               class="w-full"
+               [(ngModel)]="searchQuery"
+               (ngModelChange)="onSearchQuery()"
+        />
+      </label>
+
+      <!-- Filters -->
+      <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full sm:w-auto min-w-[10rem]">
+        <app-flow-selector
+          [flow]="searchFlow"
+          [hasResetButton]="true"
+          (flowChange)="onFlowChange($event)"
+          class="min-w-[10rem]"
+        ></app-flow-selector>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="card card-border border-base-300 card-sm items-center">
+  <div class="card-body">
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <!-- head -->
+        <thead class="hidden md:table-header-group">
+        <tr>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Amount</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- rows -->
+        <tr *ngFor="let transaction of transactions"
+            class="block md:table-row mb-6 md:mb-0 shadow-md md:shadow-none">
+
+          <td class="block md:table-cell flex justify-between items-center">
+            <span class="inline-block md:hidden font-bold">Date:</span>
+            <span class="md:block">{{ transaction.registrationDate }}</span>
+          </td>
+          <td class="block md:table-cell flex justify-between items-center">
+            <span class="inline-block md:hidden">Category:</span>
+            <app-category-badge [categoryId]="transaction.categoryId" />
+          </td>
+          <td class="block md:table-cell flex justify-between items-center gap-10">
+            <span class="inline-block md:hidden">Desc:</span>
+            <span class="text-right">{{ transaction.description }}</span>
+          </td>
+          <td class="block md:table-cell flex justify-between items-center">
+            <span class="inline-block md:hidden font-bold">Amount:</span>
+            {{ transaction.amount }}
+          </td>
+          <th class="block md:table-cell">
+            <button (click)="openTransactionDialog(transaction.id)" class="text-xs link">
+              details
+            </button>
+<!--            <button [routerLink]="['/transaction', transaction.id]"-->
+<!--                    class="text-xs link">-->
+<!--              details-->
+<!--            </button>-->
+          </th>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- Pagination -->
+<div class="card card-border border-base-300 card-sm items-center">
+  <div class="card-body">
+    <div class="join self-center sm:ml-auto">
+      <button class="join-item btn" (click)="onPreviousPage()">«</button>
+      <button class="join-item btn">
+        Page {{ pagination.pageIndex + 1 }} of {{ pagination.totalPagesCount }}
+      </button>
+      <button class="join-item btn" (click)="onNextPage()">»</button>
+    </div>
+  </div>
+</div>
+
+
+<app-transaction-dialog #transactionDialog>
+</app-transaction-dialog>

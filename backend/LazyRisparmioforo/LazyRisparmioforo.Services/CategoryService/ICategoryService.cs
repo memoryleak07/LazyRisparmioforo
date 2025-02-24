@@ -1,0 +1,11 @@
+﻿using LazyRisparmioforo.Domain.Commands;
+using LazyRisparmioforo.Domain.Entities;
+using LazyRisparmioforo.Domain.Shared;
+
+namespace CategoryService;
+
+public interface ICategoryService
+{
+    Task<ICollection<Category>> AllAsync(CancellationToken cancellationToken);
+    Task<Result<CategoryPredictResult>> PredictAsync(CategoryPredictCommand command, CancellationToken cancellationToken);
+}

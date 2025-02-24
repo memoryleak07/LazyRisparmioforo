@@ -1,0 +1,20 @@
+<ng-container *ngFor="let toast of toastService.getToasts()">
+    <div class="toast toast-top toast-center z-100">
+      <div [ngClass]="[
+         'alert flex items-center max-w-[90vw] whitespace-normal',
+         toast.type === 'success' ? 'alert-success' : '',
+         toast.type === 'error' ? 'alert-error' : '',
+         toast.type === 'info' ? 'alert-info' : '',
+         toast.type === 'warning' ? 'alert-warning' : ''
+       ]">
+        <div class="w-auto text-sm break-words whitespace-normal">
+          {{ toast.message }}
+        </div>
+        <button (click)="toastService.removeToast(toast.id)"
+          class="btn btn-sm btn-ghost"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+</ng-container>

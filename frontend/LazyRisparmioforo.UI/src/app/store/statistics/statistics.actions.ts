@@ -1,0 +1,29 @@
+import { createAction, props } from '@ngrx/store';
+import {StatRequest, StatSpentPerCategoryResponse} from '../../services/statistics-service/statistics.models';
+
+export class StatisticsActions {
+
+  static readonly getStatistics = createAction(
+    '[Statistics] GetStatistics',
+    props<{ query: StatRequest }>()
+  );
+
+  static readonly setTotalSpent = createAction(
+    '[Statistics] SetTotalSpent',
+    props<{ response: number }>()
+  );
+
+  static readonly setSpentPerCategory = createAction(
+    '[Statistics] SetSpentPerCategory',
+    props<{ response: StatSpentPerCategoryResponse[] }>()
+  );
+
+  static readonly clearStats = createAction(
+    '[Statistics] ClearStats'
+  );
+
+  static readonly errorStatService = createAction(
+    '[Statistics] Error',
+    props<{ error: string }>()
+  );
+}

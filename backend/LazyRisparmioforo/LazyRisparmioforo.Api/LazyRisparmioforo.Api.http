@@ -1,0 +1,6 @@
+@LazyRisparmioforo.Api_HostAddress = http://localhost:5134
+
+GET {{LazyRisparmioforo.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

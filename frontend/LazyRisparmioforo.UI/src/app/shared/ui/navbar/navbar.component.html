@@ -1,0 +1,79 @@
+<div class="navbar bg-base-100 shadow-sm">
+  <div class="navbar-start">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
+      </div>
+      <ul
+        tabindex="0"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+
+        <!-- Nav Menu Items -->
+        <ng-container *ngFor="let item of navMenuItems">
+          <li *ngIf="!item.children">
+            <a (click)="navigateTo(item.routerLink, item.queryParams)"
+               *ngIf="item.routerLink; else externalLink">
+              {{ item.label }}
+            </a>
+            <ng-template #externalLink>
+              <a [href]="item.link">{{ item.label }}</a>
+            </ng-template>
+          </li>
+          <li *ngIf="item.children">
+            <details>
+              <summary>{{ item.label }}</summary>
+              <ul class="p-2">
+                <li *ngFor="let child of item.children">
+                  <a (click)="navigateTo(child.routerLink, child.queryParams)"
+                     *ngIf="child.routerLink; else externalChildLink">{{ child.label }}</a>
+                  <ng-template #externalChildLink>
+                    <a [href]="child.link">{{ child.label }}</a>
+                  </ng-template>
+                </li>
+              </ul>
+            </details>
+          </li>
+        </ng-container>
+
+      </ul>
+    </div>
+    <a routerLink="/"
+      class="btn btn-ghost text-xl">daisyUI</a>
+  </div>
+  <div class="navbar-center hidden lg:flex">
+    <ul class="menu menu-horizontal px-1">
+
+      <!-- Nav Menu Items -->
+      <ng-container *ngFor="let item of navMenuItems">
+        <li *ngIf="!item.children">
+          <a (click)="navigateTo(item.routerLink, item.queryParams)"
+             *ngIf="item.routerLink; else externalLink">
+            {{ item.label }}
+          </a>
+          <ng-template #externalLink>
+            <a [href]="item.link">{{ item.label }}</a>
+          </ng-template>
+        </li>
+        <li *ngIf="item.children">
+          <details>
+            <summary>{{ item.label }}</summary>
+            <ul class="p-2">
+              <li *ngFor="let child of item.children">
+                <a (click)="navigateTo(child.routerLink, child.queryParams)"
+                   *ngIf="child.routerLink; else externalChildLink">{{ child.label }}</a>
+                <ng-template #externalChildLink>
+                  <a [href]="child.link">{{ child.label }}</a>
+                </ng-template>
+              </li>
+            </ul>
+          </details>
+        </li>
+      </ng-container>
+
+    </ul>
+  </div>
+  <div class="navbar-end">
+    <app-themes></app-themes>
+    <app-transaction-create-button></app-transaction-create-button>
+  </div>
+</div>

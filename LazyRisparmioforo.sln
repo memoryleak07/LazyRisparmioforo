@@ -1,0 +1,75 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apphost", "apphost", "{716776A2-F7B5-47EB-AADF-6B3ADEA55D59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{AEA37B97-3AD9-45F2-9F32-B63EBEF7B8A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyRisparmioforo.Api", "backend\LazyRisparmioforo\LazyRisparmioforo.Api\LazyRisparmioforo.Api.csproj", "{F5A9D133-4D55-426E-8474-D0251B26C752}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyRisparmioforo.Domain", "backend\LazyRisparmioforo\LazyRisparmioforo.Domain\LazyRisparmioforo.Domain.csproj", "{31E9C402-10C7-4B3F-89FD-494829149CE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyRisparmioforo.Infrastructure", "backend\LazyRisparmioforo\LazyRisparmioforo.Infrastructure\LazyRisparmioforo.Infrastructure.csproj", "{3FAF6493-E960-437A-9A33-2AC08D113E70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CategoryService", "backend\LazyRisparmioforo\LazyRisparmioforo.Services\CategoryService\CategoryService.csproj", "{EA049CBB-398F-4F12-9A99-3B494450D435}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LazyRisparmioforo.Services", "LazyRisparmioforo.Services", "{7910DAEB-8738-4ACC-848A-6FDDEEBA7FB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportCsvService", "backend\LazyRisparmioforo\LazyRisparmioforo.Services\ImportCsvService\ImportCsvService.csproj", "{852814C2-7488-434A-8070-AE5F3F7CFF72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionService", "backend\LazyRisparmioforo\LazyRisparmioforo.Services\TransactionService\TransactionService.csproj", "{9B8681B3-0027-4294-AE4B-1AC78882E173}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyRisparmioforo.AppHost", "apphost\LazyRisparmioforo.AppHost\LazyRisparmioforo.AppHost.csproj", "{1F8779C4-408E-4F1C-93C8-20960EF4DA09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatisticsService", "backend\LazyRisparmioforo\LazyRisparmioforo.Services\StatisticsService\StatisticsService.csproj", "{191EAEBA-162E-413E-905F-2AEE3D9763BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F5A9D133-4D55-426E-8474-D0251B26C752} = {AEA37B97-3AD9-45F2-9F32-B63EBEF7B8A2}
+		{31E9C402-10C7-4B3F-89FD-494829149CE8} = {AEA37B97-3AD9-45F2-9F32-B63EBEF7B8A2}
+		{3FAF6493-E960-437A-9A33-2AC08D113E70} = {AEA37B97-3AD9-45F2-9F32-B63EBEF7B8A2}
+		{7910DAEB-8738-4ACC-848A-6FDDEEBA7FB7} = {AEA37B97-3AD9-45F2-9F32-B63EBEF7B8A2}
+		{EA049CBB-398F-4F12-9A99-3B494450D435} = {7910DAEB-8738-4ACC-848A-6FDDEEBA7FB7}
+		{852814C2-7488-434A-8070-AE5F3F7CFF72} = {7910DAEB-8738-4ACC-848A-6FDDEEBA7FB7}
+		{9B8681B3-0027-4294-AE4B-1AC78882E173} = {7910DAEB-8738-4ACC-848A-6FDDEEBA7FB7}
+		{1F8779C4-408E-4F1C-93C8-20960EF4DA09} = {716776A2-F7B5-47EB-AADF-6B3ADEA55D59}
+		{191EAEBA-162E-413E-905F-2AEE3D9763BC} = {7910DAEB-8738-4ACC-848A-6FDDEEBA7FB7}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5A9D133-4D55-426E-8474-D0251B26C752}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5A9D133-4D55-426E-8474-D0251B26C752}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5A9D133-4D55-426E-8474-D0251B26C752}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5A9D133-4D55-426E-8474-D0251B26C752}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31E9C402-10C7-4B3F-89FD-494829149CE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31E9C402-10C7-4B3F-89FD-494829149CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31E9C402-10C7-4B3F-89FD-494829149CE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31E9C402-10C7-4B3F-89FD-494829149CE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FAF6493-E960-437A-9A33-2AC08D113E70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FAF6493-E960-437A-9A33-2AC08D113E70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FAF6493-E960-437A-9A33-2AC08D113E70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FAF6493-E960-437A-9A33-2AC08D113E70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA049CBB-398F-4F12-9A99-3B494450D435}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA049CBB-398F-4F12-9A99-3B494450D435}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA049CBB-398F-4F12-9A99-3B494450D435}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA049CBB-398F-4F12-9A99-3B494450D435}.Release|Any CPU.Build.0 = Release|Any CPU
+		{852814C2-7488-434A-8070-AE5F3F7CFF72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{852814C2-7488-434A-8070-AE5F3F7CFF72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{852814C2-7488-434A-8070-AE5F3F7CFF72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{852814C2-7488-434A-8070-AE5F3F7CFF72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B8681B3-0027-4294-AE4B-1AC78882E173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B8681B3-0027-4294-AE4B-1AC78882E173}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B8681B3-0027-4294-AE4B-1AC78882E173}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B8681B3-0027-4294-AE4B-1AC78882E173}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F8779C4-408E-4F1C-93C8-20960EF4DA09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F8779C4-408E-4F1C-93C8-20960EF4DA09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F8779C4-408E-4F1C-93C8-20960EF4DA09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F8779C4-408E-4F1C-93C8-20960EF4DA09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{191EAEBA-162E-413E-905F-2AEE3D9763BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{191EAEBA-162E-413E-905F-2AEE3D9763BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{191EAEBA-162E-413E-905F-2AEE3D9763BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{191EAEBA-162E-413E-905F-2AEE3D9763BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

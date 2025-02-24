@@ -1,0 +1,17 @@
+<dialog #dialog class="modal modal-bottom sm:modal-middle">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">{{ title }}</h3>
+    <p class="py-4">{{ content }}</p>
+    <div class="modal-action">
+      <button class="btn"
+              type="button"
+              (click)="handleCancel()">
+        {{ closeButtonText }}
+      </button>
+      <button [ngClass]="['btn', submitButtonColor]"
+              (click)="handleSubmit()">
+        {{ submitButtonText }}
+      </button>
+    </div>
+  </div>
+</dialog>

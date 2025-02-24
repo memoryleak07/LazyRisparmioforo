@@ -1,0 +1,29 @@
+<div class="tabs tabs-box inline-flex flex-nowrap m-4 bg-base-300">
+  <input name="flow"
+    type="radio"
+    role="tab"
+    class="tab w-1/2"
+    [value]="Flow.Expense"
+    id="expense"
+    aria-label="Expense"
+    [checked]="flow === Flow.Expense"
+    (change)="onFlowChange(Flow.Expense)"
+  />
+  <div class="w-1/2 indicator">
+    <input name="flow"
+      type="radio"
+      role="tab"
+      class="tab w-full"
+      [value]="Flow.Income"
+      id="income"
+      aria-label="Income"
+      [checked]="flow === Flow.Income"
+      (change)="onFlowChange(Flow.Income)"
+    />
+  </div>
+  <input *ngIf="hasResetButton && flow != null"
+         (click)="resetFlow()"
+         class="btn btn-square btn-ghost"
+         type="reset"
+         value="×"/>
+</div>
