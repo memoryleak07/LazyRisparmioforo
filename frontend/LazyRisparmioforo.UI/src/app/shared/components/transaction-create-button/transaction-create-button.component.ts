@@ -5,7 +5,7 @@ import {TransactionDialogComponent} from '../transaction-dialog/transaction-dial
   selector: 'app-transaction-create-button',
   template: `
     <button (click)="openTransactionDialog()"
-            class="btn btn-accent btn-outline btn-sm">
+            class="btn btn-primary btn-outline btn-sm">
       Create
     </button>
 

@@ -12,12 +12,12 @@ public static class StatisticsEndpoints
     {
         var api = endpoints.MapGroup("/api/statistics/");
         
-        api.MapGet("/total-spent", TotalSpentCommand)
+        api.MapGet("/total-amount", TotalAmountCommand)
             .Produces<decimal>()
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .WithValidation<StatCommand>()
-            .WithDescription("Get total amount spent within a date range")
+            .WithDescription("Get total amount within a date range")
             .WithOpenApi();
         
         api.MapGet("/spent-per-category", SpentPerCategoryCommand)
@@ -29,12 +29,12 @@ public static class StatisticsEndpoints
             .WithOpenApi();
     }
 
-    private static async Task<IResult> TotalSpentCommand(
+    private static async Task<IResult> TotalAmountCommand(
         [FromServices] IStatisticService statisticService,
         [AsParameters] StatCommand command,
         CancellationToken cancellationToken)
     {
-        var result = await statisticService.TotalSpentAsync(command, cancellationToken);
+        var result = await statisticService.TotalAmountAsync(command, cancellationToken);
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
     

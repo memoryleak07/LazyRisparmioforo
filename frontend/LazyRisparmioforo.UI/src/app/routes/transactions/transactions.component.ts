@@ -4,13 +4,14 @@ import {Subscription} from 'rxjs';
 import {selectLastTransactions, selectPagination} from '../../store/transaction/transaction.reducers';
 import {Transaction} from '../../services/transaction-service/transaction.model';
 import {TransactionActions} from '../../store/transaction/transaction.actions';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {FlowSelectorComponent} from '../../shared/components/flow-selector/flow-selector.component';
 import {Flow} from '../../constants/enums';
 import {CategoryBadgeComponent} from '../../shared/components/category-badge/category-badge.component';
 import {RouterLink} from '@angular/router';
 import {TransactionDialogComponent} from '../../shared/components/transaction-dialog/transaction-dialog.component';
+import {AmountPipe} from '../../shared/pipes/amount.pipe';
 
 @Component({
   selector: 'app-transactions',
@@ -19,8 +20,9 @@ import {TransactionDialogComponent} from '../../shared/components/transaction-di
     FormsModule,
     FlowSelectorComponent,
     CategoryBadgeComponent,
-    RouterLink,
-    TransactionDialogComponent
+    TransactionDialogComponent,
+    NgIf,
+    AmountPipe
   ],
   templateUrl: './transactions.component.html'
 })

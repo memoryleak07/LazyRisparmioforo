@@ -1,29 +1,25 @@
-<div class="hero bg-base-200 min-h-screen">
-  <div class="hero-content text-center">
-    <div class="max-w-md">
-      <h1 class="text-5xl font-bold">Import transactions</h1>
-      <p class="py-6">
-        Quaerat fugiat ut assumenda excepturi exercitationem quasi.
-        In deleniti eaque aut repudiandae et a id nisi.
-      </p>
-      <p class="py-6">
-        <input #fileInput
-               type="file"
-               accept=".csv"
-               (change)="onFileSelected($event)"
-               [disabled]="isUploading"
-               class="file-input file-input-neutral" />
-      </p>
-      <p class="py-6">
-        <button (click)="onUpload()"
-                [disabled]="!selectedFile"
-                [class]="isUploading
+<div class="text-center">
+  <h1 class="text-5xl font-bold">Import transactions</h1>
+  <p class="py-6">
+    Quaerat fugiat ut assumenda excepturi exercitationem quasi.
+    In deleniti eaque aut repudiandae et a id nisi.
+  </p>
+  <p class="py-6">
+    <input #fileInput
+           type="file"
+           accept=".csv"
+           (change)="onFileSelected($event)"
+           [disabled]="isUploading"
+           class="file-input file-input-neutral"/>
+  </p>
+  <p class="py-6">
+    <button (click)="onUpload()"
+            [disabled]="!selectedFile"
+            [class]="isUploading
                   ? 'loading loading-spinner text-primary'
                   : 'btn btn-primary'">
-          Upload
-        </button>
-      </p>
+      Upload
+    </button>
+  </p>
 
-    </div>
-  </div>
 </div>

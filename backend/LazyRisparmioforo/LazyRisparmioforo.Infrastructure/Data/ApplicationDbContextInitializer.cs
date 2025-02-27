@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using LazyRisparmioforo.Domain.Constants;
+﻿using LazyRisparmioforo.Domain.Constants;
 using LazyRisparmioforo.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -7,7 +6,6 @@ using Microsoft.Extensions.Logging;
 namespace LazyRisparmioforo.Infrastructure.Data;
 
 public class ApplicationDbContextInitializer(
-    HttpClient httpClient,
     ApplicationDbContext context,
     ILoggerFactory logger)
 {
@@ -17,10 +15,10 @@ public class ApplicationDbContextInitializer(
     {
         try
         {
-            // await context.Database.EnsureDeletedAsync();
-            // await context.Database.EnsureCreatedAsync();
-            // await context.Database.MigrateAsync();
-            // await SeedCategoriesAsync();
+            await context.Database.EnsureCreatedAsync();
+            await context.Database.MigrateAsync();
+            if (!context.Categories.Any())
+                await SeedCategoriesAsync();
         }
         catch (Exception exception)
         {

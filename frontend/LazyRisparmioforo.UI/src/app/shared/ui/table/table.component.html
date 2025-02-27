@@ -1,4 +1,4 @@
-<div class="card card-border border-base-300 card-sm">
+<div class="card card-border border-base-300 card-sm bg-base-100">
   <div class="card-body gap-4">
     <h2 class="flex justify-between items-center">
       <span class="font-semibold flex items-center gap-2">
@@ -25,22 +25,26 @@
       </span>
     </h2>
 
-    <table class="table table-auto">
-      <!-- head -->
-      <thead>
-      <tr>
-        <th *ngFor="let column of columns">{{ column.label }}</th>
-      </tr>
-      </thead>
-      <!-- Body -->
-      <tbody>
-      <tr *ngFor="let row of items">
-        <td *ngFor="let column of columns">
-          {{ row[column.key] }}
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="overflow-x-auto">
+      <table class="table table-auto w-full">
+        <!-- Table Head -->
+        <thead>
+        <tr>
+          <th *ngFor="let column of columns" class="bg-base-200 text-left px-4 py-2">
+            {{ column.label }}
+          </th>
+        </tr>
+        </thead>
+        <!-- Table Body -->
+        <tbody>
+        <tr *ngFor="let row of items" class="hover:bg-base-100">
+          <td *ngFor="let column of columns" class="border-b border-base-200 px-4 py-2">
+            {{ row[column.key] }}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
   </div>
 </div>

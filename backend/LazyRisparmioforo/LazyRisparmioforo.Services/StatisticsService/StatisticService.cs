@@ -18,7 +18,7 @@ public class StatisticService(
     /// <param name="command"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Result<decimal>> TotalSpentAsync(StatCommand command, CancellationToken cancellationToken)
+    public async Task<Result<decimal>> TotalAmountAsync(StatCommand command, CancellationToken cancellationToken)
     {
         var items = await dbContext.Transactions
             .AsNoTracking()
@@ -26,10 +26,9 @@ public class StatisticService(
                 transaction.Flow == Flow.Expense &&
                 transaction.RegistrationDate >= command.FromDate &&
                 transaction.RegistrationDate <= command.ToDate)
-            .Select(x => x.Amount)
-            .ToListAsync(cancellationToken);
+            .SumAsync(x => x.Amount, cancellationToken);
         
-        return Result.Success(items.Sum());
+        return Result.Success(items);
     } 
     
     /// <summary>
@@ -43,7 +42,7 @@ public class StatisticService(
         var items = await dbContext.Transactions
             .AsNoTracking()
             .Where(transaction =>
-                transaction.Flow == Flow.Expense &&
+                transaction.Flow == command.Flow &&
                 transaction.RegistrationDate >= command.FromDate &&
                 transaction.RegistrationDate <= command.ToDate)
             .GroupBy(x => x.CategoryId)
@@ -62,10 +61,4 @@ public class StatisticService(
         
         return results;
     }
-}
-
-public interface IStatisticService
-{
-    Task<Result<decimal>> TotalSpentAsync(StatCommand command, CancellationToken cancellationToken);
-    Task<Result<ICollection<StatResult>>> SpentPerCategoryAsync(StatCommand command, CancellationToken cancellationToken);
 }

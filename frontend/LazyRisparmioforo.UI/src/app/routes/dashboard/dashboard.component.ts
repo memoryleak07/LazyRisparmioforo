@@ -13,12 +13,14 @@ import {Category} from '../../services/category-service/category.model';
 import {selectAllCategories} from '../../store/category/category.reducers';
 import {StatisticsActions} from '../../store/statistics/statistics.actions';
 import {StatSpentPerCategoryResponse} from '../../services/statistics-service/statistics.models';
-import {selectSpentPerCategory, selectTotalSpent} from '../../store/statistics/statistics.reducers';
+import {AmountPipe} from '../../shared/pipes/amount.pipe';
+// import {selectSpentPerCategory, selectTotalSpent} from '../../store/statistics/statistics.reducers';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
-    TableComponent
+    TableComponent,
+    AmountPipe
   ],
   templateUrl: './dashboard.component.html'
 })
@@ -36,12 +38,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public spentPerCategory: StatSpentPerCategoryResponse[] = [];
 
   constructor() {
-    this.subscriptions.add(this.store.select(selectTotalSpent).subscribe((totalSpent) => {
-      this.totalSpent = totalSpent;
-    }));
-    this.subscriptions.add(this.store.select(selectSpentPerCategory).subscribe((spentPerCategory) => {
-      this.spentPerCategory = spentPerCategory;
-    }));
+    // this.subscriptions.add(this.store.select(selectTotalSpent).subscribe((totalSpent) => {
+    //   this.totalSpent = totalSpent;
+    // }));
+    // this.subscriptions.add(this.store.select(selectSpentPerCategory).subscribe((spentPerCategory) => {
+    //   this.spentPerCategory = spentPerCategory;
+    // }));
     this.subscriptions.add(
       combineLatest([
         this.store.select(selectLastTransactions),
@@ -66,12 +68,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this.store.dispatch(StatisticsActions.getStatistics({
-      query: {
-        fromDate: new Date(2024, 1, 1).toISOString().split('T')[0],
-        toDate: new Date().toISOString().split('T')[0],
-      }
-    }));
+    this.store.dispatch(StatisticsActions.getMainStatistics());
   }
 
   ngOnDestroy() {
