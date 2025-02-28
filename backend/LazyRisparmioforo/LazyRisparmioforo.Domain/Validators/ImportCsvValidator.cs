@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using LazyRisparmioforo.Domain.Commands;
-using Microsoft.AspNetCore.Http;
 
 namespace LazyRisparmioforo.Domain.Validators;
 
@@ -17,12 +16,10 @@ public class UploadFileViewModelValidator : AbstractValidator<UploadFileViewMode
 
         RuleFor(x => x.FormFile.ContentType)
             .NotEmpty().WithMessage("Content type is required.")
-            .Must(BeAValidContentType).WithMessage("Invalid content type. Only CSV files are allowed.");
+            .Must(x => x.Contains("text/csv")).WithMessage("Invalid content type. Only CSV files are allowed.");
 
         RuleFor(x => x.FormFile.Length)
             .GreaterThan(0).WithMessage("File must not be empty.")
             .LessThanOrEqualTo(10 * 1024 * 1024).WithMessage("File size must be 10 MB or less.");
     }
-
-    private bool BeAValidContentType(string contentType)  => contentType.Contains("text/csv");
 }

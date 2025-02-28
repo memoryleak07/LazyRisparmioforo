@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using LazyRisparmioforo.Domain.Constants;
+using LazyRisparmioforo.Shared.Shared;
 
 namespace LazyRisparmioforo.Domain.Shared;
 

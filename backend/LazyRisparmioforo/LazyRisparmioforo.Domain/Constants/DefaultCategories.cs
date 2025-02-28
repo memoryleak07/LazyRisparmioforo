@@ -10,7 +10,7 @@ public enum CategoryOther
 
 public static class CategoryConstants
 {
-    public static readonly ImmutableDictionary<string, int> LabelToId = new Dictionary<string, int>
+    private static readonly ImmutableDictionary<string, int> LabelToId = new Dictionary<string, int>
     {
         { "BILLS_SUBSCRIPTIONS_BILLS", 0 },
         { "BILLS_SUBSCRIPTIONS_INTERNET_PHONE", 1 },
@@ -93,4 +93,50 @@ public static class CategoryConstants
     public static readonly ImmutableDictionary<int, string> IdToLabel = 
         LabelToId.ToImmutableDictionary(kvp => kvp.Value, kvp => kvp.Key);
 
+    // public static readonly ImmutableDictionary<string, int> ConsolidatedLabelToId = new Dictionary<string, int>
+    // {
+    //     { "BILLS_SUBSCRIPTIONS", 0 },
+    //     { "CREDIT_CARDS", 1 },
+    //     { "EATING_OUT", 2 },
+    //     { "HEALTH_WELLNESS", 3 },
+    //     { "HOUSING_FAMILY", 4 },
+    //     { "LEISURE", 5 },
+    //     { "MORTGAGES_LOANS", 6 },
+    //     { "SHOPPING", 7 },
+    //     { "TAXES_SERVICES", 8 },
+    //     { "TRANSFERS", 9 },
+    //     { "TRAVELS_TRANSPORTATION", 10 },
+    //     { "WAGES_INCOME", 11 },
+    //     { "OTHER", 12 }
+    // }.ToImmutableDictionary();
+    //
+    // public static readonly ImmutableDictionary<string, ImmutableDictionary<string, int>> CategoryToSubcategories = 
+    //     new Dictionary<string, Dictionary<string, int>>
+    // {
+    //     {
+    //         "BILLS", new Dictionary<string, int>
+    //         {
+    //             { "SUBSCRIPTIONS_BILLS", 0 },
+    //             { "SUBSCRIPTIONS_INTERNET_PHONE", 1 },
+    //             { "SUBSCRIPTIONS_OTHER", 2 },
+    //             { "SUBSCRIPTIONS_SUBSCRIPTIONS", 3 }
+    //         }
+    //     },
+    //     {
+    //         "CREDIT_CARDS", new Dictionary<string, int>
+    //         {
+    //             { "CREDIT_CARDS", 4 }
+    //         }
+    //     },
+    //     {
+    //         "EATING_OUT", new Dictionary<string, int>
+    //         {
+    //             { "COFFEE_SHOPS", 5 },
+    //             { "OTHER", 6 },
+    //             { "RESTAURANTS", 7 },
+    //             { "TAKEAWAY_RESTAURANTS", 8 }
+    //         }
+    //     },
+    //     // Add more categories and subcategories as needed...
+    // }.ToImmutableDictionary(kvp => kvp.Key, kvp => kvp.Value.ToImmutableDictionary());
 }

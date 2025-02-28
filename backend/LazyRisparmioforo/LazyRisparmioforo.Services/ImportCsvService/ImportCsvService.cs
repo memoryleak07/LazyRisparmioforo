@@ -8,6 +8,7 @@ using LazyRisparmioforo.Domain.Constants;
 using LazyRisparmioforo.Domain.Entities;
 using LazyRisparmioforo.Domain.Shared;
 using LazyRisparmioforo.Infrastructure.Data;
+using LazyRisparmioforo.Shared.Shared;
 using Microsoft.Extensions.Logging;
 
 namespace ImportCsvService;
