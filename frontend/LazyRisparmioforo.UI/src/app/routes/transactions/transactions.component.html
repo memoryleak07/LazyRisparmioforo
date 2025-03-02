@@ -29,6 +29,12 @@
             class="min-w-[10rem]"
           ></app-flow-selector>
         </div>
+
+        <div>
+          <app-date-picker
+            (datesSelected)="onDatesSelected($event)">
+          </app-date-picker>
+        </div>
       </div>
   </div>
 

@@ -15,6 +15,8 @@ export interface Transaction {
 
 export interface TransactionSearchCommand extends SearchCommand  {
   flow?: Flow;
+  fromDate?: string;
+  toDate?: string;
 }
 
 export interface TransactionGetCommand {

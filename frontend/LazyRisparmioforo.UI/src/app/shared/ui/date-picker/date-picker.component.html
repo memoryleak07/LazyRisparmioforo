@@ -1,0 +1,43 @@
+<div class="grid grid-cols-1 gap-6 p-6 bg-white rounded-lg shadow-md">
+  <!-- Title -->
+  <div>
+    <p class="text-sm text-gray-500 font-medium">Select a date range</p>
+  </div>
+
+  <!-- Date Range Input -->
+  <div class="flex items-center gap-2 w-full">
+    <label class="input input-bordered flex items-center gap-2 w-full">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      <input #dateRangeInput
+             type="text"
+             class="w-full bg-transparent outline-none"
+             placeholder="Select date range">
+      <!-- Reset Button -->
+      <div class="flex justify-center">
+        <button class="btn btn-circle btn-sm btn-ghost text-gray-500 hover:bg-gray-100" (click)="reset()">
+          ✕
+        </button>
+      </div>
+    </label>
+  </div>
+
+  <!-- Filters -->
+  <form #filterForm class="flex flex-wrap gap-3">
+    <label class="flex items-center gap-2 cursor-pointer">
+      <input type="radio" name="frameworks" class="radio radio-primary radio-sm" (click)="applyFilter('lastYear')"/>
+      <span class="text-xs text-gray-700">Last Year</span>
+    </label>
+    <label class="flex items-center gap-2 cursor-pointer">
+      <input type="radio" name="frameworks" class="radio radio-primary radio-sm" (click)="applyFilter('lastMonth')"/>
+      <span class="text-xs text-gray-700">Last Month</span>
+    </label>
+    <label class="flex items-center gap-2 cursor-pointer">
+      <input type="radio" name="frameworks" class="radio radio-primary radio-sm" (click)="applyFilter('lastWeek')"/>
+      <span class="text-xs text-gray-700">Last Week</span>
+    </label>
+  </form>
+
+
+</div>

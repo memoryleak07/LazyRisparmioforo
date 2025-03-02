@@ -1,7 +1,7 @@
 ﻿using LazyRisparmioforo.Api.Extensions;
 using LazyRisparmioforo.Domain.Commands;
 using LazyRisparmioforo.Domain.Entities;
-using LazyRisparmioforo.Domain.Shared;
+using LazyRisparmioforo.Shared.Shared;
 using Microsoft.AspNetCore.Mvc;
 using MinimalHelpers.FluentValidation;
 using TransactionService;

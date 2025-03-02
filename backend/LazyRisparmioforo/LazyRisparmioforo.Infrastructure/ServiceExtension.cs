@@ -9,11 +9,11 @@ public static class ServiceExtension
 {
     public static void AddInfrastructuresServices(this IServiceCollection services, IConfiguration configuration)
     {
-        string connectionString = configuration.GetConnectionString("DefaultConnection")
+        string connectionString = configuration.GetConnectionString("TestConnection")
             ?? throw new ArgumentNullException();
         
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite(connectionString));
+            options.UseSqlServer(connectionString));
 
         services.AddScoped<ApplicationDbContextInitializer>();
     }

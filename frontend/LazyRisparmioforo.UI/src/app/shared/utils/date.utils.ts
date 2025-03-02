@@ -30,11 +30,14 @@ export class DateUtils {
 
   /**
    * Returns the first day of the current week in the format 'YYYY-MM-DD'.
+   * Monday is considered the first day of the week.
    * @returns {string} The first day of the current week in 'YYYY-MM-DD' format.
    */
   static getFirstDayOfCurrentWeek(): string {
     const now = new Date();
-    const firstDayOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+    const dayOfWeek = now.getDay();
+    const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    const firstDayOfWeek = new Date(now.setDate(now.getDate() - diffToMonday));
     return firstDayOfWeek.toISOString().split('T')[0];
   }
 }

@@ -6,7 +6,7 @@ namespace LazyRisparmioforo.Domain.Validators;
 
 public class StatisticValidators
 {
-    public class StatisticCommandValidator : AbstractValidator<StatCommand>
+    public class StatisticCommandValidator : AbstractValidator<StatRequestCommand>
     {
         public StatisticCommandValidator()
         {

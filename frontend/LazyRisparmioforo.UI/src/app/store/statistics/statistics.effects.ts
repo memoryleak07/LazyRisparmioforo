@@ -5,7 +5,6 @@ import {catchError, exhaustMap} from 'rxjs/operators';
 import {StatisticsService} from '../../services/statistics-service/statistics.service';
 import {StatisticsActions} from './statistics.actions';
 import {DateUtils} from '../../shared/utils/date.utils';
-import {Flow} from '../../constants/enums';
 
 @Injectable()
 export class StatisticsEffects {
@@ -15,38 +14,35 @@ export class StatisticsEffects {
   getMainStat = createEffect(() => {
     return this.actions$.pipe(
       ofType(StatisticsActions.getMainStatistics),
-      exhaustMap((data) =>
+      exhaustMap(() =>
         forkJoin({
-          totalSpentWeek: this.statisticsService.totalAmount({
+          weekly: this.statisticsService.summary({
             fromDate: DateUtils.getFirstDayOfCurrentWeek(),
-            toDate: DateUtils.getToday(),
-            flow: Flow.Expense
+            toDate: DateUtils.getToday()
           }),
-          totalSpentMonth: this.statisticsService.totalAmount({
+          monthly: this.statisticsService.summary({
             fromDate: DateUtils.getFirstDayOfCurrentMonth(),
-            toDate: DateUtils.getToday(),
-            flow: Flow.Expense
+            toDate: DateUtils.getToday()
           }),
-          totalSpentYear: this.statisticsService.totalAmount({
+          yearly: this.statisticsService.summary({
             fromDate: DateUtils.getFirstDayOfCurrentYear(),
-            toDate: DateUtils.getToday(),
-            flow: Flow.Expense
+            toDate: DateUtils.getToday()
           }),
-          // totalEarned: this.statisticsService.totalEarned(data.query),
-          // spentPerCategory: this.statisticsService.spentPerCategory(data.query),
+          // Categories for current year
+          spentPerCategory: this.statisticsService.spentPerCategory({
+            fromDate: DateUtils.getFirstDayOfCurrentYear(),
+            toDate: DateUtils.getToday()
+          }),
         }).pipe(
-          mergeMap(({totalSpentWeek, totalSpentMonth, totalSpentYear}) => [
+          mergeMap(({weekly, monthly, yearly, spentPerCategory}) => [
             StatisticsActions.setMainStatistics({
               response: {
-                totalSpentWeek: totalSpentWeek,
-                totalSpentMonth: totalSpentMonth,
-                totalSpentYear: totalSpentYear,
-                totalEarnedMonth: 0,
-                totalEarnedYear: 0
+                weekly: weekly,
+                monthly: monthly,
+                yearly: yearly,
               }
             }),
-            // StatisticsActions.setTotalEarned({ response: totalEarned }),
-            // StatisticsActions.setSpentPerCategory({ response: spentPerCategory }),
+            StatisticsActions.setSpentPerCategory({ response: spentPerCategory }),
           ]),
           catchError((error: { message: string }) =>
             of(StatisticsActions.errorStatService({error: error.message}))

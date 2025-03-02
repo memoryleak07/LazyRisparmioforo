@@ -1,28 +1,24 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {ToastService} from '../../shared/ui/toast/toast.service';
 import {combineLatest, Subscription} from 'rxjs';
-import {
-  selectErrorTransactionService,
-  selectLastTransactions,
-} from '../../store/transaction/transaction.reducers';
+import {selectLastTransactions} from '../../store/transaction/transaction.reducers';
 import {Transaction} from '../../services/transaction-service/transaction.model';
 import {TransactionActions} from '../../store/transaction/transaction.actions';
 import {TableComponent} from '../../shared/ui/table/table.component';
-import {Category} from '../../services/category-service/category.model';
 import {selectAllCategories} from '../../store/category/category.reducers';
 import {StatisticsActions} from '../../store/statistics/statistics.actions';
-import {StatSpentPerCategoryResponse} from '../../services/statistics-service/statistics.models';
-import {AmountPipe} from '../../shared/pipes/amount.pipe';
-// import {selectSpentPerCategory, selectTotalSpent} from '../../store/statistics/statistics.reducers';
+import {DashboardBalanceComponent} from '../../shared/components/dashboard-balance/dashboard-balance.component';
+import {DashboardCategoryAmountComponent} from '../../shared/components/dashboard-category-amount/dashboard-category-amount.component';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     TableComponent,
-    AmountPipe
+    DashboardBalanceComponent,
+    DashboardCategoryAmountComponent
   ],
-  templateUrl: './dashboard.component.html'
+  templateUrl: './dashboard.component.html',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private store = inject(Store);
@@ -33,34 +29,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     { key: 'amount', label: 'Amount' }
   ];
   public tableItems: Transaction[] = [];
-  public categories: Category[] = [];
-  public totalSpent: number = 0;
-  public spentPerCategory: StatSpentPerCategoryResponse[] = [];
 
-  constructor() {
-    // this.subscriptions.add(this.store.select(selectTotalSpent).subscribe((totalSpent) => {
-    //   this.totalSpent = totalSpent;
-    // }));
-    // this.subscriptions.add(this.store.select(selectSpentPerCategory).subscribe((spentPerCategory) => {
-    //   this.spentPerCategory = spentPerCategory;
-    // }));
-    this.subscriptions.add(
-      combineLatest([
-        this.store.select(selectLastTransactions),
-        this.store.select(selectAllCategories)
-      ]).subscribe(([lastTransactions, categories]) => {
-        this.tableItems = lastTransactions.map(transaction => {
-          const category = categories.find(cat => cat.id === transaction.categoryId);
-          return {
-            ...transaction,
-            category: category ? category.name : 'Unknown'
-          };
-        });
-      })
-    );
-  }
+  constructor() {}
 
   ngOnInit() {
+    this.store.dispatch(StatisticsActions.getMainStatistics());
     this.store.dispatch(TransactionActions.searchTransactions({
       query: {
         pageIndex: 0,
@@ -68,11 +41,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this.store.dispatch(StatisticsActions.getMainStatistics());
+    this.subscriptions.add(
+      combineLatest([
+        this.store.select(selectLastTransactions),
+        this.store.select(selectAllCategories)
+      ]).subscribe(([lastTransactions, categories]) => {
+        this.tableItems = lastTransactions.slice(0, 5).map(transaction => {
+          const category = categories.find(cat => cat.id === transaction.categoryId);
+          return {
+            ...transaction,
+            category: category ? category.name : 'Unknown',
+          };
+        });
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.store.dispatch(TransactionActions.clearLastTransactions());
+    // this.store.dispatch(TransactionActions.clearLastTransactions());
     this.subscriptions.unsubscribe();
   }
 }

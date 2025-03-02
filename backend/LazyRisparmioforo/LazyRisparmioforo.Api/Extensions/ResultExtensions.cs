@@ -1,4 +1,4 @@
-﻿using LazyRisparmioforo.Domain.Shared;
+﻿using LazyRisparmioforo.Shared.Shared;
 
 namespace LazyRisparmioforo.Api.Extensions;
 

@@ -1,6 +1,4 @@
-﻿using LazyRisparmioforo.Domain.Shared;
-
-namespace LazyRisparmioforo.Shared.Shared;
+﻿namespace LazyRisparmioforo.Shared.Shared;
 
 public record Error(string Code, string Description)
 {

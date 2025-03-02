@@ -1,5 +1,6 @@
 ﻿using LazyRisparmioforo.Api.Extensions;
 using LazyRisparmioforo.Domain.Commands;
+using LazyRisparmioforo.Shared.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using MinimalHelpers.FluentValidation;
 using StatisticsService;
@@ -12,38 +13,38 @@ public static class StatisticsEndpoints
     {
         var api = endpoints.MapGroup("/api/statistics/");
         
-        api.MapGet("/total-amount", TotalAmountCommand)
-            .Produces<decimal>()
+        api.MapGet("/summary", SummaryCommand)
+            .Produces<SummaryDto>()
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithValidation<StatCommand>()
-            .WithDescription("Get total amount within a date range")
+            .WithValidation<StatRequestCommand>()
+            .WithDescription("Get total amount income and expense within a date range.")
             .WithOpenApi();
         
         api.MapGet("/spent-per-category", SpentPerCategoryCommand)
-            .Produces<ICollection<StatResult>>()
+            .Produces<ICollection<CategoryAmountDto>>()
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
-            .WithValidation<StatCommand>()
+            .WithValidation<StatRequestCommand>()
             .WithDescription("Get the total amount spent per category within a date range.")
             .WithOpenApi();
     }
 
-    private static async Task<IResult> TotalAmountCommand(
+    private static async Task<IResult> SummaryCommand(
         [FromServices] IStatisticService statisticService,
-        [AsParameters] StatCommand command,
+        [AsParameters] StatRequestCommand requestCommand,
         CancellationToken cancellationToken)
     {
-        var result = await statisticService.TotalAmountAsync(command, cancellationToken);
+        var result = await statisticService.SummaryAsync(requestCommand, cancellationToken);
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
     
     private static async Task<IResult> SpentPerCategoryCommand(
         [FromServices] IStatisticService statisticService,
-        [AsParameters] StatCommand command,
+        [AsParameters] StatRequestCommand requestCommand,
         CancellationToken cancellationToken)
     {
-        var result = await statisticService.SpentPerCategoryAsync(command, cancellationToken);
+        var result = await statisticService.SpentPerCategoryAsync(requestCommand, cancellationToken);
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
 }

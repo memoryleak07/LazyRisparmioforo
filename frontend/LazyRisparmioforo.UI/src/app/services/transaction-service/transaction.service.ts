@@ -27,6 +27,8 @@ export class TransactionService {
     let url = `${this.apiUrl}/search?PageIndex=${request.pageIndex}&PageSize=${request.pageSize}`;
     if (request.flow != undefined) url = url + `&Flow=${request.flow}`;
     if (request.query != undefined) url = url + `&Query=${request.query}`;
+    if (request.fromDate != undefined) url = url + `&FromDate=${request.fromDate}`;
+    if (request.toDate != undefined) url = url + `&ToDate=${request.toDate}`;
     return this.http.get<Pagination<Transaction>>(url);
   }
 

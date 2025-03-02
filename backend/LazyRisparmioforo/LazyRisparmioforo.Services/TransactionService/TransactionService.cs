@@ -1,13 +1,10 @@
 ﻿using LazyRisparmioforo.Domain.Commands;
-using LazyRisparmioforo.Domain.Constants;
 using LazyRisparmioforo.Domain.Entities;
-using LazyRisparmioforo.Domain.Shared;
 using LazyRisparmioforo.Infrastructure.Data;
 using LazyRisparmioforo.Shared.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Result = LazyRisparmioforo.Domain.Shared.Result;
-
+using Result = LazyRisparmioforo.Shared.Shared.Result;
 
 namespace TransactionService;
 
@@ -20,12 +17,11 @@ public class TransactionService(
     {
         var query = dbContext.Transactions
             .AsNoTracking()
-            .Where(string.IsNullOrEmpty(command.Query)
-                ? transaction => true
-                : transaction => transaction.Description.ToLower().Contains(command.Query.ToLower()))
-            .Where(command.Flow == null
-                ? transaction => true
-                : transaction => transaction.Flow == command.Flow)
+            .Where(t =>
+                (command.Flow == null || t.Flow == command.Flow) && 
+                (command.FromDate == null || t.RegistrationDate >= command.FromDate) &&
+                (command.ToDate == null || t.RegistrationDate <= command.ToDate) &&
+                (string.IsNullOrEmpty(command.Query) || t.Description.ToLower().Contains(command.Query.ToLower())))
             .OrderByDescending(x => x.RegistrationDate)
             .AsQueryable();
 

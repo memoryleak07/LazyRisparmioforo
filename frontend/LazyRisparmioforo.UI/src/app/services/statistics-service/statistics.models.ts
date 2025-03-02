@@ -1,24 +1,20 @@
-import {Flow} from '../../constants/enums';
-
 export interface StatRequest {
   fromDate: string;
   toDate: string;
-  flow?: Flow;
+}
+
+export interface StatResponse {
+  income: number;
+  expense: number;
 }
 
 export interface StatMainResponse {
-  totalSpentWeek: number;
-  totalSpentMonth: number;
-  totalSpentYear: number;
-  totalEarnedMonth: number;
-  totalEarnedYear: number;
+  weekly: StatResponse;
+  monthly: StatResponse;
+  yearly: StatResponse;
 }
 
-export interface StatTotalSpentResponse {
-  amount: number;
-}
-
-export interface StatSpentPerCategoryResponse {
+export interface CategoryAmountResponse {
   categoryId: number;
   amount: number;
 }

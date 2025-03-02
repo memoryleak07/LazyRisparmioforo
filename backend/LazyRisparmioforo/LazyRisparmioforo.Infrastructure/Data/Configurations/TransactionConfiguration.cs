@@ -20,6 +20,6 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
             .IsRequired();
         
         builder.Property(e => e.Description)
-            .HasMaxLength(255);
+            .HasMaxLength(4000);
     }
 }

@@ -1,7 +1,8 @@
 ﻿using LazyRisparmioforo.Domain.Commands;
 using LazyRisparmioforo.Domain.Constants;
-using LazyRisparmioforo.Domain.Shared;
 using LazyRisparmioforo.Infrastructure.Data;
+using LazyRisparmioforo.Shared.DTOs;
+using LazyRisparmioforo.Shared.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -13,38 +14,42 @@ public class StatisticService(
     : IStatisticService
 {
     /// <summary>
-    /// Returns the total amount spent within a specified date range.
+    /// .
     /// </summary>
-    /// <param name="command"></param>
+    /// <param name="requestCommand"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Result<decimal>> TotalAmountAsync(StatCommand command, CancellationToken cancellationToken)
+    public async Task<Result<SummaryDto>> SummaryAsync(StatRequestCommand requestCommand, CancellationToken cancellationToken)
     {
         var items = await dbContext.Transactions
             .AsNoTracking()
-            .Where(transaction =>
-                transaction.Flow == Flow.Expense &&
-                transaction.RegistrationDate >= command.FromDate &&
-                transaction.RegistrationDate <= command.ToDate)
-            .SumAsync(x => x.Amount, cancellationToken);
+            .Where(transaction => 
+                transaction.RegistrationDate >= requestCommand.FromDate &&
+                transaction.RegistrationDate <= requestCommand.ToDate)
+            .ToListAsync(cancellationToken);
+
+        var dto = new SummaryDto
+        {
+            Expense = items.Where(t => t.Flow == Flow.Expense).Sum(transaction => transaction.Amount),
+            Income = items.Where(t => t.Flow == Flow.Income).Sum(transaction => transaction.Amount),
+        };
         
-        return Result.Success(items);
-    } 
-    
+        return dto;
+    }
+
     /// <summary>
     /// Returns the total amount spent per category within a specified date range.
     /// </summary>
-    /// <param name="command"></param>
+    /// <param name="requestCommand"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Result<ICollection<StatResult>>> SpentPerCategoryAsync(StatCommand command, CancellationToken cancellationToken)
+    public async Task<Result<ICollection<CategoryAmountDto>>> SpentPerCategoryAsync(StatRequestCommand requestCommand, CancellationToken cancellationToken)
     {
         var items = await dbContext.Transactions
             .AsNoTracking()
             .Where(transaction =>
-                transaction.Flow == command.Flow &&
-                transaction.RegistrationDate >= command.FromDate &&
-                transaction.RegistrationDate <= command.ToDate)
+                transaction.RegistrationDate >= requestCommand.FromDate &&
+                transaction.RegistrationDate <= requestCommand.ToDate)
             .GroupBy(x => x.CategoryId)
             .Select(grouping => new
                 {
@@ -55,7 +60,11 @@ public class StatisticService(
             .ToListAsync(cancellationToken);
 
         var results = items
-            .Select(x => new StatResult(x.CategoryId, x.Amounts.Sum()))
+            .Select(x => new CategoryAmountDto
+            {
+                CategoryId= x.CategoryId, 
+                Amount = x.Amounts.Sum()
+            })
             .OrderBy(x => x.Amount)
             .ToList();
         

@@ -1,6 +1,6 @@
 ﻿using LazyRisparmioforo.Domain.Commands;
 using LazyRisparmioforo.Domain.Entities;
-using LazyRisparmioforo.Domain.Shared;
+using LazyRisparmioforo.Shared.Shared;
 
 namespace TransactionService;
 

@@ -1,10 +1,11 @@
 ﻿using LazyRisparmioforo.Domain.Commands;
-using LazyRisparmioforo.Domain.Shared;
+using LazyRisparmioforo.Shared.DTOs;
+using LazyRisparmioforo.Shared.Shared;
 
 namespace StatisticsService;
 
 public interface IStatisticService
 {
-    Task<Result<decimal>> TotalAmountAsync(StatCommand command, CancellationToken cancellationToken);
-    Task<Result<ICollection<StatResult>>> SpentPerCategoryAsync(StatCommand command, CancellationToken cancellationToken);
+    Task<Result<SummaryDto>> SummaryAsync(StatRequestCommand requestCommand, CancellationToken cancellationToken);
+    Task<Result<ICollection<CategoryAmountDto>>> SpentPerCategoryAsync(StatRequestCommand requestCommand, CancellationToken cancellationToken);
 }

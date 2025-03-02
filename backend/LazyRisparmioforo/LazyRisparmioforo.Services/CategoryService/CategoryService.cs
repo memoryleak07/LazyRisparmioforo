@@ -1,10 +1,6 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json;
+﻿using System.Net.Http.Json;
 using LazyRisparmioforo.Domain.Commands;
-using LazyRisparmioforo.Domain.Constants;
 using LazyRisparmioforo.Domain.Entities;
-using LazyRisparmioforo.Domain.Shared;
 using LazyRisparmioforo.Infrastructure.Data;
 using LazyRisparmioforo.Shared.Shared;
 using Microsoft.EntityFrameworkCore;

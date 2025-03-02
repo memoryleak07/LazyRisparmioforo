@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using LazyRisparmioforo.Shared.Shared;
-
-namespace LazyRisparmioforo.Domain.Shared;
+namespace LazyRisparmioforo.Shared.Shared;
 
 
 public class Result

@@ -12,6 +12,7 @@ import {CategoryBadgeComponent} from '../../shared/components/category-badge/cat
 import {RouterLink} from '@angular/router';
 import {TransactionDialogComponent} from '../../shared/components/transaction-dialog/transaction-dialog.component';
 import {AmountPipe} from '../../shared/pipes/amount.pipe';
+import {DatePickerComponent} from '../../shared/ui/date-picker/date-picker.component';
 
 @Component({
   selector: 'app-transactions',
@@ -22,7 +23,8 @@ import {AmountPipe} from '../../shared/pipes/amount.pipe';
     CategoryBadgeComponent,
     TransactionDialogComponent,
     NgIf,
-    AmountPipe
+    AmountPipe,
+    DatePickerComponent
   ],
   templateUrl: './transactions.component.html'
 })
@@ -32,6 +34,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   public transactions : Transaction[] = [];
   public searchFlow: Flow | undefined = undefined;
   public searchQuery: string | undefined = undefined;
+  public searchFromDate: string | undefined = undefined;
+  public searchToDate: string | undefined = undefined;
   public pagination = {
     pageIndex: 0,
     pageSize: 10,
@@ -64,6 +68,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       TransactionActions.searchTransactions({
         query: {
           flow: this.searchFlow,
+          fromDate: this.searchFromDate,
+          toDate: this.searchToDate,
           query: this.searchQuery,
           pageIndex: this.pagination.pageIndex,
           pageSize: this.pagination.pageSize,
@@ -96,15 +102,26 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   onFlowChange(flow: Flow | undefined): void {
     this.searchFlow = flow;
 
-    if (this.pagination.pageIndex > 0) {
-      this.pagination = { ...this.pagination, pageIndex: 0 };
-    }
+    this.resetPagination();
+    this.searchPagedTransactions();
+  }
+
+  onDatesSelected(selectedDates: { startDate: string | null; endDate: string | null }): void {
+    this.searchFromDate = selectedDates.startDate ?? undefined;
+    this.searchToDate = selectedDates.endDate ?? undefined;
+
+    this.resetPagination();
     this.searchPagedTransactions();
   }
 
   openTransactionDialog(transactionId: number): void {
-    console.log("openTransactionDialog", transactionId);
     this.transactionDialog.transactionId = transactionId;
     this.transactionDialog.open();
+  }
+
+  private resetPagination(): void {
+    if (this.pagination.pageIndex > 0) {
+      this.pagination = { ...this.pagination, pageIndex: 0 };
+    }
   }
 }

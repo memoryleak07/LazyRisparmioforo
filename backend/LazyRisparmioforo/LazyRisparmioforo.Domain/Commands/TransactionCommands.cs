@@ -6,7 +6,10 @@ namespace LazyRisparmioforo.Domain.Commands;
 public class TransactionSearchCommand : PagedSearchCommand
 {
     public Flow? Flow { get; set; }
+    public DateOnly? FromDate { get; set; }
+    public DateOnly? ToDate { get; set; }
 }
+
 public record TransactionGetCommand(
     int Id);
 

@@ -1,0 +1,23 @@
+/*!* Background color for calendar *!*/
+/*.flatpickr-calendar {*/
+/*  background-color: #1e293b; !* Dark background *!*/
+/*  border: 1px solid #64748b;*/
+/*  color: white;*/
+/*}*/
+
+/*!* Date text color *!*/
+/*.flatpickr-day {*/
+/*  color: #cbd5e1; !* Light gray text *!*/
+/*}*/
+
+/*!* Hover effect on days *!*/
+/*.flatpickr-day:hover {*/
+/*  background-color: #334155;*/
+/*}*/
+
+/*!* Selected date color *!*/
+/*.flatpickr-day.selected {*/
+/*  background-color: #4f46e5 !important;*/
+/*  color: white !important;*/
+/*  border-radius: 8px;*/
+/*}*/

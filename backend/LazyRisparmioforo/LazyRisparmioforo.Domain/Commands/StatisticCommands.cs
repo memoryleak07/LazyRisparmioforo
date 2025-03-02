@@ -1,12 +1,5 @@
-﻿using LazyRisparmioforo.Domain.Constants;
+﻿namespace LazyRisparmioforo.Domain.Commands;
 
-namespace LazyRisparmioforo.Domain.Commands;
-
-public record StatCommand(
+public record StatRequestCommand(
     DateOnly FromDate,
-    DateOnly ToDate,
-    Flow Flow);
-
-public record StatResult(
-    int CategoryId, 
-    decimal Amount);
+    DateOnly ToDate);
