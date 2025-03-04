@@ -26,14 +26,14 @@
         </div>
       </div>
 
-      <form [formGroup]="transactionForm"
+      <form [formGroup]="formGroup"
             (ngSubmit)="save()">
 
         <!-- Flow -->
         <div class="p-4">
           <div class="flex justify-center">
             <app-flow-selector formControlName="flow"
-                               [flow]="transactionForm.get('flow')?.value">
+                               [flow]="formGroup.get('flow')?.value">
             </app-flow-selector>
           </div>
         </div>
@@ -136,7 +136,7 @@
             </svg>
           </button>
 
-          <button [disabled]="!transactionForm.valid"
+          <button [disabled]="!formGroup.valid"
                   class="btn btn-primary ml-auto"
                   type="submit">
             {{!transactionId ? "Save" : "Update"}}

@@ -27,52 +27,74 @@ api = Api(
 
 ns = api.namespace("api")
 
+def predict_category(transaction_text):
+    """Runs model inference for a single transaction"""
+    if not transaction_text:
+        return {
+            "error": "Empty transaction text"
+        }
+
+    # Tokenize input
+    inputs = tokenizer(transaction_text, return_tensors="pt")
+
+    # Run inference
+    with torch.no_grad():
+        outputs = model(**inputs)
+
+    # Get softmax probabilities
+    probs = torch.nn.functional.softmax(outputs.logits, dim=-1)
+
+    # Get the category with the highest probability
+    predicted_label_idx = torch.argmax(probs, dim=1).item()
+    predicted_category = id2label.get(predicted_label_idx, f"Unknown ({predicted_label_idx})")
+    confidence = probs[0][predicted_label_idx].item()
+
+    return {
+        "id": predicted_label_idx,
+        "name": predicted_category.replace("Category.", ""),
+        "confidence": round(confidence, 2),
+    }
+
 @ns.route("/categories")
 class Categories(Resource):
     def get(self):
-        """Returns available transaction categories"""
+        """Returns available categories"""
         return id2label
 
-transaction_request = api.model("TransactionRequest", {
-    "transaction_text": fields.String(required=True, description="Transaction description")
+input_request = api.model("InputRequest", {
+    "input": fields.String(required=True, description="Input text")
 })
-
 @ns.route("/predict")
 class Predict(Resource):
-    @ns.expect(transaction_request)
+    @ns.expect(input_request)
     def post(self):
-        """Predicts the category of a transaction"""
-
-        # Get input request
+        """Predicts the category of an input text"""
         data = request.get_json()
-        transaction_text = data.get("transaction_text", "")
+        input = data.get("input", "")
 
-        if not transaction_text:
-            return {"error": "No transaction_text provided"}, 400
+        if not input:
+            return {"error": "No input provided"}, 400
 
-        # Tokenize input
-        inputs = tokenizer(transaction_text, return_tensors="pt")
+        prediction = predict_category(input)
+        return prediction
 
-        # Run inference
-        with torch.no_grad():
-            outputs = model(**inputs)
+input_batch_request = ns.model('InputBatchRequest', {
+    'input': fields.List(fields.String, required=True, description='List of input texts')
+})
+@ns.route("/predict-batch")
+class PredictBatch(Resource):
+    @ns.expect(input_batch_request)
+    def post(self):
+        """Predicts the categories for a batch of input texts"""
+        data = request.get_json()
+        input = data.get("input", [])
+        
+        if not input:
+            return {"error": "No input provided"}, 400
 
-        # Get softmax probabilities
-        probs = torch.nn.functional.softmax(outputs.logits, dim=-1)
-
-        # Get the category with the highest probability
-        predicted_label_idx = torch.argmax(probs, dim=1).item()
-
-        # Get category name from model's labels
-        predicted_category = id2label.get(predicted_label_idx, f"Unknown ({predicted_label_idx})")
-        confidence = probs[0][predicted_label_idx].item()
-
-        return {
-            "id": predicted_label_idx,
-            "name": predicted_category.replace("Category.", ""),
-            "confidence": round(confidence, 2)
-        }
-
+        predictions = [predict_category(text) for text in input]
+        return predictions
+    
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 51153))
     app.run(host='0.0.0.0', port=port)

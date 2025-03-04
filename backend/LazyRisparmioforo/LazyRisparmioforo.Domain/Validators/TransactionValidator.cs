@@ -11,7 +11,7 @@ public class TransactionValidators
         public TransactionSearchValidator()
         {
             RuleFor(x => x.Flow)
-                .IsInEnum().WithMessage("Enter a valid flow");
+                .IsInEnum().WithMessage("Enter a valid flow.");
         }
     }
     
@@ -20,13 +20,13 @@ public class TransactionValidators
         public TransactionCreateValidator()
         {
             RuleFor(x => x.Amount)
-                .NotNull().WithMessage("Amount cannot be null.")
-                .NotEmpty().WithMessage("Amount cannot be empty.");
-        
+                .NotNull().NotEmpty().WithMessage("Amount cannot be 0.");
+
+            RuleFor(x => x.CategoryId)
+                .NotNull().NotEmpty().WithMessage("Category is required.");
+            
             RuleFor(x => x.Description)
-                .NotNull().WithMessage("Description cannot be null.")
-                .NotEmpty().WithMessage("Description cannot be empty.")
-                .MaximumLength(255).WithMessage("Description maximum length is 255.");
+                .MaximumLength(4000).WithMessage("Description maximum length is 4000.");
         }
     }
     
@@ -34,14 +34,17 @@ public class TransactionValidators
     {
         public TransactionUpdateValidator()
         {
+            RuleFor(x => x.Id)
+                .NotNull().NotEmpty().WithMessage("Id is required.");
+
             RuleFor(x => x.Amount)
-                .NotNull().WithMessage("Amount cannot be null.")
-                .NotEmpty().WithMessage("Amount cannot be empty.");
-        
+                .NotNull().NotEmpty().WithMessage("Amount cannot be 0.");
+            
+            RuleFor(x => x.CategoryId)
+                .NotNull().NotEmpty().WithMessage("Category is required.");
+            
             RuleFor(x => x.Description)
-                .NotNull().WithMessage("Description cannot be null.")
-                .NotEmpty().WithMessage("Description cannot be empty.")
-                .MaximumLength(255).WithMessage("Description maximum length is 255.");
+                .MaximumLength(4000).WithMessage("Description maximum length is 4000.");
         }
     }
     
@@ -50,7 +53,7 @@ public class TransactionValidators
         public TransactionRemoveValidator()
         {
             RuleFor(x => x.Id)
-                .NotNull().WithMessage("Id cannot be null.");
+                .NotNull().NotEmpty().WithMessage("Id is required.");
         }
     }
 }

@@ -9,7 +9,6 @@ import {FormsModule} from '@angular/forms';
 import {FlowSelectorComponent} from '../../shared/components/flow-selector/flow-selector.component';
 import {Flow} from '../../constants/enums';
 import {CategoryBadgeComponent} from '../../shared/components/category-badge/category-badge.component';
-import {RouterLink} from '@angular/router';
 import {TransactionDialogComponent} from '../../shared/components/transaction-dialog/transaction-dialog.component';
 import {AmountPipe} from '../../shared/pipes/amount.pipe';
 import {DatePickerComponent} from '../../shared/ui/date-picker/date-picker.component';
@@ -45,7 +44,11 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   @ViewChild('transactionDialog') transactionDialog!: TransactionDialogComponent;
 
-  constructor() {
+  constructor() {}
+
+  ngOnInit() {
+    this.searchPagedTransactions();
+
     this.subscriptions.add(this.store.select(selectLastTransactions).subscribe((lastTransactions) => {
       this.transactions = lastTransactions;
     }));
@@ -53,10 +56,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.store.select(selectPagination).subscribe((pagination) => {
       this.pagination = pagination;
     }));
-  }
-
-  ngOnInit() {
-    this.searchPagedTransactions();
   }
 
   ngOnDestroy() {
@@ -82,6 +81,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     if (this.searchQuery && this.searchQuery.length < 3) {
       return;
     }
+    this.resetPagination();
     this.searchPagedTransactions();
   }
 

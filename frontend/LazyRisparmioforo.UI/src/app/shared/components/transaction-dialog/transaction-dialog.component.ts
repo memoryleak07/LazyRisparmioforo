@@ -1,18 +1,17 @@
 import {Component, ElementRef, EventEmitter, inject, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Store} from '@ngrx/store';
-import {debounceTime, filter, Observable, Subscription, switchMap} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {selectAllCategories} from '../../../store/category/category.reducers';
-import {Category, CategoryPredictResponse} from '../../../services/category-service/category.model';
+import {Category} from '../../../services/category-service/category.model';
 import {Flow} from '../../../constants/enums';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {TransactionActions} from '../../../store/transaction/transaction.actions';
 import {
   selectCurrentTransaction,
-  selectErrorTransactionService, selectLastTransactions,
+  selectLastTransactions,
   selectMessage
 } from '../../../store/transaction/transaction.reducers';
 import {ToastService} from '../../ui/toast/toast.service';
-import {CategoryService} from '../../../services/category-service/category.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {FlowSelectorComponent} from '../flow-selector/flow-selector.component';
 import {DialogComponent} from '../../ui/dialog/dialog.component';
@@ -36,7 +35,7 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
   public transaction: Transaction | null = null;
   public categories: Category[] = [];
-  public transactionForm: FormGroup;
+  public formGroup: FormGroup;
 
   private _transactionId: number | undefined;
 
@@ -65,44 +64,35 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
   @ViewChild(DialogComponent) modal!: DialogComponent;
 
   constructor(private fb: FormBuilder) {
-    this.transactionForm = this.fb.group({
+    this.formGroup = this.fb.group({
       flow: [Flow.Expense, [Validators.required]],
       date: ['', [Validators.required]],
       amount: ['', [Validators.required]],
-      description: ['', [Validators.required, Validators.maxLength(255)]],
+      description: ['', [Validators.maxLength(4000)]],
       categoryId: ['', [Validators.required]],
     });
+  }
 
+  ngOnInit(): void {
     if (this.transactionId) {
       this.subscriptions.add(this.store.select(selectCurrentTransaction).subscribe((transaction) => {
         this.transaction = transaction;
         this.initializeFormWithData();
       }));
     }
+    else {
+      this.formGroup.patchValue({
+        date: new Date().toISOString().split('T')[0],
+      });
+    }
 
     this.subscriptions.add(this.store.select(selectMessage).subscribe((message) => {
-      if (message) {this.toastService.addToast(message, 'success'); }
-    }));
-
-    this.subscriptions.add(this.store.select(selectErrorTransactionService).subscribe((error) => {
-      if (error) {this.toastService.addToast(error, 'error'); }
+      if (message) { this.toastService.addToast(message, 'success'); }
     }));
 
     this.subscriptions.add(this.store.select(selectAllCategories).subscribe((categories) => {
       this.categories = categories;
     }));
-  }
-
-  ngOnInit(): void {
-    if (this.transactionId) {
-      this.initializeFormWithData();
-    }
-    else {
-      this.transactionForm.patchValue({
-        date: new Date().toISOString().split('T')[0],
-      });
-    }
-
     // Predict category
     // this.subscriptions.add(
     //   this.transactionForm.get('description')!.valueChanges.pipe(
@@ -128,33 +118,37 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
   }
 
   save(): void {
-    if (!this.transactionForm.valid) {
+    if (!this.formGroup.valid) {
       return;
     }
 
-    let { flow, date, amount, description, categoryId } = this.transactionForm.value;
+    let { flow, date, amount, description, categoryId } = this.formGroup.value;
 
     amount = flow === Flow.Income
       ? amount
       : amount * -1;
 
     if (this.transactionId) {
-      this.store.dispatch(TransactionActions.updateTransaction({request : {
+      this.store.dispatch(TransactionActions.updateTransaction({
+        request: {
           id: this.transactionId,
           date: date,
           amount: amount,
           categoryId: categoryId,
           description: description,
-        }}));
+        }
+      }));
       console.log('Transaction updated.');
     }
     else {
-      this.store.dispatch(TransactionActions.createTransaction({ request: {
+      this.store.dispatch(TransactionActions.createTransaction({
+        request: {
           date: date,
           amount: amount,
           categoryId: categoryId,
           description: description
-        }}));
+        }
+      }));
       console.log("Transaction created.");
     }
 
@@ -162,8 +156,8 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
   }
 
   closeDialog(): void {
-    this.transactionForm.reset();
-    this.transactionForm.get('flow')?.setValue(Flow.Expense);
+    this.formGroup.reset();
+    this.formGroup.get('flow')?.setValue(Flow.Expense);
     this.close();
   }
 
@@ -175,9 +169,11 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
     if (!this.transaction)
       return;
 
-    this.store.dispatch(TransactionActions.deleteTransaction({query : {
+    this.store.dispatch(TransactionActions.deleteTransaction({
+      query: {
         id: this.transaction.id
-      }}));
+      }
+    }));
     console.log("Transaction deleted.");
 
     this.closeDialog();
@@ -189,7 +185,7 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.transactionForm.patchValue({
+    this.formGroup.patchValue({
       flow: this.transaction.flow,
       date: this.transaction.registrationDate,
       amount: this.transaction.amount,

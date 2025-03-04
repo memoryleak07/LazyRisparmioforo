@@ -13,7 +13,6 @@ import {RouterLink} from '@angular/router';
   imports: [
     NgIf,
     AmountPipe,
-    RouterLink
   ],
   templateUrl: './dashboard-balance.component.html'
 })
