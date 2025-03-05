@@ -49,7 +49,7 @@ export class TransactionEffects {
             this.transactionService.create(data.request).pipe(
               mergeMap(() => [
                 TransactionActions.searchTransactions({
-                  query: { pageIndex: 0, pageSize: 10 }
+                  query: { pageIndex: 0, pageSize: 5 }
                 }),
                 TransactionActions.showMessage({
                   message: "Transaction created successfully."
@@ -71,7 +71,7 @@ export class TransactionEffects {
             this.transactionService.update(data.request).pipe(
               mergeMap(() => [
                 TransactionActions.searchTransactions({
-                  query: { pageIndex: 0, pageSize: 10 }
+                  query: { pageIndex: 0, pageSize: 5 }
                 }),
                 TransactionActions.showMessage({
                   message: "Transaction updated successfully."
@@ -93,7 +93,7 @@ export class TransactionEffects {
             this.transactionService.delete(data.query).pipe(
               mergeMap(() => [
                 TransactionActions.searchTransactions({
-                  query: { pageIndex: 0, pageSize: 10 }
+                  query: { pageIndex: 0, pageSize: 5 }
                 }),
                 TransactionActions.showMessage({
                   message: "Transaction deleted successfully."

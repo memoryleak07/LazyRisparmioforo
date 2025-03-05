@@ -1,0 +1,163 @@
+<div class="tabs tabs-lift">
+  <input type="radio" name="my_tabs_3" class="tab" aria-label="Weekly"/>
+  <div class="tab-content bg-base-100 border-base-300 p-6">
+    <div class="flex items-center gap-3 p-4">
+      <div class="p-2 bg-base-200 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 opacity-60" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Expense</p>
+        <p class="text-lg font-semibold text-red-900">
+          {{ data.weekly.expense | amount }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Income -->
+    <div class="flex items-center gap-3 p-4">
+      <div class="p-2 bg-base-200 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 opacity-60" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Income</p>
+        <p class="text-lg font-semibold text-green-900">
+          {{ data.weekly.income | amount }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Net Balance -->
+    <div class="flex items-center gap-3 p-4">
+      <div class="p-2 bg-base-200 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 opacity-60" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0 0 12 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 0 1-2.031.352 5.988 5.988 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971Zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 0 1-2.031.352 5.989 5.989 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971Z"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Net Balance</p>
+        <p class="text-lg font-semibold text-blue-900">
+          {{ data.weekly.balance | amount }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <input type="radio" name="my_tabs_3" class="tab" aria-label="Monthly"
+         checked="checked"/>
+  <div class="tab-content bg-base-100 border-base-300 p-6">
+      <!-- Expense -->
+      <div class="flex items-center gap-3 p-4">
+        <div class="p-2 bg-base-200 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 opacity-60" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Expense</p>
+          <p class="text-lg font-semibold text-red-900">
+            {{ data.monthly.expense | amount }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Income -->
+      <div class="flex items-center gap-3 p-4">
+        <div class="p-2 bg-base-200 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 opacity-60" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Income</p>
+          <p class="text-lg font-semibold text-green-900">
+            {{ data.monthly.income | amount }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Net Balance -->
+      <div class="flex items-center gap-3 p-4">
+        <div class="p-2 bg-base-200 rounded-full">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 opacity-60" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0 0 12 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 0 1-2.031.352 5.988 5.988 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971Zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 0 1-2.031.352 5.989 5.989 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971Z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Net Balance</p>
+          <p
+            class="text-lg font-semibold text-blue-900">
+            {{ data.monthly.balance | amount }}
+          </p>
+        </div>
+      </div>
+  </div>
+
+  <input type="radio" name="my_tabs_3" class="tab" aria-label="Yearly"/>
+  <div class="tab-content bg-base-100 border-base-300 p-6">
+    <div class="flex items-center gap-3 p-4">
+      <div class="p-2 bg-base-200 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500 opacity-60" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Expense</p>
+        <p class="text-lg font-semibold text-red-900">
+          {{ data.yearly.expense| amount }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Income -->
+    <div class="flex items-center gap-3 p-4">
+      <div class="p-2 bg-base-200 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 opacity-60" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Income</p>
+        <p class="text-lg font-semibold text-green-900">
+          {{ data.yearly.income | amount }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Net Balance -->
+    <div class="flex items-center gap-3 p-4">
+      <div class="p-2 bg-base-200 rounded-full">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 opacity-60" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0 0 12 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 0 1-2.031.352 5.988 5.988 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971Zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 0 1-2.031.352 5.989 5.989 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971Z"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Net Balance</p>
+        <p class="text-lg font-semibold text-blue-900">
+          {{ data.yearly.balance | amount }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

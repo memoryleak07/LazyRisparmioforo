@@ -7,10 +7,11 @@ import {TransactionActions} from '../../store/transaction/transaction.actions';
 import {TableComponent} from '../../shared/ui/table/table.component';
 import {selectAllCategories} from '../../store/category/category.reducers';
 import {StatisticsActions} from '../../store/statistics/statistics.actions';
-import {DashboardBalanceComponent} from '../../shared/components/dashboard-balance/dashboard-balance.component';
-import {DashboardCategoryAmountComponent} from '../../shared/components/dashboard-category-amount/dashboard-category-amount.component';
+import {DashboardBalanceComponent} from './dashboard-balance/dashboard-balance.component';
+import {DashboardCategoryAmountComponent} from './dashboard-category-amount/dashboard-category-amount.component';
 import {RouterLink} from '@angular/router';
-import {BarChartComponent} from '../../shared/ui/bar-chart/bar-chart.component';
+import {DashboardBarChartComponent} from './dashboard-bar-chart/dashboard-bar-chart.component';
+import {DashboardDonutChartComponent} from './dashboard-donut-chart/dashboard-donut-chart.component';
 
 
 @Component({
@@ -20,7 +21,8 @@ import {BarChartComponent} from '../../shared/ui/bar-chart/bar-chart.component';
     DashboardBalanceComponent,
     DashboardCategoryAmountComponent,
     RouterLink,
-    BarChartComponent,
+    DashboardBarChartComponent,
+    DashboardDonutChartComponent,
   ],
   templateUrl: './dashboard.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

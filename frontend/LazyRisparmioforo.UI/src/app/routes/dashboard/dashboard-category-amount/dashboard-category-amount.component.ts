@@ -4,8 +4,8 @@ import {Subscription} from 'rxjs';
 import {selectSpentPerCategory} from '../../../store/statistics/statistics.reducers';
 import {CategoryAmountResponse} from '../../../services/statistics-service/statistics.models';
 import {NgForOf} from '@angular/common';
-import {CategoryBadgeComponent} from '../category-badge/category-badge.component';
-import {AmountPipe} from '../../pipes/amount.pipe';
+import {CategoryBadgeComponent} from '../../../shared/components/category-badge/category-badge.component';
+import {AmountPipe} from '../../../shared/pipes/amount.pipe';
 
 @Component({
   selector: 'app-dashboard-category-amount',

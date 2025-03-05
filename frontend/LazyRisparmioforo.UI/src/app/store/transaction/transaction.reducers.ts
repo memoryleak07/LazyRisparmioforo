@@ -24,7 +24,7 @@ export const initialState: TransactionState = {
   lastTransactions: [],
   pagination: {
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 5,
     totalItemsCount: 0,
     totalPagesCount: 0,
   }

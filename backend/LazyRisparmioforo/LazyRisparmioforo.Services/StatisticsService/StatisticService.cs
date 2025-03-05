@@ -48,6 +48,7 @@ public class StatisticService(
         var items = await dbContext.Transactions
             .AsNoTracking()
             .Where(transaction =>
+                transaction.Flow == Flow.Expense &&
                 transaction.RegistrationDate >= command.FromDate &&
                 transaction.RegistrationDate <= command.ToDate)
             .GroupBy(x => x.CategoryId)

@@ -37,7 +37,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   public searchToDate: string | undefined = undefined;
   public pagination = {
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 5,
     totalItemsCount: 0,
     totalPagesCount: 0,
   };
