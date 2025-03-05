@@ -1,5 +1,9 @@
 import {createReducer, on, createSelector, createFeatureSelector} from '@ngrx/store';
-import {StatMainResponse, CategoryAmountResponse} from '../../services/statistics-service/statistics.models';
+import {
+  StatMainResponse,
+  CategoryAmountResponse,
+  MonthlySummaryResponse
+} from '../../services/statistics-service/statistics.models';
 import {StatisticsActions} from './statistics.actions';
 
 export const statisticsFeatureKey = 'statistics';
@@ -8,12 +12,14 @@ export interface StatisticsState {
   error: string | null,
   mainStat: StatMainResponse | null,
   spentPerCategory: CategoryAmountResponse[],
+  monthlySummary: MonthlySummaryResponse[],
 }
 
 export const initialState: StatisticsState = {
   error: null,
   mainStat: null,
-  spentPerCategory: []
+  spentPerCategory: [],
+  monthlySummary: [],
 };
 
 export const selectFeature = createFeatureSelector<StatisticsState>(
@@ -27,6 +33,11 @@ export const selectMainStat = createSelector(
 export const selectSpentPerCategory = createSelector(
   selectFeature,
   (state: StatisticsState) => state.spentPerCategory
+);
+
+export const selectMonthlySummary = createSelector(
+  selectFeature,
+  (state: StatisticsState) => state.monthlySummary
 );
 
 export const selectErrorStatService = createSelector(
@@ -44,5 +55,8 @@ export const statisticsReducer = createReducer(
   }),
   on(StatisticsActions.setSpentPerCategory, (state, {response}) => {
     return {...state, spentPerCategory: response, error: null};
+  }),
+  on(StatisticsActions.setMonthlySummary, (state, {response}) => {
+    return {...state, monthlySummary: response, error: null};
   }),
 );

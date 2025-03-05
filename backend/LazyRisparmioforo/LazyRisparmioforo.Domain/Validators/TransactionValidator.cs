@@ -20,7 +20,7 @@ public class TransactionValidators
         public TransactionCreateValidator()
         {
             RuleFor(x => x.Amount)
-                .NotNull().NotEmpty().WithMessage("Amount cannot be 0.");
+                .NotNull().NotEmpty().WithMessage("Amount is not valid.");
 
             RuleFor(x => x.CategoryId)
                 .NotNull().NotEmpty().WithMessage("Category is required.");
@@ -38,7 +38,7 @@ public class TransactionValidators
                 .NotNull().NotEmpty().WithMessage("Id is required.");
 
             RuleFor(x => x.Amount)
-                .NotNull().NotEmpty().WithMessage("Amount cannot be 0.");
+                .NotNull().NotEmpty().WithMessage("Amount is not valid.");
             
             RuleFor(x => x.CategoryId)
                 .NotNull().NotEmpty().WithMessage("Category is required.");

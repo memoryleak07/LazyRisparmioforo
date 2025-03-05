@@ -33,8 +33,13 @@ export class StatisticsEffects {
             fromDate: DateUtils.getFirstDayOfCurrentYear(),
             toDate: DateUtils.getToday()
           }),
+          // Monthly summary for current year
+          monthlySummary: this.statisticsService.monthlySummary({
+            fromDate: DateUtils.getFirstDayOfCurrentYear(),
+            toDate: DateUtils.getToday()
+          }),
         }).pipe(
-          mergeMap(({weekly, monthly, yearly, spentPerCategory}) => [
+          mergeMap(({weekly, monthly, yearly, spentPerCategory, monthlySummary}) => [
             StatisticsActions.setMainStatistics({
               response: {
                 weekly: weekly,
@@ -43,6 +48,7 @@ export class StatisticsEffects {
               }
             }),
             StatisticsActions.setSpentPerCategory({ response: spentPerCategory }),
+            StatisticsActions.setMonthlySummary({ response: monthlySummary }),
           ]),
           catchError((error: { message: string }) =>
             of(StatisticsActions.errorStatService({error: error.message}))

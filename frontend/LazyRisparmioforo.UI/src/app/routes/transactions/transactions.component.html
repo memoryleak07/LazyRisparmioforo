@@ -1,6 +1,7 @@
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+
         <!-- Search Bar -->
         <div class="w-full sm:w-96">
           <label class="input input-bordered flex items-center gap-2 w-full">
@@ -40,7 +41,7 @@
 
   <!-- Table -->
   <div class="mb-8">
-    <div *ngIf="transactions.length > 0; else noItems" class="overflow-x-auto bg-base-100 rounded-lg shadow-sm">
+    <div *ngIf="transactions.length > 0; else noItems" class="overflow-x-auto bg-base-100 rounded-lg">
       <table class="table w-full">
         <!-- Table Head -->
         <thead class="hidden md:table-header-group">
@@ -58,24 +59,25 @@
             class="block md:table-row mb-4 md:mb-0">
           <!-- Date -->
           <td class="md:table-cell flex justify-between items-center p-4 md:p-2">
-            <span class="inline-block md:hidden font-semibold text-base-content/80">Date:</span>
+            <span class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Date:</span>
             <span class="md:block">{{ transaction.registrationDate }}</span>
           </td>
           <!-- Category -->
           <td class="md:table-cell flex justify-between items-center p-4 md:p-2">
-            <span class="inline-block md:hidden font-semibold text-base-content/80">Category:</span>
+            <span class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Category:</span>
             <span class="md:block"><app-category-badge [categoryId]="transaction.categoryId"/></span>
           </td>
           <!-- Description -->
           <td class="md:table-cell flex justify-between items-center p-4 md:p-2 gap-10">
-            <span class="inline-block md:hidden font-semibold text-base-content/80">Desc:</span>
+            <span class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Desc:</span>
             <span class="text-right">{{ transaction.description }}</span>
           </td>
           <!-- Amount -->
           <td class="md:table-cell flex justify-between items-center p-4 md:p-2">
-            <span class="inline-block md:hidden font-semibold text-base-content/80">Amount:</span>
+            <span class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Amount:</span>
             <span class="md:block">{{ transaction.amount | amount }}</span>
           </td>
+          <!-- Actions -->
           <th class="md:table-cell flex justify-between md:p-2">
             <button (click)="openTransactionDialog(transaction.id)"
                     class="text-xs text-dark link">

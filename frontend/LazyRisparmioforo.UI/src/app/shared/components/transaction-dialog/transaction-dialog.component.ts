@@ -16,6 +16,7 @@ import {NgForOf, NgIf} from '@angular/common';
 import {FlowSelectorComponent} from '../flow-selector/flow-selector.component';
 import {DialogComponent} from '../../ui/dialog/dialog.component';
 import {Transaction} from '../../../services/transaction-service/transaction.model';
+import {DateUtils} from '../../utils/date.utils';
 
 @Component({
   selector: 'app-transaction-dialog',
@@ -44,11 +45,11 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
     this._transactionId = value;
     if (value) {
       this.subscriptions.add(this.store.select(selectLastTransactions).subscribe((transactions) => {
-        let tr = transactions.find(x => x.id === value);
-        if (!tr) {
+        let transaction = transactions.find(x => x.id === value);
+        if (!transaction) {
           return;
         }
-        this.transaction = tr;
+        this.transaction = transaction;
         this.initializeFormWithData();
       }));
     }
@@ -82,7 +83,7 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
     }
     else {
       this.formGroup.patchValue({
-        date: new Date().toISOString().split('T')[0],
+        date: DateUtils.getToday(),
       });
     }
 
@@ -106,6 +107,7 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.resetFormValues();
     this.subscriptions.unsubscribe();
   }
 
@@ -156,8 +158,7 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
   }
 
   closeDialog(): void {
-    this.formGroup.reset();
-    this.formGroup.get('flow')?.setValue(Flow.Expense);
+    this.resetFormValues();
     this.close();
   }
 
@@ -166,8 +167,9 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
   }
 
   delete(): void {
-    if (!this.transaction)
+    if (!this.transaction){
       return;
+    }
 
     this.store.dispatch(TransactionActions.deleteTransaction({
       query: {
@@ -179,9 +181,15 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
     this.closeDialog();
   }
 
+  private resetFormValues(): void {
+    this.formGroup.reset({
+      flow: Flow.Expense,
+      date: DateUtils.getToday(),
+    });
+  }
+
   private initializeFormWithData(): void {
     if (!this.transaction) {
-      console.warn('Cannot initialize form: is null or undefined.');
       return;
     }
 

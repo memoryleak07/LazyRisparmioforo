@@ -1,4 +1,10 @@
+
 export class DateUtils {
+
+  static MONTHS_SHORT: string[] = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ]
+
 
   /**
    * Returns today in the format 'YYYY-MM-DD'.

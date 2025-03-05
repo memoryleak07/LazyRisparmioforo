@@ -26,13 +26,13 @@ var apiService = builder.AddProject<Projects.LazyRisparmioforo_Api>(
         name: "api-service")
     .WaitFor(pythonApp);
 
-builder.AddNpmApp(
-        name:"angular-ui",
-        workingDirectory: "../../frontend/LazyRisparmioforo.UI")
-    .WithReference(apiService)
-    .WaitFor(apiService)
-    .WithHttpEndpoint(port: 80, targetPort: 4200)
-    .WithExternalHttpEndpoints()
-    .PublishAsDockerFile();
+// builder.AddNpmApp(
+//         name:"angular-ui",
+//         workingDirectory: "../../frontend/LazyRisparmioforo.UI")
+//     .WithReference(apiService)
+//     .WaitFor(apiService)
+//     .WithHttpEndpoint(port: 80, targetPort: 4200)
+//     .WithExternalHttpEndpoints()
+//     .PublishAsDockerFile();
 
 await builder.Build().RunAsync();

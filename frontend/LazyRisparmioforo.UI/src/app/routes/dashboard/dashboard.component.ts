@@ -9,13 +9,18 @@ import {selectAllCategories} from '../../store/category/category.reducers';
 import {StatisticsActions} from '../../store/statistics/statistics.actions';
 import {DashboardBalanceComponent} from '../../shared/components/dashboard-balance/dashboard-balance.component';
 import {DashboardCategoryAmountComponent} from '../../shared/components/dashboard-category-amount/dashboard-category-amount.component';
+import {RouterLink} from '@angular/router';
+import {BarChartComponent} from '../../shared/ui/bar-chart/bar-chart.component';
+
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     TableComponent,
     DashboardBalanceComponent,
-    DashboardCategoryAmountComponent
+    DashboardCategoryAmountComponent,
+    RouterLink,
+    BarChartComponent,
   ],
   templateUrl: './dashboard.component.html',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -29,8 +34,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     { key: 'amount', label: 'Amount' }
   ];
   public tableItems: Transaction[] = [];
+  public tableTitle: string = 'Last transactions';
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
     this.store.dispatch(StatisticsActions.getMainStatistics());
@@ -53,6 +59,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             category: category ? category.name : 'Unknown',
           };
         });
+        this.tableTitle = `Last ${this.tableItems.length} transaction`;
       })
     );
   }

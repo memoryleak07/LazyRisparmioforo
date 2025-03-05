@@ -4,7 +4,7 @@
     <app-dashboard-balance></app-dashboard-balance>
 
   <app-table
-    [cardTitle]="'Last 5'"
+    [cardTitle]="tableTitle"
     [routerLink]="'/transactions'"
     [columns]="tableColumns"
     [items]="tableItems">
@@ -13,7 +13,10 @@
   <app-dashboard-category-amount>
   </app-dashboard-category-amount>
 
-  <!--Last week -->
+  <app-bar-chart></app-bar-chart>
+
+
+    <!--Last week -->
   <div class="card card-border border-base-300 card-sm bg-base-100">
     <div class="card-body gap-4">
       <div class="grid grid-cols-7 border-b border-dashed border-b-base-300 pb-3">

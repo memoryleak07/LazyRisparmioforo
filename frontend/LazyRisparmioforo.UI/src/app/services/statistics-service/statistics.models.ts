@@ -6,6 +6,7 @@ export interface StatRequest {
 export interface StatResponse {
   income: number;
   expense: number;
+  balance: number;
 }
 
 export interface StatMainResponse {
@@ -17,4 +18,8 @@ export interface StatMainResponse {
 export interface CategoryAmountResponse {
   categoryId: number;
   amount: number;
+}
+
+export interface MonthlySummaryResponse extends StatResponse {
+  month: number;
 }

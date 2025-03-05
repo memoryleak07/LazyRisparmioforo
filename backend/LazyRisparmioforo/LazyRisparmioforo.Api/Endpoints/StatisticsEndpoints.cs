@@ -21,6 +21,14 @@ public static class StatisticsEndpoints
             .WithDescription("Get total amount income and expense within a date range.")
             .WithOpenApi();
         
+        api.MapGet("/summary-monthly", SummaryMonthlyCommand)
+            .Produces<ICollection<SummaryMonthlyDto>>()
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status400BadRequest)
+            .WithValidation<StatRequestCommand>()
+            .WithDescription("Get total amount income and expense grouped by month within a date range.")
+            .WithOpenApi();
+        
         api.MapGet("/spent-per-category", SpentPerCategoryCommand)
             .Produces<ICollection<CategoryAmountDto>>()
             .Produces(StatusCodes.Status200OK)
@@ -36,6 +44,15 @@ public static class StatisticsEndpoints
         CancellationToken cancellationToken)
     {
         var result = await statisticService.SummaryAsync(requestCommand, cancellationToken);
+        return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
+    }
+    
+    private static async Task<IResult> SummaryMonthlyCommand(
+        [FromServices] IStatisticService statisticService,
+        [AsParameters] StatRequestCommand requestCommand,
+        CancellationToken cancellationToken)
+    {
+        var result = await statisticService.SummaryMonthlyAsync(requestCommand, cancellationToken);
         return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
     

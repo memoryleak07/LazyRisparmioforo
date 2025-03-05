@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {Observable} from 'rxjs';
-import {StatRequest, CategoryAmountResponse, StatResponse} from './statistics.models';
+import {StatRequest, CategoryAmountResponse, StatResponse, MonthlySummaryResponse} from './statistics.models';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,11 @@ export class StatisticsService {
   summary(request: StatRequest): Observable<StatResponse> {
     return this.http.get<StatResponse>(
       `${this.apiUrl}/summary?FromDate=${request.fromDate}&ToDate=${request.toDate}`);
+  }
+
+  monthlySummary(request: StatRequest): Observable<MonthlySummaryResponse[]> {
+    return this.http.get<MonthlySummaryResponse[]>(
+      `${this.apiUrl}/summary-monthly?FromDate=${request.fromDate}&ToDate=${request.toDate}`);
   }
 
   spentPerCategory(request: StatRequest): Observable<CategoryAmountResponse[]> {

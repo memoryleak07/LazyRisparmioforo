@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import {
   StatMainResponse,
   StatRequest,
-  CategoryAmountResponse
+  CategoryAmountResponse, MonthlySummaryResponse
 } from '../../services/statistics-service/statistics.models';
 
 export class StatisticsActions {
@@ -21,9 +21,10 @@ export class StatisticsActions {
     props<{ response: CategoryAmountResponse[] }>()
   );
 
-  // static readonly clearStats = createAction(
-  //   '[Statistics] ClearStats'
-  // );
+  static readonly setMonthlySummary = createAction(
+    '[Statistics] SetMonthlySummary',
+    props<{ response: MonthlySummaryResponse[] }>()
+  );
 
   static readonly errorStatService = createAction(
     '[Statistics] Error',

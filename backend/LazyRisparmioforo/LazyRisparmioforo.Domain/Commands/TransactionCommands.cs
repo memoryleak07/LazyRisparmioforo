@@ -16,15 +16,15 @@ public record TransactionGetCommand(
 public record TransactionCreateCommand(
     int CategoryId,
     DateOnly Date,
-    string Description,
-    decimal Amount);
+    decimal Amount,
+    string? Description);
 
 public record TransactionUpdateCommand(
     int Id,
     int CategoryId,
     DateOnly Date,
-    string Description,
-    decimal Amount);
+    decimal Amount,
+    string? Description);
 
 public record TransactionRemoveCommand(
     int Id);
@@ -35,23 +35,23 @@ public static class TransactionCommandExtensions
     {
         return new Transaction
         {
+            Flow = DetermineFlow(command.Amount),
             CategoryId = command.CategoryId,
             RegistrationDate = command.Date,
             ValueDate = command.Date,
-            Description = command.Description,
             Amount = command.Amount,
-            Flow = DetermineFlow(command.Amount)
+            Description = command.Description ?? string.Empty
         };
     }
 
     public static Transaction ToEntity(this TransactionUpdateCommand command, Transaction existingEntity)
     {
+        existingEntity.Flow = DetermineFlow(command.Amount);
         existingEntity.CategoryId = command.CategoryId;
         existingEntity.RegistrationDate = command.Date;
         existingEntity.ValueDate = command.Date;
-        existingEntity.Description = command.Description;
         existingEntity.Amount = command.Amount;
-        existingEntity.Flow = DetermineFlow(command.Amount);
+        existingEntity.Description = command.Description ?? string.Empty;
 
         return existingEntity;
     }

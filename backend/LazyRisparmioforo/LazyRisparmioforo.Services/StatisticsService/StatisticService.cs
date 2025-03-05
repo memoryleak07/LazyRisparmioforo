@@ -16,16 +16,16 @@ public class StatisticService(
     /// <summary>
     /// .
     /// </summary>
-    /// <param name="requestCommand"></param>
+    /// <param name="command"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Result<SummaryDto>> SummaryAsync(StatRequestCommand requestCommand, CancellationToken cancellationToken)
+    public async Task<Result<SummaryDto>> SummaryAsync(StatRequestCommand command, CancellationToken cancellationToken)
     {
         var items = await dbContext.Transactions
             .AsNoTracking()
             .Where(transaction => 
-                transaction.RegistrationDate >= requestCommand.FromDate &&
-                transaction.RegistrationDate <= requestCommand.ToDate)
+                transaction.RegistrationDate >= command.FromDate &&
+                transaction.RegistrationDate <= command.ToDate)
             .ToListAsync(cancellationToken);
 
         var dto = new SummaryDto
@@ -40,34 +40,52 @@ public class StatisticService(
     /// <summary>
     /// Returns the total amount spent per category within a specified date range.
     /// </summary>
-    /// <param name="requestCommand"></param>
+    /// <param name="command"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Result<ICollection<CategoryAmountDto>>> SpentPerCategoryAsync(StatRequestCommand requestCommand, CancellationToken cancellationToken)
+    public async Task<Result<ICollection<CategoryAmountDto>>> SpentPerCategoryAsync(StatRequestCommand command, CancellationToken cancellationToken)
     {
         var items = await dbContext.Transactions
             .AsNoTracking()
             .Where(transaction =>
-                transaction.RegistrationDate >= requestCommand.FromDate &&
-                transaction.RegistrationDate <= requestCommand.ToDate)
+                transaction.RegistrationDate >= command.FromDate &&
+                transaction.RegistrationDate <= command.ToDate)
             .GroupBy(x => x.CategoryId)
-            .Select(grouping => new
+            .Select(grouping => new CategoryAmountDto
                 {
                     CategoryId = grouping.Key,
-                    Amounts = grouping.Select(x => x.Amount)
+                    Amount = grouping.Sum(x => x.Amount)
+                }
+            )
+            .OrderBy(x => x.Amount)
+            .ToListAsync(cancellationToken);
+
+        return items;
+    }
+    
+    /// <summary>
+    /// .
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task<Result<ICollection<SummaryMonthlyDto>>> SummaryMonthlyAsync(StatRequestCommand command, CancellationToken cancellationToken)
+    {
+        var items = await dbContext.Transactions
+            .AsNoTracking()
+            .Where(transaction =>
+                transaction.RegistrationDate >= command.FromDate &&
+                transaction.RegistrationDate <= command.ToDate)
+            .GroupBy(x => x.RegistrationDate.Month)
+            .Select(grouping => new SummaryMonthlyDto
+                {
+                    Month = grouping.Key,
+                    Income = grouping.Where(x => x.Flow == Flow.Income).Sum(x => x.Amount),
+                    Expense = grouping.Where(x => x.Flow == Flow.Expense).Sum(x => x.Amount)
                 }
             )
             .ToListAsync(cancellationToken);
-
-        var results = items
-            .Select(x => new CategoryAmountDto
-            {
-                CategoryId= x.CategoryId, 
-                Amount = x.Amounts.Sum()
-            })
-            .OrderBy(x => x.Amount)
-            .ToList();
         
-        return results;
+        return items;
     }
 }

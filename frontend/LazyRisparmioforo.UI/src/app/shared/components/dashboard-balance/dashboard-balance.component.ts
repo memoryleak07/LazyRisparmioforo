@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {NgIf} from '@angular/common';
+import {NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
 import {AmountPipe} from '../../pipes/amount.pipe';
 import {Store} from '@ngrx/store';
 import {Subscription} from 'rxjs';
@@ -13,6 +13,8 @@ import {RouterLink} from '@angular/router';
   imports: [
     NgIf,
     AmountPipe,
+    NgSwitch,
+    NgSwitchCase,
   ],
   templateUrl: './dashboard-balance.component.html'
 })
@@ -21,9 +23,9 @@ export class DashboardBalanceComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
   public activeTab: 'weekly' | 'monthly' | 'yearly' = 'weekly';
   public data: StatMainResponse = {
-    weekly: { income: 0, expense: 0 },
-    monthly: { income: 0, expense: 0 },
-    yearly: { income: 0, expense: 0 }
+    weekly: { income: 0, expense: 0, balance: 0 },
+    monthly: { income: 0, expense: 0, balance: 0 },
+    yearly: { income: 0, expense: 0, balance: 0 }
   };
 
   constructor() {}
