@@ -12,7 +12,12 @@ import {DashboardCategoryAmountComponent} from './dashboard-category-amount/dash
 import {RouterLink} from '@angular/router';
 import {DashboardBarChartComponent} from './dashboard-bar-chart/dashboard-bar-chart.component';
 import {DashboardDonutChartComponent} from './dashboard-donut-chart/dashboard-donut-chart.component';
+import {formatAmount} from '../../shared/pipes/amount.pipe';
 
+interface FormattedTransaction extends Transaction {
+  formattedAmount: string;
+  category: string;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -30,12 +35,12 @@ import {DashboardDonutChartComponent} from './dashboard-donut-chart/dashboard-do
 export class DashboardComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private subscriptions = new Subscription();
-  public tableColumns: { key: keyof Transaction, label: string }[] = [
+  public tableColumns: { key: keyof FormattedTransaction, label: string }[] = [
     { key: 'registrationDate', label: 'Date' },
     { key: 'category', label: 'Category' },
-    { key: 'amount', label: 'Amount' }
+    { key: 'formattedAmount', label: 'Amount' }
   ];
-  public tableItems: Transaction[] = [];
+  public tableItems: FormattedTransaction[] = [];
   public tableTitle: string = 'Last transactions';
 
   constructor() { }
@@ -59,6 +64,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           return {
             ...transaction,
             category: category ? category.name : 'Unknown',
+            formattedAmount: formatAmount(transaction.amount).toString(),
           };
         });
         this.tableTitle = `Last ${this.tableItems.length} transaction`;

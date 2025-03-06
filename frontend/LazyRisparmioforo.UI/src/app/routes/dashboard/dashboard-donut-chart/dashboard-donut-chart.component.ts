@@ -4,6 +4,7 @@ import {Store} from '@ngrx/store';
 import {combineLatest, Subscription} from 'rxjs';
 import {ChartComponent} from 'ng-apexcharts';
 import {selectAllCategories} from '../../../store/category/category.reducers';
+import {formatAmount} from '../../../shared/pipes/amount.pipe';
 
 @Component({
   selector: 'app-dashboard-donut-chart',
@@ -17,8 +18,7 @@ export class DashboardDonutChartComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription = new Subscription();
   public chartOptions: any;
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit() {
     this.subscriptions.add(
@@ -37,18 +37,40 @@ export class DashboardDonutChartComponent implements OnInit, OnDestroy {
         this.chartOptions = {
           series: series,
           chart: {
-            type: "donut"
+            type: "donut",
+            width: "100%",
+            height: "auto",
           },
           labels: categories,
+          stroke: {
+            show: true,
+            width: 1,
+            colors: ["var(--color-primary)"],
+          },
+          fill: {
+            type: "gradient"
+          },
+          tooltip: {
+            y: {
+              formatter: function (val: number) {
+                return formatAmount(val);
+              },
+            },
+          },
+          legend: {
+            formatter: function(val: any, opts: any) {
+              return val + " - " + formatAmount(opts.w.globals.series[opts.seriesIndex]) ;
+            }
+          },
           responsive: [
             {
               breakpoint: 480,
               options: {
                 chart: {
-                  width: 200
+                  width: "100%",
                 },
                 legend: {
-                  position: "bottom"
+                  position: "bottom", // Move legend to the bottom on small screens
                 }
               }
             }
