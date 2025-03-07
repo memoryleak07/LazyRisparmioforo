@@ -1,12 +1,13 @@
-﻿using LazyRisparmioforo.Domain.Constants;
-using LazyRisparmioforo.Domain.Entities;
+﻿using LazyRisparmioforo.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace LazyRisparmioforo.Infrastructure.Data;
 
 public class ApplicationDbContextInitializer(
     ApplicationDbContext context,
+    IConfiguration configuration,
     ILoggerFactory logger)
 {
     private readonly ILogger _logger = logger.CreateLogger<ApplicationDbContextInitializer>();
@@ -29,13 +30,9 @@ public class ApplicationDbContextInitializer(
     
     private async Task SeedCategoriesAsync()
     {
-        var categories = CategoryConstants.IdToLabel
-            .Select(kvp => new Category
-            {
-                Id = kvp.Key,
-                Name = kvp.Value
-            })
-            .ToArray();
+        var categories = configuration.GetSection("Categories").Get<ICollection<Category>>();
+        if (categories is null) 
+            throw new ArgumentNullException();
         
         context.Categories.AddRange(categories);
         await context.SaveChangesAsync();

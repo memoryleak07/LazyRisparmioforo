@@ -1,0 +1,74 @@
+{
+  "Categories": [
+    {
+      "id": 0,
+      "name": "BILLS_SUBSCRIPTIONS",
+      "description": "Recurring bills like utilities, internet, streaming services."
+    },
+    {
+      "id": 1,
+      "name": "GROCERIES",
+      "description": "Daily food purchases from supermarkets and markets."
+    },
+    {
+      "id": 2,
+      "name": "EATING_OUT",
+      "description": "Meals and drinks at restaurants, cafes, and fast food."
+    },
+    {
+      "id": 3,
+      "name": "TRANSPORTATION",
+      "description": "Daily commute, fuel, public transport, taxis, ride-shares."
+    },
+    {
+      "id": 4,
+      "name": "CLOTHING",
+      "description": "Purchases of clothing, shoes, and accessories."
+    },
+    {
+      "id": 5,
+      "name": "HEALTH_WELLNESS",
+      "description": "Daily medications, vitamins, and personal care items."
+    },
+    {
+      "id": 6,
+      "name": "SHOPPING",
+      "description": "Impulse buys and small retail purchases (excluding clothing)."
+    },
+    {
+      "id": 7,
+      "name": "LEISURE_ENTERTAINMENT",
+      "description": "Movies, events, and daily recreational activities."
+    },
+    {
+      "id": 8,
+      "name": "HOME_MAINTENANCE",
+      "description": "Small home repairs, cleaning supplies, and household items."
+    },
+    {
+      "id": 9,
+      "name": "PERSONAL_CARE",
+      "description": "Haircuts, grooming, and other personal care services."
+    },
+    {
+      "id": 10,
+      "name": "TRAVEL_DAILY",
+      "description": "Tolls, parking, and small travel related expenses."
+    },
+    {
+      "id": 11,
+      "name": "WAGES_INCOME",
+      "description": "Income from wages or small business."
+    },
+    {
+      "id": 12,
+      "name": "TRANSFERS",
+      "description": "Financial transfers including bank transfers, donations, savings, and investments."
+    },
+    {
+      "id": 99,
+      "name": "OTHER",
+      "description": "Miscellaneous expenses that don't fit other categories."
+    }
+  ]
+}

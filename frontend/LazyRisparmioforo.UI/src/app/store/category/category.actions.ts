@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import {Category} from '../../services/category-service/category.model';
+import {CategoryConfiguration} from '../../constants/default-categories';
 
 export class CategoryActions {
 
@@ -8,7 +9,7 @@ export class CategoryActions {
 
   static readonly setCategories = createAction(
     '[Category] SetCategories',
-    props<{ response: Category[] }>());
+    props<{ response: CategoryConfiguration[] }>());
 
   static readonly errorCategoryService = createAction(
     '[Category] Error',

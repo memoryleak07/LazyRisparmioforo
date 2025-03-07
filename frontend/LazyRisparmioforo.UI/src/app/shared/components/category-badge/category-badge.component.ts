@@ -1,33 +1,33 @@
-import {Component, inject, Input, OnDestroy, OnInit} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {Category} from '../../../services/category-service/category.model';
-import {Subscription} from 'rxjs';
-import {selectAllCategories} from '../../../store/category/category.reducers';
+import {Component, Input} from '@angular/core';
+import {CATEGORY_CONFIG} from '../../../constants/default-categories';
+import {NgIf, NgOptimizedImage} from '@angular/common';
+import {white} from 'ansi-colors';
 
 @Component({
   selector: 'app-category-badge',
-  imports: [],
+  imports: [
+    NgIf,
+    NgOptimizedImage,
+  ],
   template: `
-    <span class="badge">{{ categoryName }}</span>
+    <div class="badge {{category?.color}} font-semibold text-white p-3">
+      <img *ngIf="showIcon"
+           ngSrc="{{category?.icon}}"
+           alt="{{category?.name }}"
+           [width]="20"
+           [height]="20"/>
+      <span>{{ category?.name ?? 'Unknown' }}</span>
+    </div>
   `,
 })
-export class CategoryBadgeComponent implements OnInit, OnDestroy {
-  private store = inject(Store);
-  private subscriptions = new Subscription();
-  public categories: Category[] = [];
-  public categoryName: string = '';
+export class CategoryBadgeComponent {
+  @Input() categoryId!: number;
+  @Input() showIcon: boolean = true;
 
-  @Input() categoryId: number = 39; // Category.OTHER_OTHER
-
-  ngOnInit() {
-    this.subscriptions.add(this.store.select(selectAllCategories).subscribe((categories) => {
-      this.categories = categories;
-      const category = this.categories.find((cat) => cat.id === this.categoryId);
-      this.categoryName = category ? category.name : 'UnknownCategory';
-    }));
+  get category() {
+    return CATEGORY_CONFIG.find(c => c.id === this.categoryId)
+      || CATEGORY_CONFIG.find(c => c.id === 99);
   }
 
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
-  }
+  protected readonly white = white;
 }

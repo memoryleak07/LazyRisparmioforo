@@ -23,7 +23,7 @@ public class TransactionValidators
                 .NotNull().NotEmpty().WithMessage("Amount is not valid.");
 
             RuleFor(x => x.CategoryId)
-                .NotNull().NotEmpty().WithMessage("Category is required.");
+                .NotNull().WithMessage("Category is required.");
             
             RuleFor(x => x.Description)
                 .MaximumLength(4000).WithMessage("Description maximum length is 4000.");
@@ -41,7 +41,7 @@ public class TransactionValidators
                 .NotNull().NotEmpty().WithMessage("Amount is not valid.");
             
             RuleFor(x => x.CategoryId)
-                .NotNull().NotEmpty().WithMessage("Category is required.");
+                .NotNull().WithMessage("Category is required.");
             
             RuleFor(x => x.Description)
                 .MaximumLength(4000).WithMessage("Description maximum length is 4000.");

@@ -1,12 +1,13 @@
 import {createReducer, on, createSelector, createFeatureSelector} from '@ngrx/store';
 import {CategoryActions} from './category.actions';
 import {Category} from '../../services/category-service/category.model';
+import {CategoryConfiguration} from '../../constants/default-categories';
 
 export const categoryFeatureKey = 'category';
 
 export interface CategoryState {
   error: string | null,
-  allCategories: Category[],
+  allCategories: CategoryConfiguration[],
 }
 
 export const initialState: CategoryState = {

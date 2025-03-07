@@ -1,16 +1,14 @@
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import torch
+import json
 import os
 from flask import Flask, request
 from flask_restx import Api, Resource, fields
+from category_mapping import *
 
-# Construct the path to the local model
-# current_dir = os.path.dirname(__file__)
-# local_model_path = os.path.join(current_dir, "..", "..", "autonlp-bank-transaction-classification-5521155")
-# 
-# # Set model and tokenizer
-# model = AutoModelForSequenceClassification.from_pretrained(local_model_path)
-# tokenizer = AutoTokenizer.from_pretrained(local_model_path)
+with open(os.path.join("..", "..", "categories.json") , "r", encoding="utf-8") as file:
+    consolidated_categories = json.load(file)
+
 tokenizer = AutoTokenizer.from_pretrained("mgrella/autonlp-bank-transaction-classification-5521155")
 model = AutoModelForSequenceClassification.from_pretrained("mgrella/autonlp-bank-transaction-classification-5521155")
 
@@ -30,9 +28,7 @@ ns = api.namespace("api")
 def predict_category(transaction_text):
     """Runs model inference for a single transaction"""
     if not transaction_text:
-        return {
-            "error": "Empty transaction text"
-        }
+        return { "error": "Empty transaction text" }
 
     # Tokenize input
     inputs = tokenizer(transaction_text, return_tensors="pt")
@@ -49,10 +45,14 @@ def predict_category(transaction_text):
     predicted_category = id2label.get(predicted_label_idx, f"Unknown ({predicted_label_idx})")
     confidence = probs[0][predicted_label_idx].item()
 
+    # Get the consolidated category
+    consolidated_category = CATEGORY_MAPPING.get(predicted_label_idx, 99) 
+
     return {
         "id": predicted_label_idx,
         "name": predicted_category.replace("Category.", ""),
         "confidence": round(confidence, 2),
+        "consolidated": consolidated_category
     }
 
 @ns.route("/categories")

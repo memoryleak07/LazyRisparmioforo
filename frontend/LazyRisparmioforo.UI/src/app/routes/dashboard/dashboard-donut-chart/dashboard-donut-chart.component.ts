@@ -70,7 +70,7 @@ export class DashboardDonutChartComponent implements OnInit, OnDestroy {
                   width: "100%",
                 },
                 legend: {
-                  position: "bottom", // Move legend to the bottom on small screens
+                  position: "bottom",
                 }
               }
             }
