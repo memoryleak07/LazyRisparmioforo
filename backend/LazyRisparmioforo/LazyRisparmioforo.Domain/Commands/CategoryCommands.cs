@@ -3,7 +3,11 @@
 public record CategoryPredictCommand(
     string Input);
 
+public record CategoryPredictBatchCommand(
+    IList<string> Input);
+
 public record CategoryPredictResult(
     int Id, 
     string Name, 
-    double Confidence);
+    double Confidence,
+    int ConsolidatedId);

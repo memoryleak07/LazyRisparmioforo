@@ -64,14 +64,14 @@ public class ImportCsvService(
     
     private async Task<ICollection<Transaction>> AssignCategoryToTransactionsAsync(ICollection<Transaction> transactions, CancellationToken cancellationToken)
     {
-        foreach (var transaction in transactions)
+        var command = new CategoryPredictBatchCommand(
+            Input: transactions.Select(x => x.Description).ToList());
+        
+        var predictions = await categoryService.PredictBatchAsync(command, cancellationToken);
+        
+        for (int i = 0; i < transactions.Count; i++)
         {
-            var command = new CategoryPredictCommand(transaction.Description);
-            var result = await categoryService.PredictAsync(command, cancellationToken);
-            if (!result.IsSuccess)
-                continue;
-            
-            transaction.CategoryId = result.Value.Id;
+            transactions.ElementAt(i).CategoryId = predictions.Value.ElementAt(i).ConsolidatedId;
         }
         
         return transactions;

@@ -20,11 +20,11 @@
       <ul class="list">
         <li *ngFor="let item of data; index as i;"
              class="list-row">
-          <div class="font-thin opacity-30 tabular-nums">
+          <div class="text-xl font-thin opacity-30 tabular-nums">
             {{ i + 1 }}
           </div>
           <div class="list">
-            <div class="font-semibold opacity-60">
+            <div>
               <app-category-badge [categoryId]="item.categoryId" [showIcon]="true"/>
             </div>
           </div>

@@ -27,13 +27,17 @@ export class DashboardDonutChartComponent implements OnInit, OnDestroy {
         this.store.select(selectAllCategories)
       ]).subscribe(([spentPerCategory, allCategories]) => {
         const series: number[] = spentPerCategory.map((item) => Math.abs(item.amount));
+
         const categories: string[] = spentPerCategory.map((item) => {
           const category = allCategories.find((cat) => cat.id === item.categoryId);
           return category ? category.name : "Unknown";
         });
 
-        console.log("series", series);
-        console.log("categ", categories);
+        const colors: string[] = spentPerCategory.map((item) => {
+          const category = allCategories.find((cat) => cat.id === item.categoryId);
+          return category ? category.color : "#CCCCCC"; // Fallback color for unknown categories
+        });
+
         this.chartOptions = {
           series: series,
           chart: {
@@ -42,6 +46,7 @@ export class DashboardDonutChartComponent implements OnInit, OnDestroy {
             height: "auto",
           },
           labels: categories,
+          colors: colors,
           stroke: {
             show: true,
             width: 1,
@@ -58,8 +63,13 @@ export class DashboardDonutChartComponent implements OnInit, OnDestroy {
             },
           },
           legend: {
+            fontSize: "12px",
+            fontFamily: "inherit",
+            position: "bottom",
+            horizontalAlign: "left",
+            offsetY: 0,
             formatter: function(val: any, opts: any) {
-              return val + " - " + formatAmount(opts.w.globals.series[opts.seriesIndex]) ;
+              return val + " - " + formatAmount(opts.w.globals.series[opts.seriesIndex]) + " ";
             }
           },
           responsive: [

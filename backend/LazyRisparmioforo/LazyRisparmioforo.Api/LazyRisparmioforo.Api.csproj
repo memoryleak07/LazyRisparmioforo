@@ -22,4 +22,7 @@
       <ProjectReference Include="..\LazyRisparmioforo.Services\TransactionService\TransactionService.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="..\..\..\categories.json" Link="categories.json" CopyToOutputDirectory="Always"/>
+    </ItemGroup>
 </Project>

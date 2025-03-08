@@ -52,7 +52,7 @@ def predict_category(transaction_text):
         "id": predicted_label_idx,
         "name": predicted_category.replace("Category.", ""),
         "confidence": round(confidence, 2),
-        "consolidated": consolidated_category
+        "consolidatedId": consolidated_category
     }
 
 @ns.route("/categories")
@@ -98,3 +98,4 @@ class PredictBatch(Resource):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 51153))
     app.run(host='0.0.0.0', port=port)
+    

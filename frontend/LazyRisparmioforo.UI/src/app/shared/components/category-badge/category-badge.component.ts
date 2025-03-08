@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {CATEGORY_CONFIG} from '../../../constants/default-categories';
-import {NgIf, NgOptimizedImage} from '@angular/common';
+import {NgIf, NgOptimizedImage, NgStyle} from '@angular/common';
 import {white} from 'ansi-colors';
 
 @Component({
@@ -8,14 +8,16 @@ import {white} from 'ansi-colors';
   imports: [
     NgIf,
     NgOptimizedImage,
+    NgStyle,
   ],
   template: `
-    <div class="badge {{category?.color}} font-semibold text-white p-3">
+    <div class="badge font-semibold p-3 text-white"
+         [ngStyle]="{'background-color': category?.color}">
       <img *ngIf="showIcon"
            ngSrc="{{category?.icon}}"
            alt="{{category?.name }}"
            [width]="20"
-           [height]="20"/>
+           [height]="20" />
       <span>{{ category?.name ?? 'Unknown' }}</span>
     </div>
   `,

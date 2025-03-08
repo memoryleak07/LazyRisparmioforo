@@ -25,8 +25,8 @@ export class CategoryEffects {
               const defaultConfig = CATEGORY_CONFIG.find(cfg => cfg.id === category.id);
               return {
                 ...category,
-                icon: defaultConfig ? defaultConfig.icon : 'assets/icons/shopping_cart.svg',
-                color: defaultConfig ? defaultConfig.color : 'text-gray-400'
+                icon: defaultConfig ? defaultConfig.icon : '',
+                color: defaultConfig ? defaultConfig.color : ''
               };
             });
             return CategoryActions.setCategories({response: mergedCategories});

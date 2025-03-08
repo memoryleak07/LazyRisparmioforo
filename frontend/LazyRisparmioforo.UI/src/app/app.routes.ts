@@ -19,12 +19,12 @@ export const routes: Routes = [
       import('./routes/transactions/transactions.component')
         .then(m => m.TransactionsComponent)
   },
-  // {
-  //   path: 'transactions/:id',
-  //   loadComponent: () =>
-  //     import('./routes/transaction-detail/transaction-detail.component')
-  //       .then(m => m.TransactionDetailComponent)
-  // },
+  {
+    path: 'categories',
+    loadComponent: () =>
+      import('./routes/categories/categories.component')
+        .then(m => m.CategoriesComponent)
+  },
   {
     path: 'import-transactions',
     loadComponent: () =>

@@ -1,0 +1,50 @@
+<div class="container mx-auto px-4 sm:px-6 lg:px-4 py-8">
+
+  <!-- Table -->
+  <div class="mb-8">
+    <div *ngIf="categories.length > 0; else noItems"
+         class="overflow-x-auto card card-border border-base-300 card-sm bg-base-100">
+      <table class="table w-full">
+        <!-- Table Head -->
+        <thead class="hidden md:table-header-group">
+        <tr>
+          <th class="bg-base-200">Name</th>
+          <th class="bg-base-200">Description</th>
+        </tr>
+        </thead>
+        <!-- Table Body -->
+        <tbody>
+        <tr *ngFor="let category of categories"
+            class="block md:table-row mb-4 md:mb-0 ite">
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar">
+                <div class="p-3 h-12 w-12">
+                  <img
+                    ngSrc="{{category?.icon}}"
+                    alt="{{category?.name}}"
+                    [width]="12"
+                    [height]="12"
+                    class="icon"/>
+                </div>
+              </div>
+              <div>
+                <div>{{ category.name }}</div>
+              </div>
+            </div>
+          </td>
+          <td class="md:table-cell flex justify-between items-center p-4 md:p-2">
+            <span class="text-base-content">{{ category.description }}</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noItems>
+      <div class="text-center text-base-content/70 py-8">
+        No items found.
+      </div>
+    </ng-template>
+  </div>
+
+</div>

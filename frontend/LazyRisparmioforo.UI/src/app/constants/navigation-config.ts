@@ -20,6 +20,11 @@ export const NAV_MENU_ITEMS: NavMenuItem[] = [
     routerLink: '/transactions',
   },
   {
+    id: 'categories',
+    label: 'Categories',
+    routerLink: '/categories',
+  },
+  {
     id: 'import-transactions',
     label: 'Import',
     routerLink: '/import-transactions',

@@ -32,7 +32,7 @@ public class ApplicationDbContextInitializer(
     {
         var categories = configuration.GetSection("Categories").Get<ICollection<Category>>();
         if (categories is null) 
-            throw new ArgumentNullException();
+            throw new ArgumentNullException(nameof(categories));
         
         context.Categories.AddRange(categories);
         await context.SaveChangesAsync();

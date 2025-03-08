@@ -1,47 +1,54 @@
-<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<div class="container mx-auto px-4 sm:px-6 lg:px-4 py-8">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
 
-        <!-- Search Bar -->
-        <div class="w-full sm:w-96">
-          <label class="input input-bordered flex items-center gap-2 w-full">
-            <svg class="h-4 w-4 opacity-70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.3-4.3"></path>
-              </g>
-            </svg>
-            <input type="search"
-                   required
-                   placeholder="Search"
-                   class="focus:outline-none"
-                   [(ngModel)]="searchQuery"
-                   (ngModelChange)="onSearchQuery()"
-            />
-          </label>
-        </div>
+    <div class="card card-border border-base-300 card-sm bg-base-100">
+      <div class="card-body">
 
-        <!-- Filters -->
-        <div>
-          <app-flow-selector
-            [flow]="searchFlow"
-            [hasResetButton]="true"
-            (flowChange)="onFlowChange($event)"
-            class="min-w-[10rem]"
-          ></app-flow-selector>
-        </div>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
 
-        <div>
-          <app-date-picker
-            (datesSelected)="onDatesSelected($event)">
-          </app-date-picker>
+          <!-- Search Bar -->
+          <div class="w-full sm:w-96 p-4">
+            <label class="input input-bordered flex items-center gap-2 w-full">
+              <svg class="h-4 w-4 opacity-70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </g>
+              </svg>
+              <input type="search"
+                     required
+                     placeholder="Search"
+                     class="focus:outline-none"
+                     [(ngModel)]="searchQuery"
+                     (ngModelChange)="onSearchQuery()"
+              />
+            </label>
+          </div>
+
+          <!-- Filters -->
+          <div>
+            <app-flow-selector
+              [flow]="searchFlow"
+              [hasResetButton]="true"
+              (flowChange)="onFlowChange($event)"
+              class="min-w-[10rem]"
+            ></app-flow-selector>
+          </div>
+
+          <div>
+            <app-date-picker
+              (datesSelected)="onDatesSelected($event)">
+            </app-date-picker>
+          </div>
         </div>
       </div>
+    </div>
   </div>
 
   <!-- Table -->
   <div class="mb-8">
-    <div *ngIf="transactions.length > 0; else noItems" class="overflow-x-auto bg-base-100 rounded-lg">
+    <div *ngIf="transactions.length > 0; else noItems"
+         class="overflow-x-auto card card-border border-base-300 card-sm bg-base-100">
       <table class="table w-full">
         <!-- Table Head -->
         <thead class="hidden md:table-header-group">
@@ -59,22 +66,26 @@
             class="block md:table-row mb-4 md:mb-0">
           <!-- Date -->
           <td class="md:table-cell flex justify-between items-center p-4 md:p-2">
-            <span class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Date:</span>
+            <span
+              class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Date</span>
             <span class="md:block">{{ transaction.registrationDate }}</span>
           </td>
           <!-- Category -->
           <td class="md:table-cell flex justify-between items-center p-4 md:p-2">
-            <span class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Category:</span>
-            <span class="md:block"><app-category-badge [categoryId]="transaction.categoryId" [showIcon]="true"/></span>
+            <span
+              class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Category</span>
+            <span class="md:block"><app-category-badge [categoryId]="transaction.categoryId" [showIcon]="false"/></span>
           </td>
           <!-- Description -->
           <td class="md:table-cell flex justify-between items-center p-4 md:p-2 gap-10">
-            <span class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Desc:</span>
+            <span
+              class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Desc</span>
             <span class="text-right">{{ transaction.description }}</span>
           </td>
           <!-- Amount -->
           <td class="md:table-cell flex justify-between items-center p-4 md:p-2">
-            <span class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Amount:</span>
+            <span
+              class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Amount</span>
             <span class="md:block">{{ transaction.amount | amount }}</span>
           </td>
           <!-- Actions -->

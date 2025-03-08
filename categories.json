@@ -1,74 +1,74 @@
 {
   "Categories": [
     {
-      "id": 0,
-      "name": "BILLS_SUBSCRIPTIONS",
-      "description": "Recurring bills like utilities, internet, streaming services."
+      "Id": 0,
+      "Name": "BILLS_SUBSCRIPTIONS",
+      "Description": "Recurring bills like utilities, internet, streaming services."
     },
     {
-      "id": 1,
-      "name": "GROCERIES",
-      "description": "Daily food purchases from supermarkets and markets."
+      "Id": 1,
+      "Name": "GROCERIES",
+      "Description": "Daily food purchases from supermarkets and markets."
     },
     {
-      "id": 2,
-      "name": "EATING_OUT",
-      "description": "Meals and drinks at restaurants, cafes, and fast food."
+      "Id": 2,
+      "Name": "EATING_OUT",
+      "Description": "Meals and drinks at restaurants, cafes, and fast food."
     },
     {
-      "id": 3,
-      "name": "TRANSPORTATION",
-      "description": "Daily commute, fuel, public transport, taxis, ride-shares."
+      "Id": 3,
+      "Name": "TRANSPORTATION",
+      "Description": "Daily commute, fuel, public transport, taxis, rIde-shares."
     },
     {
-      "id": 4,
-      "name": "CLOTHING",
-      "description": "Purchases of clothing, shoes, and accessories."
+      "Id": 4,
+      "Name": "CLOTHING",
+      "Description": "Purchases of clothing, shoes, and accessories."
     },
     {
-      "id": 5,
-      "name": "HEALTH_WELLNESS",
-      "description": "Daily medications, vitamins, and personal care items."
+      "Id": 5,
+      "Name": "HEALTH_WELLNESS",
+      "Description": "Daily medications, vitamins, and personal care items."
     },
     {
-      "id": 6,
-      "name": "SHOPPING",
-      "description": "Impulse buys and small retail purchases (excluding clothing)."
+      "Id": 6,
+      "Name": "SHOPPING",
+      "Description": "Impulse buys and small retail purchases (excluding clothing)."
     },
     {
-      "id": 7,
-      "name": "LEISURE_ENTERTAINMENT",
-      "description": "Movies, events, and daily recreational activities."
+      "Id": 7,
+      "Name": "LEISURE_ENTERTAINMENT",
+      "Description": "Movies, events, and daily recreational activities."
     },
     {
-      "id": 8,
-      "name": "HOME_MAINTENANCE",
-      "description": "Small home repairs, cleaning supplies, and household items."
+      "Id": 8,
+      "Name": "HOME_MAINTENANCE",
+      "Description": "Small home repairs, cleaning supplies, and household items."
     },
     {
-      "id": 9,
-      "name": "PERSONAL_CARE",
-      "description": "Haircuts, grooming, and other personal care services."
+      "Id": 9,
+      "Name": "PERSONAL_CARE",
+      "Description": "Haircuts, grooming, and other personal care services."
     },
     {
-      "id": 10,
-      "name": "TRAVEL_DAILY",
-      "description": "Tolls, parking, and small travel related expenses."
+      "Id": 10,
+      "Name": "TRAVEL_DAILY",
+      "Description": "Tolls, parking, and small travel related expenses."
     },
     {
-      "id": 11,
-      "name": "WAGES_INCOME",
-      "description": "Income from wages or small business."
+      "Id": 11,
+      "Name": "WAGES_INCOME",
+      "Description": "Income from wages or small business."
     },
     {
-      "id": 12,
-      "name": "TRANSFERS",
-      "description": "Financial transfers including bank transfers, donations, savings, and investments."
+      "Id": 12,
+      "Name": "TRANSFERS",
+      "Description": "Financial transfers including bank transfers, donations, savings, and investments."
     },
     {
-      "id": 99,
-      "name": "OTHER",
-      "description": "Miscellaneous expenses that don't fit other categories."
+      "Id": 99,
+      "Name": "OTHER",
+      "Description": "Miscellaneous expenses that don't fit other categories."
     }
   ]
 }
