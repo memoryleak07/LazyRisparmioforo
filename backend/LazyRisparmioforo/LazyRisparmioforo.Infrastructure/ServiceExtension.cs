@@ -9,7 +9,7 @@ public static class ServiceExtension
 {
     public static void AddInfrastructuresServices(this IServiceCollection services, IConfiguration configuration)
     {
-        string connectionString = configuration.GetConnectionString("TestConnection")
+        string connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new ArgumentNullException();
         
         services.AddDbContext<ApplicationDbContext>(options =>

@@ -1,0 +1,45 @@
+﻿services:
+  # SQL Server Database
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "Strong!Password"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+
+  # ASP.NET Backend
+  aspnet-backend:
+    build:
+      context: ./
+      dockerfile: ./backend/LazyRisparmioforo/LazyRisparmioforo.Api/Dockerfile
+    ports:
+      - "5000:80"
+    depends_on:
+      - sqlserver
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=RisparmioforoDb;User Id=sa;Password=Strong!Password;TrustServerCertificate=True;"
+
+  # Python Server
+  python-server:
+    build:
+      context: ./
+      dockerfile: /plugins/autonlp-bank-transaction-classification-5521155/Dockerfile
+    ports:
+      - "80:80"
+
+  # Angular UI
+  angular-ui:
+    build:
+      context: /frontend/LazyRisparmioforo.UI/
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    depends_on:
+      - aspnet-backend
+      - python-server
+
+volumes:
+  sqlserverdata:

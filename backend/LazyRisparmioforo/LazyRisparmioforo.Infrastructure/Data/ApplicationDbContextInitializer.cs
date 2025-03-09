@@ -16,7 +16,7 @@ public class ApplicationDbContextInitializer(
     {
         try
         {
-            await context.Database.EnsureCreatedAsync();
+            // await context.Database.EnsureCreatedAsync();
             await context.Database.MigrateAsync();
             if (!context.Categories.Any())
                 await SeedCategoriesAsync();

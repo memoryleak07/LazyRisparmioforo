@@ -6,9 +6,12 @@ from flask import Flask, request
 from flask_restx import Api, Resource, fields
 from category_mapping import *
 
-with open(os.path.join("..", "..", "categories.json") , "r", encoding="utf-8") as file:
-    consolidated_categories = json.load(file)
+# with open(os.path.join("..", "..", "categories.json") , "r", encoding="utf-8") as file:
+#     consolidated_categories = json.load(file)
 
+with open(os.path.join("categories.json") , "r", encoding="utf-8") as file:
+    consolidated_categories = json.load(file)
+    
 tokenizer = AutoTokenizer.from_pretrained("mgrella/autonlp-bank-transaction-classification-5521155")
 model = AutoModelForSequenceClassification.from_pretrained("mgrella/autonlp-bank-transaction-classification-5521155")
 
