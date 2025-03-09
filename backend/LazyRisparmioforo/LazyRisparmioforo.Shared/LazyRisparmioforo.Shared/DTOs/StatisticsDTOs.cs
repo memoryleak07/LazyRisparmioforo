@@ -11,6 +11,7 @@ public class CategoryAmountDto
 {
     public int CategoryId { get; init; }
     public decimal Amount { get; init; }
+    public int ItemsCount { get; init; }
 }
 
 public class SummaryMonthlyDto : SummaryDto

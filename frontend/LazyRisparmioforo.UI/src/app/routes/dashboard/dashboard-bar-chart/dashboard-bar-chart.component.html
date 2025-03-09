@@ -21,7 +21,7 @@
       </span>
     </h2>
 
-    <div class="overflow-x-auto">
+    <div class="w-full">
       <div id="chart" class="text-primary">
         <apx-chart
           [series]="chartOptions.series"
@@ -35,6 +35,7 @@
           [tooltip]="chartOptions.tooltip"
           [xaxis]="chartOptions.xaxis"
           [colors]="chartOptions.colors"
+          [responsive]="chartOptions.responsive"
         ></apx-chart>
       </div>
     </div>

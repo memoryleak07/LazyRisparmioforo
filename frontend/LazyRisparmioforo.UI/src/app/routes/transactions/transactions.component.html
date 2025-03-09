@@ -68,7 +68,7 @@
           <td class="md:table-cell flex justify-between items-center p-4 md:p-2">
             <span
               class="inline-block md:hidden font-semibold text-base-content/80 bg-base-200 p-2 rounded-lg">Date</span>
-            <span class="md:block">{{ transaction.registrationDate }}</span>
+            <span class="md:block">{{ transaction.registrationDate | formatDate }}</span>
           </td>
           <!-- Category -->
           <td class="md:table-cell flex justify-between items-center p-4 md:p-2">

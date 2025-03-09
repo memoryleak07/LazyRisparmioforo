@@ -55,7 +55,8 @@ public class StatisticService(
             .Select(grouping => new CategoryAmountDto
                 {
                     CategoryId = grouping.Key,
-                    Amount = grouping.Sum(x => x.Amount)
+                    Amount = grouping.Sum(x => x.Amount),
+                    ItemsCount = grouping.Count()
                 }
             )
             .OrderBy(x => x.Amount)

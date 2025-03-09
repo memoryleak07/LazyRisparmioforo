@@ -14,7 +14,6 @@ var pythonApp = builder.AddPythonApp(
     .WithExternalHttpEndpoints()
     .WithOtlpExporter()
     .PublishAsDockerFile();
-
 #pragma warning restore ASPIREHOSTINGPYTHON001
 
 if (builder.ExecutionContext.IsRunMode && builder.Environment.IsDevelopment())

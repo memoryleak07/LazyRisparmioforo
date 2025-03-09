@@ -18,6 +18,7 @@ export interface StatMainResponse {
 export interface CategoryAmountResponse {
   categoryId: number;
   amount: number;
+  itemsCount: number;
 }
 
 export interface MonthlySummaryResponse extends StatResponse {

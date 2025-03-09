@@ -1,7 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {CATEGORY_CONFIG} from '../../../constants/default-categories';
 import {NgIf, NgOptimizedImage, NgStyle} from '@angular/common';
-import {white} from 'ansi-colors';
 
 @Component({
   selector: 'app-category-badge',
@@ -16,8 +15,8 @@ import {white} from 'ansi-colors';
       <img *ngIf="showIcon"
            ngSrc="{{category?.icon}}"
            alt="{{category?.name }}"
-           [width]="20"
-           [height]="20" />
+           [width]="12"
+           [height]="12" />
       <span>{{ category?.name ?? 'Unknown' }}</span>
     </div>
   `,
@@ -30,6 +29,4 @@ export class CategoryBadgeComponent {
     return CATEGORY_CONFIG.find(c => c.id === this.categoryId)
       || CATEGORY_CONFIG.find(c => c.id === 99);
   }
-
-  protected readonly white = white;
 }

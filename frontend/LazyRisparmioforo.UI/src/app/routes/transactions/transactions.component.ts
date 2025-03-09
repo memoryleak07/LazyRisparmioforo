@@ -13,6 +13,7 @@ import {TransactionDialogComponent} from '../../shared/components/transaction-di
 import {AmountPipe} from '../../shared/pipes/amount.pipe';
 import {DatePickerComponent} from '../../shared/ui/date-picker/date-picker.component';
 import {ChartComponent} from 'ng-apexcharts';
+import {FormatDatePipe} from '../../shared/pipes/format-date.pipe';
 
 @Component({
   selector: 'app-transactions',
@@ -25,7 +26,8 @@ import {ChartComponent} from 'ng-apexcharts';
     NgIf,
     AmountPipe,
     DatePickerComponent,
-    ChartComponent
+    ChartComponent,
+    FormatDatePipe
   ],
   templateUrl: './transactions.component.html'
 })

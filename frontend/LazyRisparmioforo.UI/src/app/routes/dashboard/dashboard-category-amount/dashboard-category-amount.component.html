@@ -24,17 +24,16 @@
             {{ i + 1 }}
           </div>
           <div class="list">
-            <div>
+            <div class="p-1">
               <app-category-badge [categoryId]="item.categoryId" [showIcon]="true"/>
             </div>
           </div>
-          <div class="font-semibold opacity-60 px-3">
-            {{ item.amount | amount }}
+          <div class="text-center">
+            <div class="font-semibold opacity-60">{{ item.amount | amount }}</div>
+            <div class="font-thin opacity-50">{{ item.itemsCount }} items</div>
           </div>
         </li>
-
       </ul>
-
     </div>
   </div>
 </div>

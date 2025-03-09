@@ -35,7 +35,7 @@ export class DashboardDonutChartComponent implements OnInit, OnDestroy {
 
         const colors: string[] = spentPerCategory.map((item) => {
           const category = allCategories.find((cat) => cat.id === item.categoryId);
-          return category ? category.color : "#CCCCCC"; // Fallback color for unknown categories
+          return category ? category.color : "#CCCCCC";
         });
 
         this.chartOptions = {
