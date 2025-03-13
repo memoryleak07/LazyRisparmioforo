@@ -16,19 +16,11 @@
       context: ./
       dockerfile: ./backend/LazyRisparmioforo/LazyRisparmioforo.Api/Dockerfile
     ports:
-      - "5000:80"
+      - "8080:8080"
     depends_on:
       - sqlserver
     environment:
       ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=RisparmioforoDb;User Id=sa;Password=Strong!Password;TrustServerCertificate=True;"
-
-  # Python Server
-  python-server:
-    build:
-      context: ./
-      dockerfile: /plugins/autonlp-bank-transaction-classification-5521155/Dockerfile
-    ports:
-      - "80:80"
 
   # Angular UI
   angular-ui:
@@ -39,7 +31,14 @@
       - "4200:4200"
     depends_on:
       - aspnet-backend
-      - python-server
+        
+  # Python Server
+  python-server:
+    build:
+      context: ./
+      dockerfile: /plugins/autonlp-bank-transaction-classification-5521155/Dockerfile
+    ports:
+      - "5001:51153"
 
 volumes:
   sqlserverdata:

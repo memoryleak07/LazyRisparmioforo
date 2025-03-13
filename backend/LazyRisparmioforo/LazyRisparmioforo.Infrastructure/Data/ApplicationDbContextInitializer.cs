@@ -16,10 +16,12 @@ public class ApplicationDbContextInitializer(
     {
         try
         {
-            // await context.Database.EnsureCreatedAsync();
+            await context.Database.OpenConnectionAsync();
             await context.Database.MigrateAsync();
             if (!context.Categories.Any())
+            {
                 await SeedCategoriesAsync();
+            }
         }
         catch (Exception exception)
         {

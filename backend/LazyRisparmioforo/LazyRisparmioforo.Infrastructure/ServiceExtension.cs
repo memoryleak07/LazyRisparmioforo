@@ -11,9 +11,11 @@ public static class ServiceExtension
     {
         string connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new ArgumentNullException();
-        
+
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(
+                connectionString,
+                providerOptions => providerOptions.EnableRetryOnFailure()));
 
         services.AddScoped<ApplicationDbContextInitializer>();
     }

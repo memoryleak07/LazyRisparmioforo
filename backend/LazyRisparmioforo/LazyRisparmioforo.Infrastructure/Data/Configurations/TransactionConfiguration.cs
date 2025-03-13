@@ -17,6 +17,7 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
             .IsRequired();
         
         builder.Property(e => e.Amount)
+            .HasPrecision(18, 2)
             .IsRequired();
         
         builder.Property(e => e.Description)
