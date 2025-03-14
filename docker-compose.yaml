@@ -1,44 +1,63 @@
 ﻿services:
-  # SQL Server Database
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  lazyrisparmioforo.db:
+    image: postgres
+    container_name: lazyrisparmioforo.db
+    restart: unless-stopped
     environment:
-      SA_PASSWORD: "Strong!Password"
-      ACCEPT_EULA: "Y"
-    ports:
-      - "1433:1433"
+      POSTGRES_DB: lazyrisparmioforodb
+      POSTGRES_USER: pi
+      POSTGRES_PASSWORD: pi4dev
     volumes:
-      - sqlserverdata:/var/opt/mssql
+      - lazyrisparmioforodb:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U pi -d lazyrisparmioforodb" ]
+      interval: 5s
+      retries: 5
+      timeout: 3s
 
-  # ASP.NET Backend
-  aspnet-backend:
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: unless-stopped
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pi@email.com
+      PGADMIN_DEFAULT_PASSWORD: pi4dev
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+  lazyrisparmioforo.api:
     build:
       context: ./
       dockerfile: ./backend/LazyRisparmioforo/LazyRisparmioforo.Api/Dockerfile
     ports:
       - "8080:8080"
     depends_on:
-      - sqlserver
+      lazyrisparmioforo.db:
+        condition: service_healthy
     environment:
-      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=RisparmioforoDb;User Id=sa;Password=Strong!Password;TrustServerCertificate=True;"
+      ConnectionStrings__DefaultConnection: "Host=lazyrisparmioforo.db;Database=lazyrisparmioforodb;Username=pi;Password=pi4dev;"
 
-  # Angular UI
-  angular-ui:
-    build:
-      context: /frontend/LazyRisparmioforo.UI/
-      dockerfile: Dockerfile
-    ports:
-      - "4200:4200"
-    depends_on:
-      - aspnet-backend
+#  angular-ui:
+#    build:
+#      context: /frontend/LazyRisparmioforo.UI/
+#      dockerfile: Dockerfile
+#    ports:
+#      - "4200:4200"
+#    depends_on:
+#      - aspnet-backend
         
   # Python Server
-  python-server:
-    build:
-      context: ./
-      dockerfile: /plugins/autonlp-bank-transaction-classification-5521155/Dockerfile
-    ports:
-      - "5001:51153"
+#  python-server:
+#    build:
+#      context: ./
+#      dockerfile: /plugins/autonlp-bank-transaction-classification-5521155/Dockerfile
+#    ports:
+#      - "5001:51153"
 
 volumes:
-  sqlserverdata:
+  lazyrisparmioforodb:
+  pgadmin-data:

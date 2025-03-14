@@ -13,9 +13,9 @@ public static class ServiceExtension
             ?? throw new ArgumentNullException();
 
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(
+            options.UseNpgsql(
                 connectionString,
-                providerOptions => providerOptions.EnableRetryOnFailure()));
+                b => b.MigrationsAssembly("LazyRisparmioforo.Api")));
 
         services.AddScoped<ApplicationDbContextInitializer>();
     }

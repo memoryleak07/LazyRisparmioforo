@@ -25,4 +25,8 @@
     <ItemGroup>
         <None Include="..\..\..\categories.json" Link="categories.json" CopyToOutputDirectory="Always"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations\" />
+    </ItemGroup>
 </Project>
