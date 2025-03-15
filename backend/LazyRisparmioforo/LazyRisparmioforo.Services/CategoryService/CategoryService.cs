@@ -14,8 +14,8 @@ public class CategoryService(
     ILogger<CategoryService> logger)
     : ICategoryService
 {
-    private const string PostPredictUrl = "http://localhost:80/api/predict";
-    private const string PostPredictBatchUrl = "http://localhost:80/api/predict-batch";
+    private const string PostPredictUrl = "http://localhost:51153/api/predict";
+    private const string PostPredictBatchUrl = "http://localhost:51153/api/predict-batch";
 
     public async Task<ICollection<Category>> AllAsync(CancellationToken cancellationToken)
         => await dbContext.Categories.AsNoTracking().ToListAsync(cancellationToken);

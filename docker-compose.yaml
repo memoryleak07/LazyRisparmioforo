@@ -41,17 +41,17 @@
     environment:
       ConnectionStrings__DefaultConnection: "Host=lazyrisparmioforo.db;Database=lazyrisparmioforodb;Username=pi;Password=pi4dev;"
 
-#  angular-ui:
-#    build:
-#      context: /frontend/LazyRisparmioforo.UI/
-#      dockerfile: Dockerfile
-#    ports:
-#      - "4200:4200"
-#    depends_on:
-#      - aspnet-backend
-        
-  # Python Server
-#  python-server:
+  lazyrisparmioforo.ui:
+    build:
+      context: ./frontend/LazyRisparmioforo.UI/
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    depends_on:
+      lazyrisparmioforo.api:
+        condition: service_started
+
+#  lazyrisparmioforo.autonlp-bank-transaction-classification.plugin:
 #    build:
 #      context: ./
 #      dockerfile: /plugins/autonlp-bank-transaction-classification-5521155/Dockerfile
