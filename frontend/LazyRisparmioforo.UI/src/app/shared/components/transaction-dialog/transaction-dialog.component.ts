@@ -12,11 +12,12 @@ import {
   selectMessage
 } from '../../../store/transaction/transaction.reducers';
 import {ToastService} from '../../ui/toast/toast.service';
-import {NgForOf, NgIf} from '@angular/common';
+import {formatCurrency, NgClass, NgForOf, NgIf, NgOptimizedImage, NgStyle} from '@angular/common';
 import {FlowSelectorComponent} from '../flow-selector/flow-selector.component';
 import {DialogComponent} from '../../ui/dialog/dialog.component';
 import {Transaction} from '../../../services/transaction-service/transaction.model';
 import {DateUtils} from '../../utils/date.utils';
+import {CategoryDto} from '../../../constants/default-categories';
 
 @Component({
   selector: 'app-transaction-dialog',
@@ -26,7 +27,9 @@ import {DateUtils} from '../../utils/date.utils';
     NgIf,
     FlowSelectorComponent,
     NgForOf,
-    DialogComponent
+    DialogComponent,
+    NgStyle,
+    NgClass,
   ],
   templateUrl: './transaction-dialog.component.html'
 })
@@ -35,8 +38,9 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
   private toastService = inject(ToastService);
   private subscriptions = new Subscription();
   public transaction: Transaction | null = null;
-  public categories: Category[] = [];
+  public categories: CategoryDto[] = [];
   public formGroup: FormGroup;
+  protected readonly Flow = Flow;
 
   private _transactionId: number | undefined;
 
@@ -94,16 +98,6 @@ export class TransactionDialogComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.store.select(selectAllCategories).subscribe((categories) => {
       this.categories = categories;
     }));
-    // Predict category
-    // this.subscriptions.add(
-    //   this.transactionForm.get('description')!.valueChanges.pipe(
-    //     debounceTime(500), // Wait for user to stop typing
-    //     filter(value => value && value.trim().length > 0 && value.trim().length > 2), // Ignore empty values
-    //     switchMap(description => this.categoryService.predict({ input: description }))
-    //   ).subscribe(response => {
-    //     this.prediction = response;
-    //   })
-    // );
   }
 
   ngOnDestroy() {

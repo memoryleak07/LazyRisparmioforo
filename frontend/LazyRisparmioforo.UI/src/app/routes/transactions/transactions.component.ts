@@ -12,7 +12,6 @@ import {CategoryBadgeComponent} from '../../shared/components/category-badge/cat
 import {TransactionDialogComponent} from '../../shared/components/transaction-dialog/transaction-dialog.component';
 import {AmountPipe} from '../../shared/pipes/amount.pipe';
 import {DatePickerComponent} from '../../shared/ui/date-picker/date-picker.component';
-import {ChartComponent} from 'ng-apexcharts';
 import {FormatDatePipe} from '../../shared/pipes/format-date.pipe';
 
 @Component({
@@ -26,7 +25,6 @@ import {FormatDatePipe} from '../../shared/pipes/format-date.pipe';
     NgIf,
     AmountPipe,
     DatePickerComponent,
-    ChartComponent,
     FormatDatePipe
   ],
   templateUrl: './transactions.component.html'
