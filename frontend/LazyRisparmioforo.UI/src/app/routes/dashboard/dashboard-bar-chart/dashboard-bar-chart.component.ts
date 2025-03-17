@@ -24,26 +24,33 @@ export class DashboardBarChartComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription.add(
       this.store.select(selectMonthlySummary).subscribe((data) => {
+        const completeData = Array.from({ length: data.length + 1 }, (_, index) => {
+          const month = index + 1;
+          const existingData = data.find((item) => item.month === month);
+          return existingData || { month, income: 0, expense: 0, balance: 0 };
+        });
 
+        const categories = DateUtils.MONTHS_SHORT.slice(0, data.length);
+        const series = [
+          {
+            name: "Income",
+            type: "column",
+            data: completeData.map((item) => item.income),
+          },
+          {
+            name: "Expense",
+            type: "column",
+            data: completeData.map((item) => Math.abs(item.expense)),
+          },
+          {
+            name: "Balance",
+            type: "area",
+            data: completeData.map((item) => item.balance),
+          }
+        ]
 
         this.chartOptions = {
-          series: [
-            {
-              name: "Income",
-              type: "column",
-              data: data.map((item) => item.income),
-            },
-            {
-              name: "Expense",
-              type: "column",
-              data: data.map((item) => Math.abs(item.expense)),
-            },
-            {
-              name: "Balance",
-              type: "area",
-              data: data.map((item) => item.balance),
-            }
-          ],
+          series: series,
           chart: {
             type: "line",
             width: "100%",
@@ -82,7 +89,7 @@ export class DashboardBarChartComponent implements OnInit, OnDestroy {
           },
           colors: ["var(--color-success)", "var(--color-error)", "var(--color-info)"],
           xaxis: {
-            categories: DateUtils.MONTHS_SHORT.slice(0, data.length),
+            categories: categories,
             labels: {
               style: {
                 colors: "var(--color-base-content)",

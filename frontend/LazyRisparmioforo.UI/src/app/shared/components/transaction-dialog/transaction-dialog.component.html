@@ -98,17 +98,19 @@
             </label>
           </div>
           <input formControlName="date"
-                 type="date">
+                 type="date"
+                 class="w-32 h-8 px-2 "
+          >
         </div>
 
         <!-- Category Select -->
-        <div class="p-4 grid grid-cols-2 gap-4 items-center">
+        <div class="p-4 grid grid-cols-[1fr_3fr] items-center">
           <div>
             <label class="font-semibold text-sm text-base-content/80 bg-base-200 p-2 rounded-lg">
               Category
             </label>
           </div>
-          <div class="filter flex justify-center">
+          <div class="filter flex justify-center gap-1">
             <div *ngFor="let category of categories">
               <input
                 class="btn btn-sm text-white"
