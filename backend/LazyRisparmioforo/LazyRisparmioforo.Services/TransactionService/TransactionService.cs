@@ -1,5 +1,6 @@
 ﻿using LazyRisparmioforo.Domain.Commands;
 using LazyRisparmioforo.Domain.Entities;
+using LazyRisparmioforo.Domain.Queries;
 using LazyRisparmioforo.Infrastructure.Data;
 using LazyRisparmioforo.Shared.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ public class TransactionService(
     ILogger<TransactionService> logger)
     : ITransactionService
 {
-    public async Task<Pagination<Transaction>> SearchAsync(TransactionSearchCommand command, CancellationToken cancellationToken)
+    public async Task<Pagination<Transaction>> SearchAsync(TransactionSearchQuery command, CancellationToken cancellationToken)
     {
         var query = dbContext.Transactions
             .AsNoTracking()

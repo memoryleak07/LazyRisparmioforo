@@ -1,5 +1,6 @@
 ﻿using LazyRisparmioforo.Domain.Commands;
 using LazyRisparmioforo.Domain.Constants;
+using LazyRisparmioforo.Domain.Queries;
 using LazyRisparmioforo.Infrastructure.Data;
 using LazyRisparmioforo.Shared.DTOs;
 using LazyRisparmioforo.Shared.Shared;
@@ -19,7 +20,7 @@ public class StatisticService(
     /// <param name="command"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Result<SummaryDto>> SummaryAsync(StatRequestCommand command, CancellationToken cancellationToken)
+    public async Task<Result<SummaryDto>> SummaryAsync(DateRangeQuery command, CancellationToken cancellationToken)
     {
         var items = await dbContext.Transactions
             .AsNoTracking()
@@ -43,7 +44,7 @@ public class StatisticService(
     /// <param name="command"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Result<ICollection<CategoryAmountDto>>> SpentPerCategoryAsync(StatRequestCommand command, CancellationToken cancellationToken)
+    public async Task<Result<ICollection<CategoryAmountDto>>> SpentPerCategoryAsync(DateRangeQuery command, CancellationToken cancellationToken)
     {
         var items = await dbContext.Transactions
             .AsNoTracking()
@@ -71,7 +72,7 @@ public class StatisticService(
     /// <param name="command"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Result<ICollection<SummaryMonthlyDto>>> SummaryMonthlyAsync(StatRequestCommand command, CancellationToken cancellationToken)
+    public async Task<Result<ICollection<SummaryMonthlyDto>>> SummaryMonthlyAsync(DateRangeQuery command, CancellationToken cancellationToken)
     {
         var items = await dbContext.Transactions
             .AsNoTracking()

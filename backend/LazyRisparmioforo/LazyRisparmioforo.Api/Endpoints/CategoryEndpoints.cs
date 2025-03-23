@@ -12,31 +12,26 @@ public static class CategoryEndpoints
     {
         var api = endpoints.MapGroup("/api/categories/");
         
-        api.MapGet("/all", GetAllCommand)
+        api.MapGet("/all", async (
+                    [FromServices] ICategoryService categoryService,
+                    CancellationToken cancellationToken) => await categoryService.AllAsync(cancellationToken))
             .Produces<ICollection<Category>>()
             .Produces(StatusCodes.Status200OK)
             .WithDescription("Get all categories")
             .WithOpenApi();
 
-        api.MapPost("/predict", PredictCommand)
+        api.MapPost("/predict", async (
+                [FromServices] ICategoryService categoryService,
+                [AsParameters] CategoryPredictCommand command,
+                CancellationToken cancellationToken) => 
+            {
+                var result = await categoryService.PredictAsync(command, cancellationToken);
+                return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
+            })
             .Produces<CategoryPredictResult>()
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .WithDescription("Predict a category from a text input")
             .WithOpenApi();
-    }
-    
-    private static async Task<ICollection<Category>> GetAllCommand(
-        [FromServices] ICategoryService categoryService,
-        CancellationToken cancellationToken)
-        => await categoryService.AllAsync(cancellationToken);
-
-    private static async Task<IResult> PredictCommand(
-        [FromServices] ICategoryService categoryService,
-        [AsParameters] CategoryPredictCommand command,
-        CancellationToken cancellationToken)
-    {
-        var result = await categoryService.PredictAsync(command, cancellationToken);
-        return result.IsSuccess ? Results.Ok(result.Value) : result.ToProblemDetails();
     }
 }

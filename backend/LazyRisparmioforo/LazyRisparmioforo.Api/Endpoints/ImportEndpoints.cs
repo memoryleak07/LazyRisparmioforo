@@ -12,7 +12,14 @@ public static class ImportEndpoints
     {
         var api = endpoints.MapGroup("/api/import");
 
-        api.MapPost("/csv", ImportCsvCommand)
+        api.MapPost("/csv", async (
+                [FromServices] IImportCsvService importCsvService,
+                [FromForm] UploadFileViewModel request,
+                CancellationToken cancellationToken) =>
+            {
+                var result = await importCsvService.ImportCsvAsync(request.ToImportFileCommand(), cancellationToken);
+                return result.IsSuccess ? Results.Created() : result.ToProblemDetails();
+            })
             .Accepts<UploadFileViewModel>("multipart/form-data")
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
@@ -20,14 +27,5 @@ public static class ImportEndpoints
             .WithDescription("Import csv bank transactions")
             .WithOpenApi()
             .DisableAntiforgery();
-    }
-    
-    private static async Task<IResult> ImportCsvCommand(
-        [FromServices] IImportCsvService importCsvService,
-        [FromForm] UploadFileViewModel request,
-        CancellationToken cancellationToken)
-    {
-        var result = await importCsvService.ImportCsvAsync(request.ToImportFileCommand(), cancellationToken);
-        return result.IsSuccess ? Results.Created() : result.ToProblemDetails();
     }
 }
